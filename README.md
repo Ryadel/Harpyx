@@ -1,5 +1,9 @@
 # Harpyx
 
+<p align="center">
+  <img src="src/Harpyx.WebApp/wwwroot/img/logo/Logo-Grayscale.svg" alt="Harpyx logo" width="240" />
+</p>
+
 **Harpyx is a multi-tenant, self-hostable platform for retrieval-augmented generation (RAG) over private document corpora.** It lets organizations upload their own documents, index them into searchable vector embeddings, and chat with them through the LLM provider of their choice.
 
 Harpyx is built in .NET 10 and ships as two cooperating services — a web-facing `Harpyx.WebApp` and a background `Harpyx.Worker` — orchestrated with Docker Compose on top of SQL Server, MinIO, RabbitMQ, Redis, OpenSearch, and ClamAV.
@@ -40,14 +44,14 @@ ASP.NET Core 10 · EF Core 9 (SQL Server) · Razor Pages + Tailwind/DaisyUI · M
 
 Extensive developer- and operator-facing documentation lives in the project's [Wiki](wiki/):
 
-- **[Home](wiki/Home.md)** — table of contents
-- **[Architecture](wiki/Architecture.md)** — clean-architecture layers, service boundaries, data flow
-- **[Configuration](wiki/Configuration.md)** — the override chain, env-var convention, Azure Key Vault
-- **[Authentication and Authorization](wiki/Authentication-and-Authorization.md)** — Entra ID, Google OAuth, role model, allowlist
-- **[RAG Pipeline](wiki/RAG-Pipeline.md)** — ingestion, extraction, chunking, embeddings, retrieval
-- **[Jobs and Messaging](wiki/Jobs-and-Messaging.md)** — RabbitMQ queues, worker lifecycle, retries
-- **[Storage and Persistence](wiki/Storage-and-Persistence.md)** — SQL Server, MinIO, Redis, OpenSearch
-- **[Security](wiki/Security.md)** — malware scanning, encryption at rest, upload policy, audit
-- **[Observability](wiki/Observability.md)** — OpenTelemetry, Serilog, health checks
-- **[Development](wiki/Development.md)** — prerequisites, build, tests, migrations
-- **[Deployment](wiki/Deployment.md)** — Docker Compose topology, container images, scaling notes
+- **[Home](https://github.com/Ryadel/Harpyx/wiki/Home)** — table of contents
+- **[Architecture](https://github.com/Ryadel/Harpyx/wiki/Architecture)** — clean-architecture layers, service boundaries, data flow
+- **[Configuration](https://github.com/Ryadel/Harpyx/wiki/Configuration)** — the override chain, env-var convention, Azure Key Vault
+- **[Authentication and Authorization](https://github.com/Ryadel/Harpyx/wiki/Authentication-and-Authorization)** — Entra ID, Google OAuth, role model, allowlist
+- **[RAG Pipeline](https://github.com/Ryadel/Harpyx/wiki/RAG-Pipeline)** — ingestion, extraction, chunking, embeddings, retrieval
+- **[Jobs and Messaging](https://github.com/Ryadel/Harpyx/wiki/Jobs-and-Messaging)** — RabbitMQ queues, worker lifecycle, retries
+- **[Storage and Persistence](https://github.com/Ryadel/Harpyx/wiki/Storage-and-Persistence)** — SQL Server, MinIO, Redis, OpenSearch
+- **[Security](https://github.com/Ryadel/Harpyx/wiki/Security)** — malware scanning, encryption at rest, upload policy, audit
+- **[Observability](https://github.com/Ryadel/Harpyx/wiki/Observability)** — OpenTelemetry, Serilog, health checks
+- **[Development](https://github.com/Ryadel/Harpyx/wiki/Development)** — prerequisites, build, tests, migrations
+- **[Deployment](https://github.com/Ryadel/Harpyx/wiki/Deployment)** — Docker Compose topology, container images, scaling notes
