@@ -42,7 +42,7 @@ ASP.NET Core 10 · EF Core 9 (SQL Server) · Razor Pages + Tailwind/DaisyUI · M
 
 ## Documentation
 
-Extensive developer- and operator-facing documentation lives in the project's [Wiki](wiki/):
+Extensive developer & operator documentation lives in the project's [Wiki](wiki/):
 
 - **[Home](https://github.com/Ryadel/Harpyx/wiki/Home)** — table of contents
 - **[Architecture](https://github.com/Ryadel/Harpyx/wiki/Architecture)** — clean-architecture layers, service boundaries, data flow

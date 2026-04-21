@@ -8,8 +8,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_WEBAPP: ghcr.io/${{ github.repository_owner }}/harpyx-webapp
-  IMAGE_WORKER: ghcr.io/${{ github.repository_owner }}/harpyx-worker
 
 jobs:
   build-and-push:
@@ -27,6 +25,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare image names
+        id: image-names
+        shell: bash
+        run: |
+          owner_lc="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "webapp=${{ env.REGISTRY }}/${owner_lc}/harpyx-webapp" >> "$GITHUB_OUTPUT"
+          echo "worker=${{ env.REGISTRY }}/${owner_lc}/harpyx-worker" >> "$GITHUB_OUTPUT"
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -41,7 +47,7 @@ jobs:
         id: meta-webapp
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_WEBAPP }}
+          images: ${{ steps.image-names.outputs.webapp }}
           tags: |
             type=sha,prefix=sha-
             type=raw,value=latest,enable={{is_default_branch}}
@@ -50,7 +56,7 @@ jobs:
         id: meta-worker
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_WORKER }}
+          images: ${{ steps.image-names.outputs.worker }}
           tags: |
             type=sha,prefix=sha-
             type=raw,value=latest,enable={{is_default_branch}}
@@ -64,8 +70,8 @@ jobs:
           push: true
           tags: ${{ steps.meta-webapp.outputs.tags }}
           labels: ${{ steps.meta-webapp.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.IMAGE_WEBAPP }}:buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_WEBAPP }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ steps.image-names.outputs.webapp }}:buildcache
+          cache-to: type=registry,ref=${{ steps.image-names.outputs.webapp }}:buildcache,mode=max
 
       - name: Build and push worker
         id: build-worker
@@ -76,8 +82,8 @@ jobs:
           push: true
           tags: ${{ steps.meta-worker.outputs.tags }}
           labels: ${{ steps.meta-worker.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.IMAGE_WORKER }}:buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_WORKER }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ steps.image-names.outputs.worker }}:buildcache
+          cache-to: type=registry,ref=${{ steps.image-names.outputs.worker }}:buildcache,mode=max
 
   deploy:
     name: Deploy to production
