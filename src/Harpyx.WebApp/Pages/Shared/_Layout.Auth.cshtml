@@ -1,0 +1,140 @@
+@using Harpyx.WebApp.Security
+@using Harpyx.Application.Filters
+@using Harpyx.Application.Interfaces
+@inject ITenantScopeService TenantScopeService
+@inject ITenantService TenantService
+
+@if (!User.Identity?.IsAuthenticated ?? true)
+{
+    <div class="flex items-center gap-2 text-sm">
+        Login with
+        <form asp-controller="Account" asp-action="LoginGoogle" method="post" class="m-0">
+            <button type="submit" class="link link-hover font-semibold">Google</button>
+        </form>
+        <span class="text-base-content/50">|</span>
+        <form asp-controller="Account" asp-action="LoginEntra" method="post" class="m-0">
+            <button type="submit" class="link link-hover font-semibold">Microsoft</button>
+        </form>
+    </div>
+}
+else
+{
+    var scope = await TenantScopeService.GetScopeAsync(User, Context.RequestAborted);
+    var currentPath = $"{Context.Request.PathBase}{Context.Request.Path}";
+    var tenantOptions = scope.AccessibleTenantIds.Count > 0
+        ? await TenantService.GetAsync(
+            new TenantFilter { Ids = scope.AccessibleTenantIds },
+            Context.RequestAborted)
+        : Array.Empty<Harpyx.Application.DTOs.TenantDto>();
+    var tenantNamesById = tenantOptions
+        .GroupBy(t => t.Id)
+        .ToDictionary(g => g.Key, g => g.First().Name);
+    const int maxTenantMenuItems = 10;
+    var hasMoreTenantsThanMenuLimit = tenantOptions.Count > maxTenantMenuItems;
+    var tenantOptionsToDisplay = tenantOptions.Take(maxTenantMenuItems).ToList();
+    var currentTenantLabel = scope.IsAllTenants
+        ? "All tenants"
+        : scope.CurrentTenantId is Guid currentTenantId && tenantNamesById.TryGetValue(currentTenantId, out var tenantName)
+            ? tenantName
+            : "No tenant";
+
+    <div class="flex items-center gap-2">
+        <span class="text-sm text-base-content/70">
+            <a asp-page="/Profile/Index">@User.GetEmail()</a>
+            <span class="mx-1 text-base-content/50">|</span>
+            @currentTenantLabel
+        </span>
+
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder profile-menu-btn p-0 w-10 h-10 min-h-0" title="@User.GetEmail()">
+                <div class="w-10 rounded-full bg-base-300 text-base-content">
+                    <iconify-icon icon="mdi:account-circle-outline" class="text-2xl leading-none"></iconify-icon>
+                </div>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] w-80 rounded-box bg-base-100 p-2 shadow">
+                <li>
+                    <span class="max-w-full truncate text-xs text-base-content/70">
+                        <a asp-page="/Profile/Index">
+                            Logged in as: <strong>@User.GetEmail()</strong>
+                        </a>
+                    </span>
+                </li>
+                <li>
+                    <span class="max-w-full truncate text-xs text-base-content/70">
+                        Current tenant: <strong>@currentTenantLabel</strong>
+                    </span>
+                </li>
+                @if (tenantOptions.Count > 0)
+                {
+                    <li><hr class="my-1 border-base-300" /></li>
+                    if (scope.IsAdmin)
+                    {
+                        <li>
+                            <a asp-controller="TenantScope"
+                               asp-action="Switch"
+                               asp-route-all="true"
+                               asp-route-returnUrl="@currentPath"
+                               class="flex w-full items-center justify-between gap-2 text-left @(scope.IsAllTenants ? "font-semibold" : string.Empty)">
+                                <span class="inline-flex items-center gap-2">
+                                    <iconify-icon icon="mdi:domain"></iconify-icon>
+                                    All tenants
+                                </span>
+                                @if (scope.IsAllTenants)
+                                {
+                                    <iconify-icon icon="mdi:check"></iconify-icon>
+                                }
+                            </a>
+                        </li>
+                    }
+
+                    @foreach (var tenant in tenantOptionsToDisplay)
+                    {
+                        var isSelected = !scope.IsAllTenants && scope.CurrentTenantId == tenant.Id;
+                        <li>
+                            <a asp-controller="TenantScope"
+                               asp-action="Switch"
+                               asp-route-tenantId="@tenant.Id"
+                               asp-route-returnUrl="@currentPath"
+                               class="flex w-full items-center justify-between gap-2 text-left @(isSelected ? "font-semibold" : string.Empty)">
+                                <span class="inline-flex items-center gap-2">
+                                    <iconify-icon icon="mdi:office-building"></iconify-icon>
+                                    @tenant.Name
+                                </span>
+                                @if (isSelected)
+                                {
+                                    <iconify-icon icon="mdi:check"></iconify-icon>
+                                }
+                            </a>
+                        </li>
+                    }
+
+                    @if (hasMoreTenantsThanMenuLimit)
+                    {
+                        <li>
+                            <a asp-page="/Tenants/Index" class="flex items-center gap-2">
+                                <iconify-icon icon="mdi:format-list-bulleted"></iconify-icon>
+                                View all
+                            </a>
+                        </li>
+                    }
+                }
+                <li><hr class="my-1 border-base-300" /></li>
+                <li>
+                    <a asp-page="/Profile/Index" class="flex items-center gap-2">
+                        <iconify-icon icon="mdi:account-outline"></iconify-icon>
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="flex w-full items-center gap-2 text-left">
+                            <iconify-icon icon="mdi:logout"></iconify-icon>
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+}

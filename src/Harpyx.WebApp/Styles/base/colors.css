@@ -1,0 +1,6 @@
+@layer base {
+    :root {
+        --brand-500: #4f6ef7;
+        --brand-700: #364fd6;
+    }
+}

@@ -1,0 +1,6 @@
+.auth-menu-btn:hover,
+.auth-menu-btn:focus-visible,
+.auth-menu-btn:active {
+    background-color: oklch(var(--p) / 0.14);
+    box-shadow: 0 0 0 2px oklch(var(--p) / 0.45);
+}

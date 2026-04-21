@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="Intro" xml:space="preserve">
+    <value>Harpyx is an AI-powered workspace to organize project documents and ask questions over their content. Each project can collect multiple files and use RAG indexing to retrieve relevant context for chat answers.</value>
+  </data>
+  <data name="ConfigureProviders" xml:space="preserve">
+    <value>To start using AI features, configure the following LLM providers in your profile:</value>
+  </data>
+  <data name="ChatBadge" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="ChatProviderTitle" xml:space="preserve">
+    <value>Chat provider</value>
+  </data>
+  <data name="ChatProviderDescription" xml:space="preserve">
+    <value>Used for answer generation.</value>
+  </data>
+  <data name="RagBadge" xml:space="preserve">
+    <value>RAG</value>
+  </data>
+  <data name="RagProviderTitle" xml:space="preserve">
+    <value>RAG Embedding provider</value>
+  </data>
+  <data name="RagProviderDescription" xml:space="preserve">
+    <value>Used for document indexing and retrieval.</value>
+  </data>
+  <data name="OcrBadge" xml:space="preserve">
+    <value>OCR</value>
+  </data>
+  <data name="OptionalLabel" xml:space="preserve">
+    <value>(optional)</value>
+  </data>
+  <data name="OcrProviderTitle" xml:space="preserve">
+    <value>OCR provider</value>
+  </data>
+  <data name="OcrProviderDescription" xml:space="preserve">
+    <value>Extracts text from scanned documents and images. If not configured, Harpyx falls back to a built-in local OCR engine.</value>
+  </data>
+  <data name="GoToProfile" xml:space="preserve">
+    <value>Go to Profile</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+</root>

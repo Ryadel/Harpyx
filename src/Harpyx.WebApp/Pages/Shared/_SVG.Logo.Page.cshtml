@@ -1,0 +1,9 @@
+@* Full-page Logo *@
+@{
+    var logoViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
+    {
+        ["Class"] = "block mx-auto h-48 w-auto harpyx-logo--hero"
+    };
+}
+
+<partial name="_SVG.Logo" view-data="logoViewData" />

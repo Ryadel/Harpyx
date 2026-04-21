@@ -1,0 +1,305 @@
+@page "{provider?}"
+@model Harpyx.WebApp.Pages.Profile.EditModel
+@using Harpyx.Domain.Enums
+@{
+    ViewData["Title"] = Model.IsEditMode
+        ? $"{Model.ProviderDisplayName} - Edit LLM Provider"
+        : "Add LLM Provider";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <h1 class="text-2xl font-semibold">@Model.Title</h1>
+            <p class="text-sm text-base-content/70">
+                Configure one provider for <span class="font-semibold">Chat</span>, <span class="font-semibold">RAG Embedding</span>, <span class="font-semibold">OCR</span>, or any combination.
+                In <i>Edit mode</i>, API Key can be left empty to keep the existing key.
+                Azure OpenAI and Amazon Bedrock require the endpoint/base URL from your cloud account.
+                OpenAI-compatible and local endpoints are published by admins as hosted models.
+            </p>
+            <hr />
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert alert-error">
+                    <span>@Model.ErrorMessage</span>
+                </div>
+            }
+
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+
+                @if (Model.IsEditMode)
+                {
+                    <input type="hidden" asp-for="Provider" />
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Provider</span>
+                        </label>
+                        <input value="@Model.ProviderDisplayName" class="input input-bordered w-full" disabled />
+                    </div>
+                }
+                else
+                {
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Provider</span>
+                        </label>
+                        <select asp-for="Provider" asp-items="Model.ProviderOptions" class="select select-bordered w-full">
+                            <option value="@LlmProvider.None">-- Select provider --</option>
+                        </select>
+                    </div>
+                }
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Name (optional)</span>
+                    </label>
+                    <input asp-for="Name" class="input input-bordered w-full" placeholder="e.g. Team Assistant" />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Description (optional)</span>
+                    </label>
+                    <input asp-for="Description" class="input input-bordered w-full" placeholder="Short description for this provider config" />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Notes (optional)</span>
+                    </label>
+                    <textarea asp-for="Notes" class="textarea textarea-bordered w-full" rows="3" placeholder="Internal notes"></textarea>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">API Key</span>
+                    </label>
+                    <input asp-for="ApiKey" type="password" class="input input-bordered w-full" autocomplete="off"
+                           placeholder="Enter API key. Leave empty only to keep existing key." />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Endpoint / Base URL</span>
+                    </label>
+                    <input asp-for="BaseUrl" class="input input-bordered w-full"
+                           placeholder="Azure: https://resource.openai.azure.com/openai/v1, Bedrock: https://bedrock-mantle.region.api.aws/v1" />
+                    <span class="text-xs text-base-content/60">
+                        Required for Azure OpenAI and Amazon Bedrock. Leave empty for OpenAI, Anthropic Claude, and Google.
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                    <div class="rounded-box border border-base-300 bg-base-200 p-4">
+                        <h2 class="text-lg font-semibold">Chat Configuration</h2>
+                        <p class="text-sm text-base-content/70">
+                            Used for project chat and final answer generation.
+                        </p>
+                        <div class="mt-3 space-y-3">
+                            <div class="form-control">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input asp-for="EnableChat" type="checkbox" class="checkbox" id="EnableChat" />
+                                    <span class="label-text">Use for Chat</span>
+                                </label>
+                            </div>
+                            <div class="form-control" id="ChatModelContainer">
+                                <label class="label">
+                                    <span class="label-text">Chat Model (optional)</span>
+                                </label>
+                                <input asp-for="ChatModel" class="input input-bordered w-full" placeholder="e.g. gpt-4o" id="ChatModel" />
+                            </div>
+                            <div class="form-control">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input asp-for="SetAsDefaultChat" type="checkbox" class="checkbox" id="SetAsDefaultChat" />
+                                    <span class="label-text">Set as default for Chat</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-box border border-base-300 bg-base-200 p-4">
+                        <h2 class="text-lg font-semibold">RAG Embedding Configuration</h2>
+                        <p class="text-sm text-base-content/70">
+                            Used for document indexing and retrieval context.
+                        </p>
+                        <div class="mt-3 space-y-3">
+                            <div class="form-control">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input asp-for="EnableRagEmbedding" type="checkbox" class="checkbox" id="EnableRagEmbedding" />
+                                    <span class="label-text">Use for RAG Embedding</span>
+                                </label>
+                                <span class="text-xs text-base-content/60" id="RagProviderHint"></span>
+                            </div>
+                            <div class="form-control" id="RagModelContainer">
+                                <label class="label">
+                                    <span class="label-text">RAG Embedding Model (optional)</span>
+                                </label>
+                                <input asp-for="RagEmbeddingModel" class="input input-bordered w-full" placeholder="e.g. text-embedding-3-large" id="RagEmbeddingModel" />
+                            </div>
+                            <div class="form-control">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input asp-for="SetAsDefaultRagEmbedding" type="checkbox" class="checkbox" id="SetAsDefaultRagEmbedding" />
+                                    <span class="label-text">Set as default for RAG Embedding</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-box border border-base-300 bg-base-200 p-4">
+                        <h2 class="text-lg font-semibold">OCR Configuration</h2>
+                        <p class="text-sm text-base-content/70">
+                            Used for OCR capabilities when extracting text from scanned content.
+                        </p>
+                        <div class="mt-3 space-y-3">
+                            <div class="form-control">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input asp-for="EnableOcr" type="checkbox" class="checkbox" id="EnableOcr" />
+                                    <span class="label-text">Use for OCR</span>
+                                </label>
+                                <span class="text-xs text-base-content/60" id="OcrProviderHint"></span>
+                            </div>
+                            <div class="form-control" id="OcrModelContainer">
+                                <label class="label">
+                                    <span class="label-text">OCR Model (optional)</span>
+                                </label>
+                                <input asp-for="OcrModel" class="input input-bordered w-full" placeholder="e.g. gpt-4o-mini" id="OcrModel" />
+                            </div>
+                            <div class="form-control">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input asp-for="SetAsDefaultOcr" type="checkbox" class="checkbox" id="SetAsDefaultOcr" />
+                                    <span class="label-text">Set as default for OCR</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary mw-120">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save
+                    </button>
+                    <a asp-page="/Profile/Index" class="btn btn-ghost mw-120">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const enableChat = document.getElementById('EnableChat');
+        const chatModel = document.getElementById('ChatModel');
+        const defaultChat = document.getElementById('SetAsDefaultChat');
+        const chatModelContainer = document.getElementById('ChatModelContainer');
+        const provider = document.getElementById('Provider');
+        const baseUrl = document.getElementById('BaseUrl');
+
+        const enableRag = document.getElementById('EnableRagEmbedding');
+        const ragModel = document.getElementById('RagEmbeddingModel');
+        const defaultRag = document.getElementById('SetAsDefaultRagEmbedding');
+        const ragModelContainer = document.getElementById('RagModelContainer');
+        const ragProviderHint = document.getElementById('RagProviderHint');
+
+        const enableOcr = document.getElementById('EnableOcr');
+        const ocrModel = document.getElementById('OcrModel');
+        const defaultOcr = document.getElementById('SetAsDefaultOcr');
+        const ocrModelContainer = document.getElementById('OcrModelContainer');
+        const ocrProviderHint = document.getElementById('OcrProviderHint');
+
+        const ragProviders = new Set(['OpenAI', 'Google', 'AzureOpenAI']);
+        const ocrProviders = new Set(['OpenAI', 'Claude', 'Google']);
+        const endpointProviders = new Set(['AzureOpenAI', 'AmazonBedrock']);
+
+        function setMutedState(container, muted) {
+            if (!container) return;
+            container.classList.toggle('opacity-60', muted);
+        }
+
+        function applyChatState() {
+            const enabled = !!enableChat?.checked;
+            if (chatModel) {
+                chatModel.disabled = !enabled;
+                if (!enabled) chatModel.value = '';
+            }
+            if (defaultChat) {
+                defaultChat.disabled = !enabled;
+                if (!enabled) defaultChat.checked = false;
+            }
+            setMutedState(chatModelContainer, !enabled);
+        }
+
+        function applyRagState() {
+            const supported = ragProviders.has(provider?.value || '');
+            if (enableRag) {
+                enableRag.disabled = !supported;
+                if (!supported) enableRag.checked = false;
+            }
+            const enabled = supported && !!enableRag?.checked;
+            if (ragModel) {
+                ragModel.disabled = !enabled;
+                if (!enabled) ragModel.value = '';
+            }
+            if (defaultRag) {
+                defaultRag.disabled = !enabled;
+                if (!enabled) defaultRag.checked = false;
+            }
+            setMutedState(ragModelContainer, !enabled);
+            if (ragProviderHint) {
+                ragProviderHint.textContent = supported
+                    ? ''
+                    : 'RAG embeddings are not available for this provider yet.';
+            }
+        }
+
+        function applyOcrState() {
+            const supported = ocrProviders.has(provider?.value || '');
+            if (enableOcr) {
+                enableOcr.disabled = !supported;
+                if (!supported) enableOcr.checked = false;
+            }
+            const enabled = supported && !!enableOcr?.checked;
+            if (ocrModel) {
+                ocrModel.disabled = !enabled;
+                if (!enabled) ocrModel.value = '';
+            }
+            if (defaultOcr) {
+                defaultOcr.disabled = !enabled;
+                if (!enabled) defaultOcr.checked = false;
+            }
+            setMutedState(ocrModelContainer, !enabled);
+            if (ocrProviderHint) {
+                ocrProviderHint.textContent = supported
+                    ? ''
+                    : 'OCR is not available for this provider yet.';
+            }
+        }
+
+        function applyEndpointState() {
+            if (!baseUrl) return;
+            const required = endpointProviders.has(provider?.value || '');
+            baseUrl.disabled = !required;
+            if (!required) baseUrl.value = '';
+            baseUrl.closest('.form-control')?.classList.toggle('opacity-60', !required);
+        }
+
+        enableChat?.addEventListener('change', applyChatState);
+        enableRag?.addEventListener('change', applyRagState);
+        enableOcr?.addEventListener('change', applyOcrState);
+        provider?.addEventListener('change', function () {
+            applyEndpointState();
+            applyRagState();
+            applyOcrState();
+        });
+
+        applyEndpointState();
+        applyChatState();
+        applyRagState();
+        applyOcrState();
+    })();
+</script>

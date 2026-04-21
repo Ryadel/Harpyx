@@ -1,0 +1,18 @@
+@model Harpyx.WebApp.Areas.Admin.Pages.UsageLimits.LimitCellModel
+
+<div class="limit-cell flex items-center gap-2">
+    <input name="@Model.ValueFieldName"
+           value="@Model.Value"
+           type="number"
+           min="0"
+           class="input input-bordered input-sm w-32 limit-value" />
+    <label class="flex items-center gap-1 cursor-pointer">
+        <input name="@Model.UnlimitedFieldName"
+               value="true"
+               type="checkbox"
+               class="checkbox checkbox-sm limit-unlimited"
+               checked="@Model.Unlimited" />
+        <input name="@Model.UnlimitedFieldName" value="false" type="hidden" />
+        <span class="text-xs">Unlimited</span>
+    </label>
+</div>

@@ -1,0 +1,13 @@
+{
+  "name": "harpyx-webapp",
+  "private": true,
+  "devDependencies": {
+    "daisyui": "^4.12.14",
+    "tailwindcss": "^3.4.17"
+  },
+  "scripts": {
+    "css:build": "tailwindcss -c tailwind.config.js -i ./Styles/app.css -o ./wwwroot/css/app.css --minify",
+    "css:watch": "tailwindcss -c tailwind.config.js -i ./Styles/app.css -o ./wwwroot/css/app.css --watch"
+  }
+, "-vs-binding":{"ProjectOpened":["css:watch"]}
+}

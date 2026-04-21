@@ -1,0 +1,101 @@
+<div class="dropdown dropdown-end dropdown-top">
+    <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+        <span id="theme-label">Theme</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 9l-7 7-7-7" />
+        </svg>
+    </div>
+    <ul tabindex="0"
+        class="menu dropdown-content mt-3 w-max rounded-box bg-base-100 p-2 shadow grid grid-cols-2 gap-x-2 md:grid-cols-3">
+        <li><button type="button" class="theme-option" data-theme-option="aqua">Aqua</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="black">Black</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="bumblebee">Bumblebee</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="cmyk">CMYK</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="corporate">Corporate</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="cupcake">Cupcake</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="cyberpunk">Cyberpunk</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="dark">Dark</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="dracula">Dracula</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="emerald">Emerald</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="fantasy">Fantasy</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="forest">Forest</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="garden">Garden</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="halloween">Halloween</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="light">Light</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="lofi">Lofi</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="luxury">Luxury</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="pastel">Pastel</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="retro">Retro</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="synthwave">Synthwave</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="valentine">Valentine</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="wireframe">Wireframe</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="autumn">Autumn</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="business">Business</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="acid">Acid</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="lemonade">Lemonade</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="night">Night</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="coffee">Coffee</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="winter">Winter</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="dim">Dim</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="nord">Nord</button></li>
+        <li><button type="button" class="theme-option" data-theme-option="sunset">Sunset</button></li>
+        <li class="col-span-2 mt-1 md:col-span-3">
+            <button type="button" id="theme-reset" class="btn btn-ghost btn-xs w-full">Reset</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+    (function () {
+        const cookieKey = "harpyx_theme";
+        const storageKey = "theme";
+        const defaultTheme = "cupcake";
+        const root = document.documentElement;
+        const label = document.getElementById("theme-label");
+        const items = document.querySelectorAll(".theme-option");
+        const resetButton = document.getElementById("theme-reset");
+
+        const getCookie = (name) => {
+            const encodedName = `${name}=`;
+            const cookie = document.cookie
+                .split(";")
+                .map((item) => item.trim())
+                .find((item) => item.startsWith(encodedName));
+            return cookie ? decodeURIComponent(cookie.substring(encodedName.length)) : null;
+        };
+
+        const setCookie = (name, value) => {
+            const oneYearSeconds = 60 * 60 * 24 * 365;
+            document.cookie = `${name}=${encodeURIComponent(value)}; Max-Age=${oneYearSeconds}; Path=/; SameSite=Lax`;
+        };
+
+        const saved = getCookie(cookieKey) ?? localStorage.getItem(storageKey);
+        const theme = saved ?? defaultTheme;
+
+        const setTheme = (value) => {
+            root.setAttribute("data-theme", value);
+            setCookie(cookieKey, value);
+            localStorage.setItem(storageKey, value);
+            window.harpyxSyncColorScheme?.();
+            if (label) {
+                label.textContent = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+        };
+
+        setTheme(theme);
+
+        items.forEach((item) => {
+            item.addEventListener("click", () => {
+                const next = item.getAttribute("data-theme-option");
+                if (!next) return;
+                setTheme(next);
+            });
+        });
+
+        resetButton?.addEventListener("click", () => {
+            setTheme(defaultTheme);
+        });
+    })();
+</script>

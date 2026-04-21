@@ -1,0 +1,122 @@
+@page
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+@model Harpyx.WebApp.Pages.IndexModel
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    var brandHero = new BrandHeroViewModel(
+        SharedLocalizer["BrandHeroTitle"].Value,
+        SharedLocalizer["BrandHeroSubtitle"].Value);
+}
+
+<div class="grid gap-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex flex-col gap-4">
+                <partial name="_BrandHero" model="brandHero" />
+
+                <div class="flex items-center gap-2 md:justify-center">
+                    @if (!User.Identity?.IsAuthenticated ?? true)
+                    {
+                        <form asp-controller="Account" asp-action="LoginGoogle" method="post" class="m-0">
+                            <button type="submit" class="btn btn-primary">
+                                <iconify-icon icon="simple-icons:google"></iconify-icon>
+                                @Localizer["LoginWithGoogle"]
+                            </button>
+                        </form>
+                        <form asp-controller="Account" asp-action="LoginEntra" method="post" class="m-0">
+                            <button type="submit" class="btn btn-primary">
+                                <iconify-icon icon="simple-icons:microsoft"></iconify-icon>
+                                @Localizer["LoginWithMicrosoft"]
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-page="/Workspaces/Index" class="btn btn-primary mw-120">
+                            <iconify-icon icon="mdi:folder-open"></iconify-icon>
+                            @Localizer["GoToProjects"]
+                        </a>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline mw-120">
+                                <iconify-icon icon="mdi:logout"></iconify-icon>
+                                @Localizer["Logout"]
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+
+            <partial name="_SignedInAs" />
+        </div>
+    </div>
+
+    @*
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">Your Account</h2>
+
+            <div class="stats stats-vertical w-full lg:stats-horizontal">
+                <div class="stat">
+                    <div class="stat-title">Current Tenant</div>
+                    <div class="stat-value text-lg font-semibold">@Model.CurrentTenantLabel</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Total Users</div>
+                    <div class="stat-value">@Model.AccountUserCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Total Tenants</div>
+                    <div class="stat-value">@Model.AccountTenantCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Workspaces</div>
+                    <div class="stat-value">@Model.CurrentTenantWorkspaceCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Projects</div>
+                    <div class="stat-value">@Model.CurrentTenantProjectCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Documents</div>
+                    <div class="stat-value">@Model.CurrentTenantDocumentCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    *@
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">@Localizer["SystemStatus"]</h2>
+
+            <div class="stats stats-vertical w-full lg:stats-horizontal">
+                <div class="stat">
+                    <div class="stat-title">@Localizer["Environment"]</div>
+                    <div class="stat-value text-lg font-semibold">@Model.EnvironmentName</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">@Localizer["TotalUsers"]</div>
+                    <div class="stat-value">@Model.UserCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">@Localizer["TotalTenants"]</div>
+                    <div class="stat-value">@Model.TenantCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">@Localizer["TotalWorkspaces"]</div>
+                    <div class="stat-value">@Model.WorkspaceCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">@Localizer["TotalProjects"]</div>
+                    <div class="stat-value">@Model.ProjectCount</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">@Localizer["TotalDocuments"]</div>
+                    <div class="stat-value">@Model.DocumentCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="LoginWithGoogle" xml:space="preserve">
+    <value>Login with Google</value>
+  </data>
+  <data name="LoginWithMicrosoft" xml:space="preserve">
+    <value>Login with Microsoft</value>
+  </data>
+  <data name="GoToProjects" xml:space="preserve">
+    <value>Go to Projects</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="SystemStatus" xml:space="preserve">
+    <value>System Status</value>
+  </data>
+  <data name="Environment" xml:space="preserve">
+    <value>Environment</value>
+  </data>
+  <data name="TotalUsers" xml:space="preserve">
+    <value>Total Users</value>
+  </data>
+  <data name="TotalTenants" xml:space="preserve">
+    <value>Total Tenants</value>
+  </data>
+  <data name="TotalWorkspaces" xml:space="preserve">
+    <value>Total Workspaces</value>
+  </data>
+  <data name="TotalProjects" xml:space="preserve">
+    <value>Total Projects</value>
+  </data>
+  <data name="TotalDocuments" xml:space="preserve">
+    <value>Total Documents</value>
+  </data>
+</root>

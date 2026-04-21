@@ -1,0 +1,209 @@
+@page "{id?}"
+@model Harpyx.WebApp.Pages.Workspaces.EditModel
+@{
+    ViewData["Title"] = Model.Id is null
+        ? "Create Workspace"
+        : $"{Model.Name} - Edit";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <h1 class="text-2xl font-semibold">@Model.Title</h1>
+            <hr />
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert alert-error">
+                    <span>@Model.ErrorMessage</span>
+                </div>
+            }
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tenant</span>
+                    </label>
+                    <select asp-for="TenantId" asp-items="Model.TenantOptions" class="select select-bordered w-full"></select>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Name</span>
+                    </label>
+                    <input asp-for="Name" class="input input-bordered w-full" />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Description</span>
+                    </label>
+                    <input asp-for="Description" class="input input-bordered w-full" />
+                </div>
+
+                <div class="form-control">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="IsActive" type="checkbox" class="checkbox" />
+                        <span class="label-text">Active</span>
+                    </label>
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">Chat LLM</h2>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="IsChatLlmEnabled"
+                               type="checkbox"
+                               class="checkbox"
+                               id="IsChatLlmEnabled"
+                               disabled="@(Model.HasChatModelOptions ? null : "disabled")" />
+                        <span class="label-text">Enabled</span>
+                    </label>
+                    @if (!Model.HasChatModelOptions)
+                    {
+                        <div class="text-sm text-warning">No specialized Chat provider available for this workspace tenant.</div>
+                    }
+                    else if (Model.ChatModelOptions.Count() > 1)
+                    {
+                        <div class="text-sm text-base-content/70">Multiple Chat providers available: select one to keep Chat enabled by default for new projects.</div>
+                    }
+                    <div class="form-control" id="ChatModelContainer">
+                        <label class="label">
+                            <span class="label-text">Chat provider</span>
+                        </label>
+                        <select asp-for="ChatModelId"
+                                asp-items="Model.ChatModelOptions"
+                                class="select select-bordered w-full"
+                                id="ChatModelId">
+                            <option value="">Select a Chat provider</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">RAG LLM</h2>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="IsRagLlmEnabled"
+                               type="checkbox"
+                               class="checkbox"
+                               id="IsRagLlmEnabled"
+                               disabled="@(Model.HasRagProviderOptions ? null : "disabled")" />
+                        <span class="label-text">Enabled</span>
+                    </label>
+                    @if (!Model.HasRagProviderOptions)
+                    {
+                        <div class="text-sm text-warning">No specialized RAG provider available for this workspace tenant.</div>
+                    }
+                    else if (Model.RagProviderOptions.Count() > 1)
+                    {
+                        <div class="text-sm text-base-content/70">Multiple RAG providers available: select one to keep RAG enabled by default for new projects.</div>
+                    }
+                    <div class="form-control" id="RagProviderContainer">
+                        <label class="label">
+                            <span class="label-text">RAG provider</span>
+                        </label>
+                        <select asp-for="RagEmbeddingModelId"
+                                asp-items="Model.RagProviderOptions"
+                                class="select select-bordered w-full"
+                                id="RagEmbeddingModelId">
+                            <option value="">Select a RAG provider</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">OCR LLM</h2>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="IsOcrLlmEnabled"
+                               type="checkbox"
+                               class="checkbox"
+                               id="IsOcrLlmEnabled"
+                               disabled="@(Model.HasOcrModelOptions ? null : "disabled")" />
+                        <span class="label-text">Enabled</span>
+                    </label>
+                    @if (!Model.HasOcrModelOptions)
+                    {
+                        <div class="text-sm text-warning">No specialized OCR provider available for this workspace tenant.</div>
+                    }
+                    else if (Model.OcrModelOptions.Count() > 1)
+                    {
+                        <div class="text-sm text-base-content/70">Multiple OCR providers available: select one to keep OCR enabled by default for new projects.</div>
+                    }
+                    <div class="form-control" id="OcrModelContainer">
+                        <label class="label">
+                            <span class="label-text">OCR provider</span>
+                        </label>
+                        <select asp-for="OcrModelId"
+                                asp-items="Model.OcrModelOptions"
+                                class="select select-bordered w-full"
+                                id="OcrModelId">
+                            <option value="">Select an OCR provider</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary mw-120">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save
+                    </button>
+                    <a asp-page="/Workspaces/Index" class="btn btn-ghost mw-120">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const chatEnabled = document.getElementById('IsChatLlmEnabled');
+        const ChatModel = document.getElementById('ChatModelId');
+        const chatContainer = document.getElementById('ChatModelContainer');
+
+        const ragEnabled = document.getElementById('IsRagLlmEnabled');
+        const ragProvider = document.getElementById('RagEmbeddingModelId');
+        const ragContainer = document.getElementById('RagProviderContainer');
+
+        const ocrEnabled = document.getElementById('IsOcrLlmEnabled');
+        const OcrModel = document.getElementById('OcrModelId');
+        const ocrContainer = document.getElementById('OcrModelContainer');
+
+        function applyChatState() {
+            const enabled = !!chatEnabled?.checked && !chatEnabled?.disabled;
+            if (chatContainer) chatContainer.classList.toggle('hidden', !enabled);
+            if (ChatModel) {
+                ChatModel.disabled = !enabled;
+                if (!enabled) ChatModel.value = '';
+            }
+        }
+
+        function applyRagState() {
+            const enabled = !!ragEnabled?.checked && !ragEnabled?.disabled;
+            if (ragContainer) ragContainer.classList.toggle('hidden', !enabled);
+            if (ragProvider) {
+                ragProvider.disabled = !enabled;
+                if (!enabled) ragProvider.value = '';
+            }
+        }
+
+        function applyOcrState() {
+            const enabled = !!ocrEnabled?.checked && !ocrEnabled?.disabled;
+            if (ocrContainer) ocrContainer.classList.toggle('hidden', !enabled);
+            if (OcrModel) {
+                OcrModel.disabled = !enabled;
+                if (!enabled) OcrModel.value = '';
+            }
+        }
+
+        chatEnabled?.addEventListener('change', applyChatState);
+        ragEnabled?.addEventListener('change', applyRagState);
+        ocrEnabled?.addEventListener('change', applyOcrState);
+
+        applyChatState();
+        applyRagState();
+        applyOcrState();
+    })();
+</script>

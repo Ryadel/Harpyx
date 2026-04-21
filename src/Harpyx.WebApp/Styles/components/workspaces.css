@@ -1,0 +1,19 @@
+.workspace-card-description {
+    margin-left: 2rem;
+}
+
+.workspace-projects-body {
+    padding-left: 3.5rem;
+}
+
+.workspace-projects-first-col {
+    padding-left: 0 !important;
+}
+
+.workspace-title-group,
+.workspace-project-name-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+}

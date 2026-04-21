@@ -1,0 +1,82 @@
+<div class="dropdown dropdown-end dropdown-top">
+    <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+        <span id="width-label">Standard</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 9l-7 7-7-7" />
+        </svg>
+    </div>
+    <ul tabindex="0" class="menu dropdown-content mt-3 w-44 rounded-box bg-base-100 p-2 shadow">
+        <li><button type="button" class="width-option" data-width-option="compact">Compact</button></li>
+        <li><button type="button" class="width-option" data-width-option="standard">Standard</button></li>
+        <li><button type="button" class="width-option" data-width-option="wide">Wide</button></li>
+        <li><button type="button" class="width-option" data-width-option="full">Full</button></li>
+        <li><hr class="my-1 border-base-300" /></li>
+        <li><button type="button" id="width-reset" class="btn btn-ghost btn-xs w-full">Reset to default</button></li>
+    </ul>
+</div>
+
+<script>
+    (function () {
+        const cookieKey = "harpyx_width";
+        const defaultWidth = "standard";
+        const label = document.getElementById("width-label");
+        const items = document.querySelectorAll(".width-option");
+        const resetButton = document.getElementById("width-reset");
+
+        const getCookie = (name) => {
+            const encodedName = `${name}=`;
+            const cookie = document.cookie
+                .split(";")
+                .map((item) => item.trim())
+                .find((item) => item.startsWith(encodedName));
+            return cookie ? decodeURIComponent(cookie.substring(encodedName.length)) : null;
+        };
+
+        const setCookie = (name, value) => {
+            const oneYearSeconds = 60 * 60 * 24 * 365;
+            document.cookie = `${name}=${encodeURIComponent(value)}; Max-Age=${oneYearSeconds}; Path=/; SameSite=Lax`;
+        };
+
+        const toLabel = (value) => {
+            if (value === "full") return "Full";
+            if (value === "wide") return "Wide";
+            if (value === "compact") return "Compact";
+            return "Standard";
+        };
+
+        const applyLabel = (value) => {
+            if (label) {
+                label.textContent = toLabel(value);
+            }
+        };
+
+        const setWidth = (value) => {
+            const normalizedValue = value === "compact" || value === "standard" || value === "wide" || value === "full"
+                ? value
+                : defaultWidth;
+            setCookie(cookieKey, normalizedValue);
+            applyLabel(normalizedValue);
+            window.location.reload();
+        };
+
+        const savedWidth = getCookie(cookieKey);
+        const currentWidth = savedWidth === "compact" || savedWidth === "standard" || savedWidth === "wide" || savedWidth === "full"
+            ? savedWidth
+            : defaultWidth;
+        applyLabel(currentWidth);
+
+        items.forEach((item) => {
+            item.addEventListener("click", () => {
+                const next = item.getAttribute("data-width-option");
+                if (!next) return;
+                setWidth(next);
+            });
+        });
+
+        resetButton?.addEventListener("click", () => {
+            setWidth(defaultWidth);
+        });
+    })();
+</script>

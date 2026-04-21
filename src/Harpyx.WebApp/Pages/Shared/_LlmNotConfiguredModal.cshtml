@@ -1,0 +1,25 @@
+@* Modal dialog shown when the user tries to perform an LLM action without a configured provider.
+   Include this partial on pages that trigger LLM calls.
+   Open with: document.getElementById('llm-not-configured-modal').showModal() *@
+
+<dialog id="llm-not-configured-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">LLM Provider Not Configured</h3>
+        <p class="py-4">
+            No LLM provider and API key are configured for your account.
+            Please configure your LLM provider in the Profile section to use AI features.
+        </p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost">Close</button>
+            </form>
+            <a href="/Profile" class="btn btn-primary">
+                <iconify-icon icon="mdi:account-cog"></iconify-icon>
+                Go to Profile
+            </a>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>

@@ -1,0 +1,55 @@
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+@{
+    var canAccessAdmin = User?.Identity?.IsAuthenticated == true &&
+        (await AuthorizationService.AuthorizeAsync(User, null, "AdminOnly")).Succeeded;
+    var currentArea = ((string?)ViewContext.RouteData.Values["area"] ?? string.Empty).ToLowerInvariant();
+    var currentPage = ((string?)ViewContext.RouteData.Values["page"] ?? string.Empty).ToLowerInvariant();
+
+    var isAdmin = currentArea == "admin";
+    var isTenants = currentArea.Length == 0 && currentPage.StartsWith("/tenants/");
+    var isWorkspaces = currentArea.Length == 0 && currentPage.StartsWith("/workspaces/");
+    var isProjects = currentArea.Length == 0 && currentPage.StartsWith("/projects/");
+    var isMembers = currentArea.Length == 0 && currentPage.StartsWith("/members/");
+    var isApi = currentArea.Length == 0 && currentPage.StartsWith("/api/");
+    var isUsers = currentArea.Length == 0 && currentPage.StartsWith("/users/");
+}
+
+<div class="navbar-center hidden md:flex">
+    <ul class="menu menu-horizontal gap-1 px-1">
+        @if (canAccessAdmin)
+        {
+            <li><a asp-area="Admin" asp-page="/Index" class="btn btn-ghost btn-sm @(isAdmin ? "btn-active" : string.Empty)">Admin</a></li>
+            <li><a asp-area="" asp-page="/Tenants/Index" class="btn btn-ghost btn-sm @(isTenants ? "btn-active" : string.Empty)">Tenants</a></li>
+            <li><a asp-area="" asp-page="/Users/Index" class="btn btn-ghost btn-sm @(isUsers ? "btn-active" : string.Empty)">Users</a></li>
+        }
+        @* <li><a asp-page="/Index" class="btn btn-ghost btn-sm">Dashboard</a></li> *@
+        <li><a asp-area="" asp-page="/Workspaces/Index" class="btn btn-ghost btn-sm @(isWorkspaces ? "btn-active" : string.Empty)">Workspaces</a></li>
+        <li><a asp-area="" asp-page="/Projects/Index" class="btn btn-ghost btn-sm @(isProjects ? "btn-active" : string.Empty)">Projects</a></li>
+        <li><a asp-area="" asp-page="/Members/Index" class="btn btn-ghost btn-sm @(isMembers ? "btn-active" : string.Empty)">Members</a></li>
+        <li><a asp-area="" asp-page="/Api/Index" class="btn btn-ghost btn-sm @(isApi ? "btn-active" : string.Empty)">API</a></li>
+    </ul>
+</div>
+
+<div class="dropdown dropdown-end md:hidden">
+    <div tabindex="0" role="button" class="btn btn-ghost">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </div>
+    <ul tabindex="0" class="menu dropdown-content mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
+        @if (canAccessAdmin)
+        {
+            <li><a asp-area="Admin" asp-page="/Index" class="@(isAdmin ? "active font-semibold" : string.Empty)">Admin</a></li>
+            <li><a asp-area="" asp-page="/Tenants/Index" class="@(isTenants ? "active font-semibold" : string.Empty)">Tenants</a></li>
+            <li><a asp-area="" asp-page="/Users/Index" class="@(isUsers ? "active font-semibold" : string.Empty)">Users</a></li>
+            <li><hr class="my-1 border-base-300" /></li>
+        }
+        @* <li><a asp-page="/Index">Dashboard</a></li> *@
+        <li><a asp-area="" asp-page="/Workspaces/Index" class="@(isWorkspaces ? "active font-semibold" : string.Empty)">Workspaces</a></li>
+        <li><a asp-area="" asp-page="/Projects/Index" class="@(isProjects ? "active font-semibold" : string.Empty)">Projects</a></li>
+        <li><a asp-area="" asp-page="/Members/Index" class="@(isMembers ? "active font-semibold" : string.Empty)">Members</a></li>
+        <li><a asp-area="" asp-page="/Api/Index" class="@(isApi ? "active font-semibold" : string.Empty)">API</a></li>
+    </ul>
+</div>

@@ -1,0 +1,196 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${Database__Password}
+    ports:
+      - "${Docker__SqlServerPublicPort}:${Docker__SqlServerContainerPort}"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -C -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: ${Minio__AccessKey}
+      MINIO_ROOT_PASSWORD: ${Minio__SecretKey}
+    command: server /data --console-address ":9001"
+    ports:
+      - "${Docker__MinioApiPort}:${Docker__MinioApiContainerPort}"
+      - "${Docker__MinioConsolePort}:${Docker__MinioConsoleContainerPort}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RabbitMQ__UserName}
+      RABBITMQ_DEFAULT_PASS: ${RabbitMQ__Password}
+    ports:
+      - "${Docker__RabbitMqAmqpPort}:${Docker__RabbitMqAmqpContainerPort}"
+      - "${Docker__RabbitMqManagementPort}:${Docker__RabbitMqManagementContainerPort}"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  opensearch:
+    image: opensearchproject/opensearch:2.18.0
+    environment:
+      discovery.type: single-node
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: ${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      OPENSEARCH_JAVA_OPTS: ${Docker__OpenSearchJavaOpts}
+    ports:
+      - "${Docker__OpenSearchHttpPort}:${Docker__OpenSearchHttpContainerPort}"
+      - "${Docker__OpenSearchPerformancePort}:${Docker__OpenSearchPerformanceContainerPort}"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSk -u 'admin:${OPENSEARCH_INITIAL_ADMIN_PASSWORD}' 'https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=2s' >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${Docker__RedisPort}:${Docker__RedisContainerPort}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - "${Docker__ClamAvPort}:${Docker__ClamAvContainerPort}"
+    volumes:
+      - clamav-db:/var/lib/clamav
+
+  webapp:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.webapp
+    environment:
+      DOTNET_ENVIRONMENT: ${DOTNET_ENVIRONMENT}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+      Database__Host: ${Database__Host}
+      Database__Port: ${Database__Port}
+      Database__Name: ${Database__Name}
+      Database__Username: ${Database__Username}
+      Database__Password: ${Database__Password}
+      Database__TrustServerCertificate: ${Database__TrustServerCertificate}
+      Database__ApplyMigrationsOnStartup: ${Database__ApplyMigrationsOnStartup:-true}
+      Minio__Endpoint: ${Minio__Endpoint}
+      Minio__AccessKey: ${Minio__AccessKey}
+      Minio__SecretKey: ${Minio__SecretKey}
+      RabbitMQ__HostName: ${RabbitMQ__HostName}
+      RabbitMQ__UserName: ${RabbitMQ__UserName}
+      RabbitMQ__Password: ${RabbitMQ__Password}
+      Redis__ConnectionString: ${Redis__ConnectionString}
+      OpenSearch__Enabled: ${OpenSearch__Enabled}
+      OpenSearch__Endpoint: ${OpenSearch__Endpoint}
+      OpenSearch__Username: ${OpenSearch__Username}
+      OpenSearch__Password: ${OpenSearch__Password}
+      OpenSearch__AllowInsecureTls: ${OpenSearch__AllowInsecureTls}
+      OpenSearch__IndexName: ${OpenSearch__IndexName}
+      OpenSearch__IndexAlias: ${OpenSearch__IndexAlias}
+      OpenSearch__EmbeddingDimensions: ${OpenSearch__EmbeddingDimensions}
+      OpenSearch__RequestTimeoutSeconds: ${OpenSearch__RequestTimeoutSeconds}
+      MalwareScan__Enabled: ${MalwareScan__Enabled}
+      MalwareScan__FailClosed: ${MalwareScan__FailClosed}
+      MalwareScan__Host: ${MalwareScan__Host}
+      MalwareScan__Port: ${MalwareScan__Port}
+      MalwareScan__TimeoutSeconds: ${MalwareScan__TimeoutSeconds}
+      MalwareScan__ChunkSizeBytes: ${MalwareScan__ChunkSizeBytes}
+      OpenTelemetry__Otlp__Endpoint: ${OpenTelemetry__Otlp__Endpoint}
+      Authentication__EntraId__Instance: ${Authentication__EntraId__Instance}
+      Authentication__EntraId__TenantId: ${Authentication__EntraId__TenantId}
+      Authentication__EntraId__ClientId: ${Authentication__EntraId__ClientId}
+      Authentication__EntraId__ClientSecret: ${Authentication__EntraId__ClientSecret}
+      Authentication__Google__ClientId: ${Authentication__Google__ClientId}
+      Authentication__Google__ClientSecret: ${Authentication__Google__ClientSecret}
+      SeedAdmin__ObjectId: ${SeedAdmin__ObjectId}
+      SeedAdmin__Email: ${SeedAdmin__Email}
+      Encryption__MasterKey: ${Encryption__MasterKey}
+      Email__Host: ${Email__Host}
+      Email__Port: ${Email__Port}
+      Email__Username: ${Email__Username}
+      Email__Password: ${Email__Password}
+      Email__From: ${Email__From}
+    ports:
+      - "${Docker__WebAppPort}:${Docker__WebAppContainerPort}"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      clamav:
+        condition: service_started
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.worker
+    environment:
+      DOTNET_ENVIRONMENT: ${DOTNET_ENVIRONMENT}
+      Database__Host: ${Database__Host}
+      Database__Port: ${Database__Port}
+      Database__Name: ${Database__Name}
+      Database__Username: ${Database__Username}
+      Database__Password: ${Database__Password}
+      Database__TrustServerCertificate: ${Database__TrustServerCertificate}
+      Minio__Endpoint: ${Minio__Endpoint}
+      Minio__AccessKey: ${Minio__AccessKey}
+      Minio__SecretKey: ${Minio__SecretKey}
+      RabbitMQ__HostName: ${RabbitMQ__HostName}
+      RabbitMQ__UserName: ${RabbitMQ__UserName}
+      RabbitMQ__Password: ${RabbitMQ__Password}
+      Redis__ConnectionString: ${Redis__ConnectionString}
+      OpenSearch__Enabled: ${OpenSearch__Enabled}
+      OpenSearch__Endpoint: ${OpenSearch__Endpoint}
+      OpenSearch__Username: ${OpenSearch__Username}
+      OpenSearch__Password: ${OpenSearch__Password}
+      OpenSearch__AllowInsecureTls: ${OpenSearch__AllowInsecureTls}
+      OpenSearch__IndexName: ${OpenSearch__IndexName}
+      OpenSearch__IndexAlias: ${OpenSearch__IndexAlias}
+      OpenSearch__EmbeddingDimensions: ${OpenSearch__EmbeddingDimensions}
+      OpenSearch__RequestTimeoutSeconds: ${OpenSearch__RequestTimeoutSeconds}
+      OpenTelemetry__Otlp__Endpoint: ${OpenTelemetry__Otlp__Endpoint}
+      Authentication__EntraId__Instance: ${Authentication__EntraId__Instance}
+      Authentication__EntraId__TenantId: ${Authentication__EntraId__TenantId}
+      Authentication__EntraId__ClientId: ${Authentication__EntraId__ClientId}
+      Authentication__EntraId__ClientSecret: ${Authentication__EntraId__ClientSecret}
+      Authentication__Google__ClientId: ${Authentication__Google__ClientId}
+      Authentication__Google__ClientSecret: ${Authentication__Google__ClientSecret}
+      SeedAdmin__ObjectId: ${SeedAdmin__ObjectId}
+      SeedAdmin__Email: ${SeedAdmin__Email}
+      Encryption__MasterKey: ${Encryption__MasterKey}
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+networks:
+  default:
+    name: harpyx-network
+
+volumes:
+  clamav-db:

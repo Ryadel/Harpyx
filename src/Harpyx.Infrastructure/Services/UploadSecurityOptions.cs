@@ -1,0 +1,78 @@
+namespace Harpyx.Infrastructure.Services;
+
+public class UploadSecurityOptions
+{
+    public string[] AllowedExtensions { get; set; } =
+    [
+        ".pdf",
+        ".txt",
+        ".md",
+        ".rtf",
+        ".epub",
+        ".csv",
+        ".json",
+        ".xml",
+        ".yaml",
+        ".yml",
+        ".html",
+        ".htm",
+        ".docx",
+        ".xlsx",
+        ".pptx",
+        ".odt",
+        ".ods",
+        ".odp",
+        ".eml",
+        ".msg",
+        ".zip",
+        ".rar",
+        ".7z",
+        ".tar.gz",
+        ".tgz",
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".tif",
+        ".tiff",
+        ".bmp"
+    ];
+
+    public string[] AllowedContentTypes { get; set; } =
+    [
+        "application/pdf",
+        "text/plain",
+        "text/markdown",
+        "application/rtf",
+        "text/rtf",
+        "application/epub+zip",
+        "text/csv",
+        "application/json",
+        "application/xml",
+        "text/xml",
+        "application/yaml",
+        "application/x-yaml",
+        "text/yaml",
+        "text/x-yaml",
+        "text/html",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.oasis.opendocument.presentation",
+        "message/rfc822",
+        "application/vnd.ms-outlook",
+        "application/zip",
+        "application/x-zip-compressed",
+        "application/vnd.rar",
+        "application/x-rar-compressed",
+        "application/x-7z-compressed",
+        "application/gzip",
+        "application/x-gzip",
+        "application/x-tar",
+        "image/png",
+        "image/jpeg",
+        "image/tiff",
+        "image/bmp"
+    ];
+}

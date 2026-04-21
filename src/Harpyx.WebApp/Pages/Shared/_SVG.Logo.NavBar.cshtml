@@ -1,0 +1,9 @@
+@* NAVBAR Logo, used in top-left corner *@
+@{
+    var logoViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData)
+    {
+        ["Class"] = "block h-6 w-auto harpyx-logo--nav"
+    };
+}
+
+<partial name="_SVG.Logo" view-data="logoViewData" />

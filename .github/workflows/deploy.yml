@@ -1,0 +1,119 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_WEBAPP: ghcr.io/${{ github.repository_owner }}/harpyx-webapp
+  IMAGE_WORKER: ghcr.io/${{ github.repository_owner }}/harpyx-worker
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      webapp-digest: ${{ steps.build-webapp.outputs.digest }}
+      worker-digest: ${{ steps.build-worker.outputs.digest }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata for webapp
+        id: meta-webapp
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_WEBAPP }}
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Extract metadata for worker
+        id: meta-worker
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_WORKER }}
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push webapp
+        id: build-webapp
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/Dockerfile.webapp
+          push: true
+          tags: ${{ steps.meta-webapp.outputs.tags }}
+          labels: ${{ steps.meta-webapp.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.IMAGE_WEBAPP }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_WEBAPP }}:buildcache,mode=max
+
+      - name: Build and push worker
+        id: build-worker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/Dockerfile.worker
+          push: true
+          tags: ${{ steps.meta-worker.outputs.tags }}
+          labels: ${{ steps.meta-worker.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.IMAGE_WORKER }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_WORKER }}:buildcache,mode=max
+
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    environment: production
+
+    steps:
+      - name: Checkout (for compose file)
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose.prod.yml to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          source: docker-compose.prod.yml
+          target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Pull images and restart services
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            docker compose -f docker-compose.prod.yml pull webapp worker
+
+            docker compose -f docker-compose.prod.yml up -d --no-deps --remove-orphans webapp worker
+
+            docker image prune -f

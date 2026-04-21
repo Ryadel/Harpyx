@@ -1,0 +1,84 @@
+# Build outputs
+**/bin/
+**/obj/
+**/artifacts/
+
+# Frontend dependencies
+**/node_modules/
+
+# Runtime local state
+**/App_Keys/
+**/App_Data/keys/
+**/App_Data/DataProtection-Keys/
+
+# Local environment and workspace files
+.env
+.env.local
+.env.*.local
+docker-compose.prod.yml
+Harpyx.Dev.slnx
+dev/
+
+# GitHub Wiki is a separate repository checked out locally.
+wiki/
+
+# IDE and editor state
+.vs/
+.github/*
+!.github/workflows/
+!.github/workflows/**
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+.claude/
+.cursor/
+.roo/
+.openai/
+.codex/
+**/.history/
+
+# Logs
+*.log
+**/.run.*.log
+
+# Test and coverage outputs
+**/TestResults/
+**/coverage/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.xml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Temporary/editor leftovers
+*.tmp
+*.bak
+*.swp
+
+# User-specific files
+*.user
+*.suo
+*.pdb
+*.DotSettings
+*.rsuser
+
+# JetBrains Rider / ReSharper local state
+.idea/
+*.sln.DotSettings.user
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

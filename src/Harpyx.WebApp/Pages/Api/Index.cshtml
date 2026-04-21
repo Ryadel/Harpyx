@@ -1,0 +1,132 @@
+@page
+@model Harpyx.WebApp.Pages.Api.IndexModel
+@{
+    ViewData["Title"] = "API Keys";
+    var createApiButtonClass = Model.IsApiEnabledForInstance
+        ? "btn btn-primary btn-sm"
+        : "btn btn-primary btn-sm btn-disabled";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">API Keys</h1>
+                <div class="ml-auto flex items-center gap-2">
+                    <a class="btn btn-ghost btn-sm" asp-page="/Api/Docs">
+                        <iconify-icon icon="mdi:file-document-outline"></iconify-icon>
+                        API Docs
+                    </a>
+                    <a class="@createApiButtonClass" asp-page="/Api/Edit">
+                        <iconify-icon icon="mdi:key-plus"></iconify-icon>
+                        Create API Key
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Manage API keys for server-to-server integrations. Use least-privilege permissions and rotate keys regularly.
+            </p>
+            <div class="rounded-lg border border-base-300 bg-base-200 p-3 text-sm">
+                <ul class="list-disc pl-5 space-y-1 text-base-content/80">
+                    <li>Use <code>Authorization: ApiKey &lt;your-key&gt;</code> for API requests.</li>
+                    <li>Store keys in a secure secret manager, never in frontend code or logs.</li>
+                    <li>Full key values are only visible at creation time.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">
+            <span>@Model.ErrorMessage</span>
+        </div>
+    }
+
+    @if (!Model.IsApiEnabledForInstance)
+    {
+        <div class="alert alert-warning">
+            <span>API access is disabled for this instance.</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-3">
+            <h2 class="text-xl font-semibold">Keys</h2>
+            @if (Model.ApiKeys.Count == 0)
+            {
+                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
+                    No API keys yet. Create one from the
+                    <a asp-page="/Api/Edit" class="link link-hover font-semibold">Create API Key</a> page.
+                </div>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Preview</th>
+                                <th>Permissions</th>
+                                <th>Status</th>
+                                <th>Last used</th>
+                                <th>Expires</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var key in Model.ApiKeys)
+                        {
+                            <tr>
+                                <td class="font-medium">@key.Name</td>
+                                <td class="font-mono text-xs">@key.KeyPreview...@key.KeyLast4</td>
+                                <td>
+                                    @foreach (var permission in Harpyx.WebApp.Pages.Api.IndexModel.DescribePermissions(key.Permissions))
+                                    {
+                                        <span class="badge badge-ghost badge-sm mr-1">@permission</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge @(key.IsActive ? "badge-success" : "badge-ghost")">@(key.IsActive ? "Active" : "Revoked")</span>
+                                </td>
+                                <td>@(key.LastUsedAtUtc?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                                <td>@(key.ExpiresAtUtc?.ToString("yyyy-MM-dd") ?? "-")</td>
+                                <td class="text-right">
+                                    @if (key.IsActive)
+                                    {
+                                        <form method="post" asp-page-handler="Revoke" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="RevokeApiKeyId" value="@key.Id" />
+                                            <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('Revoke this API key?')">
+                                                <iconify-icon icon="mdi:key-remove"></iconify-icon>
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-page-handler="Delete" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="DeleteApiKeyId" value="@key.Id" />
+                                            <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('Delete this revoked API key permanently?')">
+                                                <iconify-icon icon="mdi:delete"></iconify-icon>
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

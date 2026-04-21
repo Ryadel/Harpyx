@@ -1,0 +1,1386 @@
+@page "{id:guid}"
+@model Harpyx.WebApp.Pages.Projects.DetailsModel
+@{
+    ViewData["Title"] = Model.Project != null
+        ? $"{Model.Project.Name} - Details"
+        : "Project Details";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-2">
+            <div class="flex flex-wrap items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-semibold">@Model.Project?.Name</h1>
+                    @if (!string.IsNullOrWhiteSpace(Model.Project?.Description))
+                    {
+                        <p class="text-base-content/70">@Model.Project?.Description</p>
+                    }
+                </div>
+                <div class="ml-auto flex items-center gap-2">
+                    <a class="btn btn-ghost btn-sm" asp-page="/Projects/Index">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Back to Projects
+                    </a>
+                    @if (Model.Project is not null)
+                    {
+                        <a class="btn btn-ghost btn-sm" asp-page="/Projects/Edit" asp-route-id="@Model.Project.Id">
+                            <iconify-icon icon="mdi:pencil"></iconify-icon>
+                            Edit Project
+                        </a>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+            {
+                <div class="alert alert-success">
+                    <span>@Model.SuccessMessage</span>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert alert-error">
+                    <span>@Model.ErrorMessage</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="project-dashboard-form" class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="RenameDocumentId" id="RenameDocumentId" />
+        <input type="hidden" asp-for="RenameFileName" id="RenameFileName" />
+        <input type="hidden" asp-for="ChatHistoryJson" id="ChatHistoryJson" />
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow">
+                <div class="card-body space-y-4">
+                    <div class="flex items-center gap-4">
+                        <h2 class="text-lg font-semibold">Documents</h2>
+                        <div class="ml-auto flex items-center gap-1">
+                            <button type="button" class="btn btn-ghost btn-sm" id="select-all-docs" title="Select all documents" aria-label="Select all documents">
+                                <iconify-icon icon="mdi:checkbox-multiple-marked"></iconify-icon>
+                                Select all
+                            </button>
+                            <button type="button" class="btn btn-ghost btn-sm" id="deselect-all-docs" title="Deselect all documents" aria-label="Deselect all documents">
+                                <iconify-icon icon="mdi:checkbox-multiple-blank-outline"></iconify-icon>
+                                Unselect all
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label">
+                            <span class="label-text">Add new document</span>
+                        </label>
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <input asp-for="UploadFile" type="file" class="file-input file-input-bordered w-full" />
+                            <button type="submit" class="btn btn-primary sm:btn mw-120" asp-page-handler="Upload" title="Upload document" aria-label="Upload document">
+                                <iconify-icon icon="mdi:upload"></iconify-icon>
+                                Upload
+                            </button>
+                        </div>
+                        <div class="divider text-xs text-base-content/50 my-1">OR</div>
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <input asp-for="DocumentUrl" type="url" class="input input-bordered w-full"
+                                   placeholder="https://example.com/document.pdf" />
+                            <button type="submit" class="btn btn-secondary sm:btn mw-120" asp-page-handler="AddUrl" title="Add URL document" aria-label="Add URL document">
+                                <iconify-icon icon="mdi:link-plus"></iconify-icon>
+                                Add URL
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto" data-project-id="@Model.Id">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                                <tr>
+                                    <th class="w-10"></th>
+                                    <th>File</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="documents-tbody">
+                            @if (Model.Documents.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center text-base-content/70">
+                                        No documents uploaded yet.
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var doc in Model.Documents)
+                                {
+                                    var selectable = Model.IsDocumentSelectable(doc);
+                                    <tr data-doc-row data-doc-id="@doc.Id">
+                                        <td>
+                                            <input type="checkbox"
+                                                   name="SelectedDocumentIds"
+                                                   value="@doc.Id"
+                                                   class="checkbox checkbox-sm"
+                                                   data-doc-checkbox
+                                                   @(Model.SelectedDocumentIds.Contains(doc.Id) ? "checked" : "")
+                                                   @(!selectable ? "disabled" : string.Empty) />
+                                        </td>
+                                        <td class="font-medium" data-doc-file-name data-doc-nesting="@doc.NestingLevel" data-doc-is-container="@doc.IsContainer.ToString().ToLower()" data-doc-container-type="@((int)doc.ContainerType)" data-doc-source-url="@(doc.SourceUrl ?? "")">
+                                            <div class="flex items-center gap-1" style="padding-left: @(doc.NestingLevel * 1.5)rem">
+                                                @if (doc.NestingLevel > 0)
+                                                {
+                                                    <iconify-icon icon="mdi:subdirectory-arrow-right" class="text-base-content/40 shrink-0"></iconify-icon>
+                                                }
+                                                @if (doc.SourceUrl is not null)
+                                                {
+                                                    <iconify-icon icon="mdi:link" class="text-base-content/40 shrink-0" title="@doc.SourceUrl"></iconify-icon>
+                                                }
+                                                else if (doc.IsContainer)
+                                                {
+                                                    <iconify-icon icon="@(doc.ContainerType == Harpyx.Domain.Enums.DocumentContainerType.Email ? "mdi:email-outline" : "mdi:folder-zip-outline")" class="text-base-content/60 shrink-0"></iconify-icon>
+                                                }
+                                                <span title="@(doc.ContainerPath ?? doc.FileName)">@doc.FileName</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-base-content/70" data-doc-content-type>@doc.ContentType</td>
+                                        <td class="text-base-content/70" data-doc-size>@Model.FormatBytes(doc.SizeBytes)</td>
+                                        <td data-doc-status-cell>
+                                            @if (doc.State == Harpyx.Domain.Enums.DocumentState.Quarantined)
+                                            {
+                                                <span class="badge badge-warning" data-doc-status-text>@doc.State</span>
+                                            }
+                                            else if (doc.State == Harpyx.Domain.Enums.DocumentState.Rejected)
+                                            {
+                                                <span class="badge badge-error" data-doc-status-text>@doc.State</span>
+                                            }
+                                            else if (doc.State == Harpyx.Domain.Enums.DocumentState.Failed)
+                                            {
+                                                <span class="badge badge-error" data-doc-status-text>@doc.State</span>
+                                            }
+                                            else
+                                            {
+                                                <span data-doc-status-text>@doc.State</span>
+                                            }
+
+                                            @if (Model.CanRetryDocument(doc))
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-error btn-sm ml-2"
+                                                        asp-page-handler="Retry"
+                                                        name="RetryDocumentId"
+                                                        value="@doc.Id"
+                                                        data-doc-retry
+                                                        aria-label="Retry document processing"
+                                                        title="Retry document processing">
+                                                    <iconify-icon icon="mdi:refresh"></iconify-icon>
+                                                </button>
+                                            }
+                                        </td>
+                                        <td class="text-right">
+                                            <div class="inline-flex items-center gap-1">
+                                                <button type="button"
+                                                        class="btn btn-ghost btn-sm"
+                                                        data-doc-id="@doc.Id"
+                                                        data-doc-view
+                                                        aria-label="View details"
+                                                        data-doc-name="@doc.FileName"
+                                                        data-doc-type="@doc.ContentType"
+                                                        data-doc-size="@Model.FormatBytes(doc.SizeBytes)"
+                                                        data-doc-state="@doc.State"
+                                                        data-doc-container-path="@(doc.ContainerPath ?? "")"
+                                                        data-doc-extraction-state="@doc.ExtractionState"
+                                                        title="View details"
+                                                        onclick="openDocInfo(this)">
+                                                    <iconify-icon icon="mdi:file-eye"></iconify-icon>
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-ghost btn-sm"
+                                                        data-doc-id="@doc.Id"
+                                                        data-doc-name="@doc.FileName"
+                                                        aria-label="Rename file"
+                                                        title="Rename file"
+                                                        onclick="renameDocument(this)">
+                                                    <iconify-icon icon="mdi:rename"></iconify-icon>
+                                                </button>
+                                                <button type="submit"
+                                                        class="btn btn-ghost btn-sm text-error"
+                                                        asp-page-handler="Delete"
+                                                        name="DeleteDocumentId"
+                                                        value="@doc.Id"
+                                                        aria-label="Delete file"
+                                                        title="Delete file"
+                                                        onclick="return confirm('Delete @doc.FileName?')">
+                                                    <iconify-icon icon="mdi:delete"></iconify-icon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-semibold">Supported formats:</span>
+                        <span class="text-xs text-base-content/80 break-words leading-6">
+                            <i>@string.Join(", ", Model.SupportedExtensions).</i>
+                            Archives will be recursively extracted into individual files.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="space-y-6">
+            <div class="card bg-base-100 shadow">
+                <div class="card-body space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-lg font-semibold">Project Chat</h2>
+                            <div id="selected-docs-counter" class="ml-auto text-sm text-base-content/60">
+                                Selected documents: @Model.SelectedDocumentIds.Count / @Model.Documents.Count
+                            </div>
+                        </div>
+
+                        @if (!Model.HasLlmConfigured)
+                        {
+                            <div class="alert alert-warning">
+                                <span>
+                                    No LLM model configured. Set one in your
+                                    <a href="/Profile" class="link link-hover font-semibold">Profile</a>
+                                    to enable chat.
+                                </span>
+                            </div>
+                        }
+
+                        <div id="chat-ajax-error" class="alert alert-error hidden">
+                            <span></span>
+                        </div>
+
+                        <div id="chat-history" class="space-y-3 max-h-96 overflow-y-auto rounded-box border border-base-200 p-4">
+                            @if (Model.ChatHistory.Count == 0)
+                            {
+                                <div id="chat-empty-state" class="text-base-content/60 text-sm">
+                                    Start by sending a user prompt. Selected documents will be used as context.
+                                </div>
+                            }
+                            else
+                            {
+                                @foreach (var message in Model.ChatHistory)
+                                {
+                                    <div class="chat @(message.Role == "user" ? "chat-end" : "chat-start")">
+                                        <div class="chat-header text-xs text-base-content/60">
+                                            @(message.Role == "user" ? "You" : "Assistant") &bull; @message.Timestamp.ToLocalTime().ToString("HH:mm")
+                                        </div>
+                                        <div class="chat-bubble @(message.Role == "user" ? "chat-bubble-primary" : "")">
+                                            @message.Content
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="button"
+                                    id="chat-send-history-button"
+                                    class="btn btn-outline btn-sm"
+                                    aria-label="Sends the chat history to the chat model to resync the context"
+                                    title="Sends the chat history to the chat model to resync the context">
+                                <iconify-icon icon="mdi:history"></iconify-icon>
+                                Re-send Chat History
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="collapse collapse-arrow rounded-lg border border-base-300 bg-base-100">
+                            <input type="checkbox" class="min-h-0" />
+                            <div class="collapse-title">
+                                <div class="flex items-center justify-between gap-3">
+                                    <span class="font-medium">System Prompt</span>
+                                    <span id="system-prompt-counter" class="text-xs text-base-content/60">0 / @Model.SystemPromptMaxLengthChars chars</span>
+                                </div>
+                            </div>
+                            <div class="collapse-content space-y-3">
+                                <textarea asp-for="SystemPrompt"
+                                          class="textarea textarea-bordered w-full"
+                                          rows="7"
+                                          maxlength="@Model.SystemPromptMaxLengthChars"
+                                          placeholder="Defines assistant behavior and rules. This instruction is applied before user prompt and RAG context."></textarea>
+                                <p class="text-xs text-base-content/70">
+                                    Use this for stable instructions (style, constraints, allowed behavior). If empty, the admin default is used.
+                                </p>
+
+                                <div class="rounded-lg border border-base-300 p-3 space-y-3">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="text-xs font-semibold uppercase text-base-content/60">System Prompt Library</div>
+                                        <div id="system-prompt-library-count" class="text-xs text-base-content/60">@Model.GetSystemPromptLibraryItems().Count items</div>
+                                    </div>
+                                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                                        <select id="system-prompt-library" class="select select-bordered select-sm w-full" data-prompt-type="@((int)Harpyx.Domain.Enums.ProjectPromptType.System)">
+                                            <option value="">Select a saved system prompt...</option>
+                                            @foreach (var item in Model.GetSystemPromptLibraryItems())
+                                            {
+                                                var prefix = item.IsFavorite ? "* " : "";
+                                                <option value="@item.Id"
+                                                        data-is-favorite="@(item.IsFavorite ? "true" : "false")"
+                                                        data-prompt-type="@((int)item.PromptType)">
+                                                    @($"{prefix}{Model.GetPromptPreview(item.Content)}")
+                                                </option>
+                                            }
+                                        </select>
+                                        <button type="button"
+                                                id="system-prompt-use"
+                                                class="btn btn-ghost btn-sm"
+                                                aria-label="Use selected system prompt"
+                                                title="Use selected system prompt">
+                                            <iconify-icon icon="mdi:history"></iconify-icon>
+                                        </button>
+                                        <button type="button"
+                                                id="system-prompt-favorite"
+                                                class="btn btn-ghost btn-sm"
+                                                aria-label="Toggle favorite for selected system prompt"
+                                                title="Toggle favorite for selected system prompt">
+                                            <iconify-icon icon="mdi:star-outline"></iconify-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="collapse collapse-arrow rounded-lg border border-base-300 bg-base-100">
+                            <input type="checkbox" class="min-h-0" checked />
+                            <div class="collapse-title">
+                                <div class="flex items-center justify-between gap-3">
+                                    <span class="font-medium">User Prompt</span>
+                                    <span id="user-prompt-counter" class="text-xs text-base-content/60">0 / @Model.UserPromptMaxLengthChars chars</span>
+                                </div>
+                            </div>
+                            <div class="collapse-content space-y-3">
+                                <textarea asp-for="UserPrompt"
+                                          class="textarea textarea-bordered w-full"
+                                          rows="5"
+                                          maxlength="@Model.UserPromptMaxLengthChars"
+                                          placeholder="Type the question or task for this chat turn."></textarea>
+                                <p class="text-xs text-base-content/70">
+                                    This is the actual request sent to the assistant for the current turn.
+                                </p>
+
+                                <div class="rounded-lg border border-base-300 p-3 space-y-3">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="text-xs font-semibold uppercase text-base-content/60">User Prompt Library</div>
+                                        <div id="user-prompt-library-count" class="text-xs text-base-content/60">@Model.GetUserPromptLibraryItems().Count items</div>
+                                    </div>
+                                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                                        <select id="user-prompt-library" class="select select-bordered select-sm w-full" data-prompt-type="@((int)Harpyx.Domain.Enums.ProjectPromptType.User)">
+                                            <option value="">Select a saved user prompt...</option>
+                                            @foreach (var item in Model.GetUserPromptLibraryItems())
+                                            {
+                                                var prefix = item.IsFavorite ? "* " : "";
+                                                <option value="@item.Id"
+                                                        data-is-favorite="@(item.IsFavorite ? "true" : "false")"
+                                                        data-prompt-type="@((int)item.PromptType)">
+                                                    @($"{prefix}{Model.GetPromptPreview(item.Content)}")
+                                                </option>
+                                            }
+                                        </select>
+                                        <button type="button"
+                                                id="user-prompt-use"
+                                                class="btn btn-ghost btn-sm"
+                                                aria-label="Use selected user prompt"
+                                                title="Use selected user prompt">
+                                            <iconify-icon icon="mdi:history"></iconify-icon>
+                                        </button>
+                                        <button type="button"
+                                                id="user-prompt-favorite"
+                                                class="btn btn-ghost btn-sm"
+                                                aria-label="Toggle favorite for selected user prompt"
+                                                title="Toggle favorite for selected user prompt">
+                                            <iconify-icon icon="mdi:star-outline"></iconify-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Provider</span>
+                            </label>
+                            <select asp-for="SelectedModelId" asp-items="Model.ModelOptions" class="select select-bordered w-full">
+                                <option value="">@Model.DefaultModelOptionLabel</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end justify-end gap-2">
+                            <button type="submit"
+                                    id="chat-send-button"
+                                    data-chat-submit="true"
+                                    class="btn btn-primary w-full sm:w-auto mw-120"
+                                    asp-page-handler="Chat">
+                                <iconify-icon icon="mdi:send"></iconify-icon>
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" id="rename-submit" class="hidden" asp-page-handler="Rename"></button>
+    </form>
+</div>
+
+<dialog id="doc-info-modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Document Details</h3>
+        <div class="mt-4 space-y-2 text-sm">
+            <div><span class="font-semibold">File:</span> <span id="doc-info-name"></span></div>
+            <div><span class="font-semibold">Type:</span> <span id="doc-info-type"></span></div>
+            <div><span class="font-semibold">Size:</span> <span id="doc-info-size"></span></div>
+            <div><span class="font-semibold">Status:</span> <span id="doc-info-state"></span></div>
+            <div id="doc-info-container-path-row" class="hidden"><span class="font-semibold">Container Path:</span> <span id="doc-info-container-path"></span></div>
+            <div id="doc-info-extraction-state-row" class="hidden"><span class="font-semibold">Extraction:</span> <span id="doc-info-extraction-state"></span></div>
+        </div>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn btn-ghost">Close</button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script>
+    (function () {
+        const selectAllBtn = document.getElementById('select-all-docs');
+        const deselectAllBtn = document.getElementById('deselect-all-docs');
+        const form = document.getElementById('project-dashboard-form');
+        const documentsTbody = document.getElementById('documents-tbody');
+        const selectedDocsCounter = document.getElementById('selected-docs-counter');
+        const projectContainer = document.querySelector('[data-project-id]');
+        const projectId = projectContainer?.getAttribute('data-project-id') || '';
+        const systemPrompt = document.getElementById('SystemPrompt');
+        const systemPromptCounter = document.getElementById('system-prompt-counter');
+        const userPrompt = document.getElementById('UserPrompt');
+        const userPromptCounter = document.getElementById('user-prompt-counter');
+        const retryButtonClassName = 'btn btn-error btn-sm ml-2';
+
+        function getCheckboxes() {
+            return form.querySelectorAll('input[name="SelectedDocumentIds"]:not(:disabled)');
+        }
+
+        function updateSelectedCounter() {
+            if (!selectedDocsCounter || !documentsTbody) {
+                return;
+            }
+
+            const selectedCount = documentsTbody.querySelectorAll('input[name="SelectedDocumentIds"]:checked').length;
+            const totalCount = documentsTbody.querySelectorAll('[data-doc-row]').length;
+            selectedDocsCounter.textContent = `Selected: ${selectedCount} / ${totalCount}`;
+        }
+
+        function normalizeDocumentState(state) {
+            if (typeof state === 'string') {
+                return state;
+            }
+
+            switch (state) {
+                case 0: return 'Uploaded';
+                case 1: return 'Queued';
+                case 2: return 'Processing';
+                case 3: return 'Completed';
+                case 4: return 'Failed';
+                case 5: return 'Quarantined';
+                case 6: return 'Rejected';
+                default: return String(state ?? '');
+            }
+        }
+
+        function isDocumentSelectable(state) {
+            return state !== 'Quarantined' && state !== 'Rejected';
+        }
+
+        function canRetryDocument(state) {
+            return state === 'Failed';
+        }
+
+        function applyStatusStyle(statusTextElement, state) {
+            if (!statusTextElement) {
+                return;
+            }
+
+            statusTextElement.className = '';
+            if (state === 'Quarantined') {
+                statusTextElement.className = 'badge badge-warning';
+            } else if (state === 'Rejected' || state === 'Failed') {
+                statusTextElement.className = 'badge badge-error';
+            }
+        }
+
+        function upsertRetryButton(statusCell, docId, state) {
+            if (!statusCell) {
+                return;
+            }
+
+            const existingRetryButton = statusCell.querySelector('[data-doc-retry]');
+            if (!canRetryDocument(state)) {
+                existingRetryButton?.remove();
+                return;
+            }
+
+            if (existingRetryButton) {
+                existingRetryButton.value = docId;
+                existingRetryButton.className = retryButtonClassName;
+                return;
+            }
+
+            const retryButton = document.createElement('button');
+            retryButton.type = 'submit';
+            retryButton.className = retryButtonClassName;
+            retryButton.name = 'RetryDocumentId';
+            retryButton.value = docId;
+            retryButton.formAction = `${window.location.pathname}?handler=Retry`;
+            retryButton.formMethod = 'post';
+            retryButton.setAttribute('data-doc-retry', '');
+            retryButton.setAttribute('aria-label', 'Retry document processing');
+            retryButton.setAttribute('title', 'Retry document processing');
+            retryButton.innerHTML = '<iconify-icon icon="mdi:refresh"></iconify-icon>';
+            statusCell.appendChild(retryButton);
+        }
+
+        function formatBytes(bytes) {
+            const scale = 1024;
+            const orders = ['B', 'KB', 'MB', 'GB'];
+            let max = Number(bytes || 0);
+            let order = 0;
+            while (max >= scale && order < orders.length - 1) {
+                order += 1;
+                max = max / scale;
+            }
+
+            return `${max.toFixed(max >= 100 ? 0 : (max >= 10 ? 1 : 2)).replace(/\.?0+$/, '')} ${orders[order]}`;
+        }
+
+        function syncDocumentRow(row, doc) {
+            const docId = String(doc.id ?? doc.Id ?? '');
+            const state = normalizeDocumentState(doc.state ?? doc.State);
+            const fileName = String(doc.fileName ?? doc.FileName ?? '');
+            const contentType = String(doc.contentType ?? doc.ContentType ?? '');
+            const sizeBytes = Number(doc.sizeBytes ?? doc.SizeBytes ?? 0);
+            const nestingLevel = Number(doc.nestingLevel ?? doc.NestingLevel ?? 0);
+            const containerPath = String(doc.containerPath ?? doc.ContainerPath ?? '');
+            const isContainer = Boolean(doc.isContainer ?? doc.IsContainer ?? false);
+            const containerType = Number(doc.containerType ?? doc.ContainerType ?? 0);
+            const sourceUrl = String(doc.sourceUrl ?? doc.SourceUrl ?? '');
+
+            const fileNameCell = row.querySelector('[data-doc-file-name]');
+            const contentTypeCell = row.querySelector('[data-doc-content-type]');
+            const sizeCell = row.querySelector('[data-doc-size]');
+            const statusCell = row.querySelector('[data-doc-status-cell]');
+            let statusTextElement = row.querySelector('[data-doc-status-text]');
+            const viewButton = row.querySelector('[data-doc-view]');
+            const renameButton = row.querySelector('button[onclick^="renameDocument"]');
+            const checkbox = row.querySelector('[data-doc-checkbox]');
+
+            if (fileNameCell) {
+                fileNameCell.dataset.docSourceUrl = sourceUrl;
+                const nameSpan = fileNameCell.querySelector('span') || fileNameCell;
+                nameSpan.textContent = fileName;
+                nameSpan.title = containerPath || fileName;
+            }
+
+            if (contentTypeCell) {
+                contentTypeCell.textContent = contentType;
+            }
+
+            if (sizeCell) {
+                sizeCell.textContent = formatBytes(sizeBytes);
+            }
+
+            if (!statusTextElement && statusCell) {
+                statusTextElement = document.createElement('span');
+                statusTextElement.setAttribute('data-doc-status-text', '');
+                statusCell.prepend(statusTextElement);
+            }
+
+            if (statusTextElement) {
+                statusTextElement.textContent = state;
+                applyStatusStyle(statusTextElement, state);
+            }
+
+            upsertRetryButton(statusCell, docId, state);
+
+            if (viewButton) {
+                viewButton.dataset.docName = fileName;
+                viewButton.dataset.docType = contentType;
+                viewButton.dataset.docSize = formatBytes(sizeBytes);
+                viewButton.dataset.docState = state;
+            }
+
+            if (renameButton) {
+                renameButton.dataset.docName = fileName;
+            }
+
+            if (checkbox) {
+                const selectable = isDocumentSelectable(state);
+                checkbox.disabled = !selectable;
+                if (!selectable) {
+                    checkbox.checked = false;
+                }
+            }
+        }
+
+        async function refreshDocumentStatuses() {
+            if (!projectId || !documentsTbody) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/documents/project/${projectId}`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const docs = await response.json();
+                if (!Array.isArray(docs)) {
+                    return;
+                }
+
+                const rowsById = new Map();
+                documentsTbody.querySelectorAll('[data-doc-row]').forEach(row => {
+                    const id = (row.getAttribute('data-doc-id') || '').toLowerCase();
+                    if (id) {
+                        rowsById.set(id, row);
+                    }
+                });
+
+                docs.forEach(doc => {
+                    const id = String(doc.id ?? doc.Id ?? '').toLowerCase();
+                    const row = rowsById.get(id);
+                    if (row) {
+                        syncDocumentRow(row, doc);
+                    }
+                });
+
+                updateSelectedCounter();
+            } catch {
+                // Ignore transient polling errors and continue with next cycle.
+            }
+        }
+
+        function bindCounter(textarea, counter) {
+            if (!textarea || !counter) {
+                return;
+            }
+
+            const max = parseInt(textarea.getAttribute('maxlength') || '0', 10);
+            const safeMax = Number.isNaN(max) ? 0 : max;
+
+            const update = function () {
+                const used = textarea.value.length;
+                counter.textContent = `${used} / ${safeMax} chars`;
+            };
+
+            textarea.addEventListener('input', update);
+            update();
+        }
+
+        selectAllBtn?.addEventListener('click', function () {
+            getCheckboxes().forEach(cb => cb.checked = true);
+            updateSelectedCounter();
+        });
+
+        deselectAllBtn?.addEventListener('click', function () {
+            getCheckboxes().forEach(cb => cb.checked = false);
+            updateSelectedCounter();
+        });
+
+        documentsTbody?.addEventListener('change', function (event) {
+            const target = event.target;
+            if (target instanceof HTMLInputElement && target.name === 'SelectedDocumentIds') {
+                updateSelectedCounter();
+            }
+        });
+
+        bindCounter(systemPrompt, systemPromptCounter);
+        bindCounter(userPrompt, userPromptCounter);
+        updateSelectedCounter();
+        refreshDocumentStatuses();
+        window.setInterval(refreshDocumentStatuses, 4000);
+    })();
+
+    (function () {
+        const form = document.getElementById('project-dashboard-form');
+        const projectContainer = document.querySelector('[data-project-id]');
+        const projectId = projectContainer?.getAttribute('data-project-id') || '';
+        const antiForgeryToken = form?.querySelector('input[name="__RequestVerificationToken"]');
+        const chatHistory = document.getElementById('chat-history');
+        const chatError = document.getElementById('chat-ajax-error');
+        const chatSendButton = document.getElementById('chat-send-button');
+        const chatSendButtonDefaultHtml = chatSendButton?.innerHTML ?? '';
+        const systemPrompt = document.getElementById('SystemPrompt');
+        const userPrompt = document.getElementById('UserPrompt');
+        const chatHistoryJson = document.getElementById('ChatHistoryJson');
+        const systemPromptLibrary = document.getElementById('system-prompt-library');
+        const userPromptLibrary = document.getElementById('user-prompt-library');
+        const systemPromptUseButton = document.getElementById('system-prompt-use');
+        const userPromptUseButton = document.getElementById('user-prompt-use');
+        const systemPromptFavoriteButton = document.getElementById('system-prompt-favorite');
+        const userPromptFavoriteButton = document.getElementById('user-prompt-favorite');
+        const systemPromptLibraryCount = document.getElementById('system-prompt-library-count');
+        const userPromptLibraryCount = document.getElementById('user-prompt-library-count');
+        let isChatSubmitting = false;
+
+        function escapeHtml(value) {
+            const div = document.createElement('div');
+            div.textContent = value ?? '';
+            return div.innerHTML;
+        }
+
+        function formatMultiline(value) {
+            return escapeHtml(String(value ?? '')).replace(/\n/g, '<br>');
+        }
+
+        function renderMarkdownFinal(value) {
+            const safeContent = String(value ?? '');
+            if (!window.marked || !window.DOMPurify) {
+                return formatMultiline(safeContent);
+            }
+
+            const parsed = window.marked.parse(safeContent, {
+                gfm: true,
+                breaks: true
+            });
+
+            return window.DOMPurify.sanitize(parsed, {
+                USE_PROFILES: { html: true }
+            });
+        }
+
+        function hideChatError() {
+            if (!chatError) {
+                return;
+            }
+
+            chatError.classList.add('hidden');
+            const span = chatError.querySelector('span');
+            if (span) {
+                span.textContent = '';
+            }
+        }
+
+        function showChatError(message) {
+            if (!chatError) {
+                return;
+            }
+
+            const span = chatError.querySelector('span');
+            if (span) {
+                span.textContent = message;
+            }
+            chatError.classList.remove('hidden');
+        }
+
+        function setChatSubmitState(isSubmitting) {
+            if (!chatSendButton) {
+                return;
+            }
+
+            chatSendButton.disabled = isSubmitting;
+            if (isSubmitting) {
+                chatSendButton.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Sending';
+            } else {
+                chatSendButton.innerHTML = chatSendButtonDefaultHtml;
+            }
+        }
+
+        function appendChatMessage(role, content, timestampIso) {
+            if (!chatHistory) {
+                return null;
+            }
+
+            const emptyState = document.getElementById('chat-empty-state');
+            emptyState?.remove();
+
+            const chat = document.createElement('div');
+            chat.className = `chat ${role === 'user' ? 'chat-end' : 'chat-start'}`;
+
+            const header = document.createElement('div');
+            header.className = 'chat-header text-xs text-base-content/60';
+            const timestamp = timestampIso ? new Date(timestampIso) : new Date();
+            const hh = `${timestamp.getHours()}`.padStart(2, '0');
+            const mm = `${timestamp.getMinutes()}`.padStart(2, '0');
+            header.innerHTML = `${role === 'user' ? 'You' : 'Assistant'} &bull; ${hh}:${mm}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = role === 'user' ? 'chat-bubble chat-bubble-primary' : 'chat-bubble';
+            bubble.innerHTML = formatMultiline(content);
+
+            chat.appendChild(header);
+            chat.appendChild(bubble);
+            chatHistory.appendChild(chat);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            return { chat, bubble };
+        }
+
+        function appendAssistantToken(target, token) {
+            if (!target?.bubble) {
+                return;
+            }
+
+            const current = target.bubble.dataset.rawContent || '';
+            const next = `${current}${String(token ?? '')}`;
+            target.bubble.dataset.rawContent = next;
+            target.bubble.innerHTML = formatMultiline(next);
+            if (chatHistory) {
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        }
+
+        function setAssistantContent(target, content) {
+            if (!target?.bubble) {
+                return;
+            }
+
+            const safeContent = String(content ?? '');
+            target.bubble.dataset.rawContent = safeContent;
+            target.bubble.classList.add('chat-markdown');
+            target.bubble.innerHTML = renderMarkdownFinal(safeContent);
+            if (chatHistory) {
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        }
+
+        function parseStreamEventLine(line) {
+            if (!line) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(line);
+            } catch {
+                return null;
+            }
+        }
+
+        function getSelectedPrompt(select) {
+            if (!select || !select.value) {
+                return null;
+            }
+
+            const option = select.selectedOptions[0];
+            if (!option || !option.value) {
+                return null;
+            }
+
+            return {
+                id: option.value,
+                promptType: option.dataset.promptType || select.dataset.promptType || '',
+                isFavorite: (option.dataset.isFavorite || '').toLowerCase() === 'true'
+            };
+        }
+
+        function setFavoriteButtonState(button, isFavorite) {
+            if (!button) {
+                return;
+            }
+
+            button.classList.toggle('text-warning', isFavorite);
+            button.innerHTML = `<iconify-icon icon="${isFavorite ? 'mdi:star' : 'mdi:star-outline'}"></iconify-icon>`;
+        }
+
+        function normalizePromptLibraryItems(items) {
+            if (!Array.isArray(items)) {
+                return [];
+            }
+
+            return items.map(item => ({
+                id: String(item.id ?? item.Id ?? ''),
+                promptType: String(item.promptType ?? item.PromptType ?? ''),
+                isFavorite: Boolean(item.isFavorite ?? item.IsFavorite),
+                preview: String(item.preview ?? item.Preview ?? '')
+            })).filter(item => item.id.length > 0);
+        }
+
+        function rebuildPromptSelect(select, items, placeholder, preferredId) {
+            if (!select) {
+                return;
+            }
+
+            const selectedId = preferredId || select.value;
+            select.innerHTML = '';
+
+            const placeholderOption = document.createElement('option');
+            placeholderOption.value = '';
+            placeholderOption.textContent = placeholder;
+            select.appendChild(placeholderOption);
+
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.dataset.promptType = item.promptType;
+                option.dataset.isFavorite = item.isFavorite ? 'true' : 'false';
+                option.textContent = `${item.isFavorite ? '* ' : ''}${item.preview}`;
+                if (item.id === selectedId) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+
+        function updatePromptLibraries(payload, preferredSystemId, preferredUserId) {
+            const libraries = payload?.promptLibraries ?? payload?.PromptLibraries ?? payload;
+            if (!libraries) {
+                return;
+            }
+
+            const systemItems = normalizePromptLibraryItems(libraries.system ?? libraries.System);
+            const userItems = normalizePromptLibraryItems(libraries.user ?? libraries.User);
+
+            rebuildPromptSelect(systemPromptLibrary, systemItems, 'Select a saved system prompt...', preferredSystemId);
+            rebuildPromptSelect(userPromptLibrary, userItems, 'Select a saved user prompt...', preferredUserId);
+
+            if (systemPromptLibraryCount) {
+                systemPromptLibraryCount.textContent = `${systemItems.length} items`;
+            }
+            if (userPromptLibraryCount) {
+                userPromptLibraryCount.textContent = `${userItems.length} items`;
+            }
+
+            const systemSelection = getSelectedPrompt(systemPromptLibrary);
+            const userSelection = getSelectedPrompt(userPromptLibrary);
+            setFavoriteButtonState(systemPromptFavoriteButton, systemSelection?.isFavorite ?? false);
+            setFavoriteButtonState(userPromptFavoriteButton, userSelection?.isFavorite ?? false);
+        }
+
+        function buildAjaxFormData() {
+            const data = new FormData();
+            if (antiForgeryToken?.name && antiForgeryToken?.value) {
+                data.append(antiForgeryToken.name, antiForgeryToken.value);
+            }
+            if (projectId) {
+                data.append('Id', projectId);
+            }
+            return data;
+        }
+
+        async function useSelectedPrompt(select, targetTextarea) {
+            const selected = getSelectedPrompt(select);
+            if (!selected || !targetTextarea) {
+                return;
+            }
+
+            hideChatError();
+
+            const data = buildAjaxFormData();
+            data.append('promptId', selected.id);
+            data.append('promptType', selected.promptType);
+
+            const response = await fetch(`${window.location.pathname}?handler=UsePromptAjax`, {
+                method: 'POST',
+                body: data,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            let payload = null;
+            try {
+                payload = await response.json();
+            } catch {
+                payload = null;
+            }
+
+            if (!response.ok || !payload?.success) {
+                showChatError(payload?.error || 'Unable to load selected prompt.');
+                return;
+            }
+
+            targetTextarea.value = payload.content ?? '';
+            targetTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+            const preferredSystemId = selected.promptType === '1' ? selected.id : undefined;
+            const preferredUserId = selected.promptType === '2' ? selected.id : undefined;
+            updatePromptLibraries(payload, preferredSystemId, preferredUserId);
+        }
+
+        async function toggleFavoriteForSelectedPrompt(select) {
+            const selected = getSelectedPrompt(select);
+            if (!selected) {
+                return;
+            }
+
+            hideChatError();
+
+            const data = buildAjaxFormData();
+            data.append('promptId', selected.id);
+
+            const response = await fetch(`${window.location.pathname}?handler=TogglePromptFavoriteAjax`, {
+                method: 'POST',
+                body: data,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            let payload = null;
+            try {
+                payload = await response.json();
+            } catch {
+                payload = null;
+            }
+
+            if (!response.ok || !payload?.success) {
+                showChatError(payload?.error || 'Unable to toggle prompt favorite.');
+                return;
+            }
+
+            const preferredSystemId = (select === systemPromptLibrary) ? selected.id : undefined;
+            const preferredUserId = (select === userPromptLibrary) ? selected.id : undefined;
+            updatePromptLibraries(payload, preferredSystemId, preferredUserId);
+        }
+
+        async function submitChatAjax() {
+            if (!form || !chatSendButton || isChatSubmitting) {
+                return;
+            }
+
+            const currentPrompt = userPrompt?.value?.trim() || '';
+            if (!currentPrompt) {
+                showChatError('Please enter a user prompt.');
+                return;
+            }
+
+            hideChatError();
+            isChatSubmitting = true;
+            setChatSubmitState(true);
+
+            const data = new FormData(form);
+            const userEntry = appendChatMessage('user', currentPrompt, null);
+            const assistantEntry = appendChatMessage('assistant', '', null);
+            if (userPrompt) {
+                userPrompt.value = '';
+                userPrompt.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            try {
+                const response = await fetch(`${window.location.pathname}?handler=ChatStream`, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) {
+                    let payload = null;
+                    try {
+                        payload = await response.json();
+                    } catch {
+                        payload = null;
+                    }
+
+                    userEntry?.chat.remove();
+                    assistantEntry?.chat.remove();
+                    if (userPrompt) {
+                        userPrompt.value = currentPrompt;
+                        userPrompt.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                    showChatError(payload?.error || 'Chat request failed.');
+                    return;
+                }
+
+                const reader = response.body?.getReader();
+                if (!reader) {
+                    throw new Error('Streaming is not supported by this browser.');
+                }
+
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let donePayload = null;
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        break;
+                    }
+
+                    buffer += decoder.decode(value, { stream: true });
+                    let lineBreakIndex = buffer.indexOf('\n');
+                    while (lineBreakIndex >= 0) {
+                        const rawLine = buffer.slice(0, lineBreakIndex);
+                        buffer = buffer.slice(lineBreakIndex + 1);
+                        lineBreakIndex = buffer.indexOf('\n');
+
+                        const payload = parseStreamEventLine(rawLine.trim());
+                        if (!payload) {
+                            continue;
+                        }
+
+                        if (payload.type === 'token') {
+                            appendAssistantToken(assistantEntry, payload.content || '');
+                            continue;
+                        }
+
+                        if (payload.type === 'done') {
+                            donePayload = payload;
+                            continue;
+                        }
+
+                        if (payload.type === 'error') {
+                            throw new Error(payload.error || 'Chat request failed.');
+                        }
+                    }
+                }
+
+                buffer += decoder.decode();
+                if (buffer.trim().length > 0) {
+                    const finalPayload = parseStreamEventLine(buffer.trim());
+                    if (finalPayload?.type === 'done') {
+                        donePayload = finalPayload;
+                    } else if (finalPayload?.type === 'error') {
+                        throw new Error(finalPayload.error || 'Chat request failed.');
+                    }
+                }
+
+                if (!donePayload) {
+                    throw new Error('Chat stream ended unexpectedly.');
+                }
+
+                if (chatHistoryJson) {
+                    chatHistoryJson.value = donePayload.chatHistoryJson || '';
+                }
+
+                updatePromptLibraries(donePayload);
+                setAssistantContent(assistantEntry, donePayload.assistantMessage || assistantEntry?.bubble?.dataset.rawContent || '');
+            } catch (error) {
+                userEntry?.chat.remove();
+                assistantEntry?.chat.remove();
+                if (userPrompt) {
+                    userPrompt.value = currentPrompt;
+                    userPrompt.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                const message = error instanceof Error && error.message
+                    ? error.message
+                    : 'Unexpected network error while sending chat.';
+                showChatError(message);
+            } finally {
+                isChatSubmitting = false;
+                setChatSubmitState(false);
+            }
+        }
+
+        form?.addEventListener('submit', function (event) {
+            const submitter = event.submitter;
+            if (!(submitter instanceof HTMLElement) || submitter.dataset.chatSubmit !== 'true') {
+                return;
+            }
+
+            event.preventDefault();
+            void submitChatAjax();
+        });
+
+        systemPromptLibrary?.addEventListener('change', function () {
+            const selected = getSelectedPrompt(systemPromptLibrary);
+            setFavoriteButtonState(systemPromptFavoriteButton, selected?.isFavorite ?? false);
+        });
+
+        userPromptLibrary?.addEventListener('change', function () {
+            const selected = getSelectedPrompt(userPromptLibrary);
+            setFavoriteButtonState(userPromptFavoriteButton, selected?.isFavorite ?? false);
+        });
+
+        systemPromptUseButton?.addEventListener('click', function () {
+            void useSelectedPrompt(systemPromptLibrary, systemPrompt);
+        });
+
+        userPromptUseButton?.addEventListener('click', function () {
+            void useSelectedPrompt(userPromptLibrary, userPrompt);
+        });
+
+        systemPromptFavoriteButton?.addEventListener('click', function () {
+            void toggleFavoriteForSelectedPrompt(systemPromptLibrary);
+        });
+
+        userPromptFavoriteButton?.addEventListener('click', function () {
+            void toggleFavoriteForSelectedPrompt(userPromptLibrary);
+        });
+
+        const initialSystem = getSelectedPrompt(systemPromptLibrary);
+        const initialUser = getSelectedPrompt(userPromptLibrary);
+        setFavoriteButtonState(systemPromptFavoriteButton, initialSystem?.isFavorite ?? false);
+        setFavoriteButtonState(userPromptFavoriteButton, initialUser?.isFavorite ?? false);
+
+        const chatSendHistoryButton = document.getElementById('chat-send-history-button');
+        let isHistorySubmitting = false;
+
+        async function submitSendChatHistory() {
+            if (!form || isHistorySubmitting || isChatSubmitting) {
+                return;
+            }
+
+            hideChatError();
+            isHistorySubmitting = true;
+            if (chatSendHistoryButton) {
+                chatSendHistoryButton.disabled = true;
+                chatSendHistoryButton.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Sending...';
+            }
+
+            const assistantEntry = appendChatMessage('assistant', '', null);
+
+            try {
+                const data = new FormData(form);
+                const response = await fetch(`${window.location.pathname}?handler=SendChatHistoryStream`, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) {
+                    let payload = null;
+                    try {
+                        payload = await response.json();
+                    } catch {
+                        payload = null;
+                    }
+                    assistantEntry?.chat.remove();
+                    showChatError(payload?.error || 'Send chat history request failed.');
+                    return;
+                }
+
+                const reader = response.body?.getReader();
+                if (!reader) {
+                    throw new Error('Streaming is not supported by this browser.');
+                }
+
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let donePayload = null;
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        break;
+                    }
+
+                    buffer += decoder.decode(value, { stream: true });
+                    let lineBreakIndex = buffer.indexOf('\n');
+                    while (lineBreakIndex >= 0) {
+                        const rawLine = buffer.slice(0, lineBreakIndex);
+                        buffer = buffer.slice(lineBreakIndex + 1);
+                        lineBreakIndex = buffer.indexOf('\n');
+
+                        const payload = parseStreamEventLine(rawLine.trim());
+                        if (!payload) {
+                            continue;
+                        }
+
+                        if (payload.type === 'token') {
+                            appendAssistantToken(assistantEntry, payload.content || '');
+                            continue;
+                        }
+
+                        if (payload.type === 'done') {
+                            donePayload = payload;
+                            continue;
+                        }
+
+                        if (payload.type === 'error') {
+                            throw new Error(payload.error || 'Send chat history request failed.');
+                        }
+                    }
+                }
+
+                buffer += decoder.decode();
+                if (buffer.trim().length > 0) {
+                    const finalPayload = parseStreamEventLine(buffer.trim());
+                    if (finalPayload?.type === 'done') {
+                        donePayload = finalPayload;
+                    } else if (finalPayload?.type === 'error') {
+                        throw new Error(finalPayload.error || 'Send chat history request failed.');
+                    }
+                }
+
+                if (!donePayload) {
+                    throw new Error('Chat stream ended unexpectedly.');
+                }
+
+                if (chatHistoryJson) {
+                    chatHistoryJson.value = donePayload.chatHistoryJson || '';
+                }
+
+                setAssistantContent(assistantEntry, donePayload.assistantMessage || assistantEntry?.bubble?.dataset.rawContent || '');
+            } catch (error) {
+                assistantEntry?.chat.remove();
+                const message = error instanceof Error && error.message
+                    ? error.message
+                    : 'Unexpected network error while sending chat history.';
+                showChatError(message);
+            } finally {
+                isHistorySubmitting = false;
+                if (chatSendHistoryButton) {
+                    chatSendHistoryButton.disabled = false;
+                    chatSendHistoryButton.innerHTML = '<iconify-icon icon="mdi:history"></iconify-icon> Send Chat History';
+                }
+            }
+        }
+
+        chatSendHistoryButton?.addEventListener('click', function () {
+            void submitSendChatHistory();
+        });
+    })();
+
+    function renameDocument(button) {
+        const id = button.dataset.docId;
+        const currentName = button.dataset.docName || '';
+        const newName = prompt('New file name', currentName);
+        if (!newName || newName.trim() === currentName) {
+            return;
+        }
+        document.getElementById('RenameDocumentId').value = id;
+        document.getElementById('RenameFileName').value = newName.trim();
+        document.getElementById('rename-submit').click();
+    }
+
+    function openDocInfo(button) {
+        const modal = document.getElementById('doc-info-modal');
+        document.getElementById('doc-info-name').textContent = button.dataset.docName || '';
+        document.getElementById('doc-info-type').textContent = button.dataset.docType || '';
+        document.getElementById('doc-info-size').textContent = button.dataset.docSize || '';
+        document.getElementById('doc-info-state').textContent = button.dataset.docState || '';
+
+        const containerPath = button.dataset.docContainerPath || '';
+        const containerPathRow = document.getElementById('doc-info-container-path-row');
+        const containerPathSpan = document.getElementById('doc-info-container-path');
+        if (containerPath) {
+            containerPathSpan.textContent = containerPath;
+            containerPathRow.classList.remove('hidden');
+        } else {
+            containerPathRow.classList.add('hidden');
+        }
+
+        const extractionState = button.dataset.docExtractionState || '';
+        const extractionStateRow = document.getElementById('doc-info-extraction-state-row');
+        const extractionStateSpan = document.getElementById('doc-info-extraction-state');
+        if (extractionState) {
+            extractionStateSpan.textContent = extractionState;
+            extractionStateRow.classList.remove('hidden');
+        } else {
+            extractionStateRow.classList.add('hidden');
+        }
+
+        modal.showModal();
+    }
+</script>

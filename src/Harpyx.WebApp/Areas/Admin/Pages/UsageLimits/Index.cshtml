@@ -1,0 +1,165 @@
+@page
+@model Harpyx.WebApp.Areas.Admin.Pages.UsageLimits.IndexModel
+@using Harpyx.WebApp.Areas.Admin.Pages.UsageLimits
+@{
+    ViewData["Title"] = "Admin - Usage Limits";
+}
+@section SidePanel {
+    <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
+}
+
+<div class="space-y-6">
+    @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">
+            <span>@Model.ErrorMessage</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h1 class="text-2xl font-semibold">Usage Limits</h1>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Configure instance-wide limits for resources, storage, and optional capabilities. Use `Unlimited` to remove a cap.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">Users and tenants</h2>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="form-control">
+                            <span class="label-text">Tenants per user</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.TenantsPerUser", Model.Limits.TenantsPerUser, "Limits.TenantsPerUserUnlimited", Model.Limits.TenantsPerUserUnlimited))
+                        </label>
+                        <label class="form-control">
+                            <span class="label-text">Workspaces per user</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.WorkspacesPerUser", Model.Limits.WorkspacesPerUser, "Limits.WorkspacesPerUserUnlimited", Model.Limits.WorkspacesPerUserUnlimited))
+                        </label>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">Workspaces and projects</h2>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="form-control">
+                            <span class="label-text">Projects per workspace</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.ProjectsPerWorkspace", Model.Limits.ProjectsPerWorkspace, "Limits.ProjectsPerWorkspaceUnlimited", Model.Limits.ProjectsPerWorkspaceUnlimited))
+                        </label>
+                        <label class="form-control">
+                            <span class="label-text">Permanent projects per workspace</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.PermanentProjectsPerWorkspace", Model.Limits.PermanentProjectsPerWorkspace, "Limits.PermanentProjectsPerWorkspaceUnlimited", Model.Limits.PermanentProjectsPerWorkspaceUnlimited))
+                        </label>
+                        <label class="form-control">
+                            <span class="label-text">Max temporary project lifetime (hours)</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.MaxTemporaryProjectLifetimeHours", Model.Limits.MaxTemporaryProjectLifetimeHours, "Limits.MaxTemporaryProjectLifetimeHoursUnlimited", Model.Limits.MaxTemporaryProjectLifetimeHoursUnlimited))
+                        </label>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">Documents and storage</h2>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="form-control">
+                            <span class="label-text">Documents per workspace</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.DocumentsPerWorkspace", Model.Limits.DocumentsPerWorkspace, "Limits.DocumentsPerWorkspaceUnlimited", Model.Limits.DocumentsPerWorkspaceUnlimited))
+                        </label>
+                        <label class="form-control">
+                            <span class="label-text">Storage per user (GB)</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.StoragePerUserGb", Model.Limits.StoragePerUserGb, "Limits.StoragePerUserGbUnlimited", Model.Limits.StoragePerUserGbUnlimited))
+                        </label>
+                        <label class="form-control">
+                            <span class="label-text">Storage per tenant (GB)</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.StoragePerTenantGb", Model.Limits.StoragePerTenantGb, "Limits.StoragePerTenantGbUnlimited", Model.Limits.StoragePerTenantGbUnlimited))
+                        </label>
+                        <label class="form-control">
+                            <span class="label-text">Storage per workspace (GB)</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.StoragePerWorkspaceGb", Model.Limits.StoragePerWorkspaceGb, "Limits.StoragePerWorkspaceGbUnlimited", Model.Limits.StoragePerWorkspaceGbUnlimited))
+                        </label>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">Capabilities</h2>
+                    <div class="space-y-3">
+                        <label class="form-control">
+                            <span class="label-text">LLM providers per user</span>
+                            @await Html.PartialAsync("/Areas/Admin/Pages/UsageLimits/_LimitCell.cshtml", new LimitCellModel("Limits.LlmProvidersPerUser", Model.Limits.LlmProvidersPerUser, "Limits.LlmProvidersPerUserUnlimited", Model.Limits.LlmProvidersPerUserUnlimited))
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input asp-for="Limits.EnableOcr" type="checkbox" class="checkbox checkbox-sm" />
+                            <span>Enable OCR</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input asp-for="Limits.EnableRagIndexing" type="checkbox" class="checkbox checkbox-sm" />
+                            <span>Enable RAG indexing</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input asp-for="Limits.EnableApi" type="checkbox" class="checkbox checkbox-sm" />
+                            <span>Enable API access</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary mw-120">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save
+                    </button>
+                    <a asp-area="Admin" asp-page="/Index" class="btn btn-ghost mw-120">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        function sync(cell) {
+            const input = cell.querySelector('.limit-value');
+            const checkbox = cell.querySelector('.limit-unlimited');
+            if (!input || !checkbox) {
+                return;
+            }
+
+            if (checkbox.checked) {
+                input.value = '';
+                input.setAttribute('disabled', 'disabled');
+            } else {
+                input.removeAttribute('disabled');
+            }
+        }
+
+        const cells = document.querySelectorAll('.limit-cell');
+        cells.forEach(cell => {
+            const checkbox = cell.querySelector('.limit-unlimited');
+            if (!checkbox) {
+                return;
+            }
+
+            checkbox.addEventListener('change', function () {
+                sync(cell);
+            });
+
+            sync(cell);
+        });
+    })();
+</script>

@@ -1,0 +1,103 @@
+@page
+@model Harpyx.WebApp.Areas.Admin.Pages.IndexModel
+@{
+    ViewData["Title"] = "Admin - Dashboard";
+}
+@section SidePanel {
+    <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
+}
+
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-semibold">Admin Overview</h1>
+        <p class="mt-2 text-sm text-base-content/70">
+            This area contains platform-wide controls. Use these shortcuts for settings, governance, and operational management.
+        </p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+        <a asp-area="Admin" asp-page="/Settings/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:tune"></iconify-icon>
+                    General Settings
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Toggle self-registration and other application-wide policies.
+                </p>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-page="/UsageLimits/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:gauge"></iconify-icon>
+                    Usage Limits
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Configure instance-wide limits for tenants, workspaces, documents, storage, and optional capabilities.
+                </p>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-page="/Health/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:heart-pulse"></iconify-icon>
+                    System Health
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Check required services and optional capabilities.
+                </p>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-page="/Users/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
+                    Users
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Review all users, roles, and activation state from one place.
+                </p>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-page="/Llm/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:server-network"></iconify-icon>
+                    Hosted Models
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Maintain hosted models available to users.
+                </p>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-page="/Tenants/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:office-building-outline"></iconify-icon>
+                    Tenants
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Inspect and edit all tenant entities in the platform.
+                </p>
+            </div>
+        </a>
+
+        <a asp-area="Admin" asp-page="/Invitations/Index" class="card bg-base-100 shadow admin-dashboard-card">
+            <div class="card-body">
+                <div class="flex items-center gap-2 text-lg font-semibold">
+                    <iconify-icon icon="mdi:email-fast-outline"></iconify-icon>
+                    User Invitations
+                </div>
+                <p class="text-sm text-base-content/70">
+                    Invite users when self-registration is disabled, then track invitation status.
+                </p>
+            </div>
+        </a>
+    </div>
+</div>

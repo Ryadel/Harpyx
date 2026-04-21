@@ -1,0 +1,149 @@
+@{
+    var preferredTheme = Context?.Request?.Cookies["harpyx_theme"];
+    if (string.IsNullOrWhiteSpace(preferredTheme))
+    {
+        preferredTheme = "cupcake";
+    }
+
+    var widthPreference = Context?.Request?.Cookies["harpyx_width"]?.ToLowerInvariant();
+    var normalizedWidth = widthPreference switch
+    {
+        "compact" => "compact",
+        "standard" => "standard",
+        "wide" => "wide",
+        "full" => "full",
+        _ => "standard"
+    };
+    var contentWidthClass = normalizedWidth == "full" ? "w-full" : "mx-auto w-full";
+    var contentWidthStyle = normalizedWidth switch
+    {
+        "compact" => "max-width: 72rem;",
+        "standard" => "max-width: 90rem;",
+        "wide" => "max-width: 108rem;",
+        _ => null
+    };
+}
+<!DOCTYPE html>
+<html lang="en" data-theme="@preferredTheme">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} | Harpyx" : "Harpyx")</title>
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    <style>
+        @@keyframes harpyx-logo-reveal {
+            from {
+                opacity: 0;
+                transform: translateY(6px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .harpyx-logo {
+            --harpyx-logo-tone-1: currentColor;
+            --harpyx-logo-tone-1-opacity: 0.4275;
+            --harpyx-logo-tone-2: currentColor;
+            --harpyx-logo-tone-2-opacity: 0.6392;
+            --harpyx-logo-tone-3: currentColor;
+            --harpyx-logo-tone-3-opacity: 0.9216;
+            opacity: 0;
+            transform-origin: center;
+            animation: harpyx-logo-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        html[data-color-scheme="dark"] .harpyx-logo--preserve-on-dark {
+            --harpyx-logo-tone-1: #929292;
+            --harpyx-logo-tone-1-opacity: 1;
+            --harpyx-logo-tone-2: #5c5c5c;
+            --harpyx-logo-tone-2-opacity: 1;
+            --harpyx-logo-tone-3: #141414;
+            --harpyx-logo-tone-3-opacity: 1;
+        }
+
+        .harpyx-logo--nav {
+            animation-duration: 320ms;
+        }
+
+        .harpyx-logo--hero {
+            animation-duration: 520ms;
+            transition: transform 180ms ease, filter 180ms ease;
+        }
+
+        .harpyx-logo--hero:hover {
+            transform: scale(1.018);
+            filter: brightness(1.03);
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            .harpyx-logo {
+                opacity: 1;
+                animation: none;
+                transition: none;
+            }
+
+            .harpyx-logo--hero:hover {
+                transform: none;
+                filter: none;
+            }
+        }
+    </style>
+    <script>
+        (function () {
+            const root = document.documentElement;
+            window.harpyxSyncColorScheme = function () {
+                const scheme = getComputedStyle(root).colorScheme;
+                root.setAttribute("data-color-scheme", scheme.includes("dark") ? "dark" : "light");
+            };
+
+            window.harpyxSyncColorScheme();
+        })();
+    </script>
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <partial name="_Layout.Favicon" />
+</head>
+<body class="min-h-screen bg-base-200">
+    <header class="sticky top-0 z-50 border-b border-base-300 bg-base-100/80 backdrop-blur">
+        <div class="@contentWidthClass px-4" style="@contentWidthStyle">
+            <div class="navbar px-0">
+                <div class="navbar-start">
+                    <a href="/" class="btn btn-ghost text-lg font-semibold flex items-center gap-2">
+                        <partial name="_SVG.Logo.NavBar" />
+                        Harpyx
+                    </a>
+                </div>
+
+                <partial name="_Layout.TopMenu" />
+
+                <div class="navbar-end gap-4">
+                    <partial name="_Layout.Auth" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="@contentWidthClass px-4 py-8" style="@contentWidthStyle">
+        @if (IsSectionDefined("SidePanel"))
+        {
+            <div class="grid gap-6 lg:grid-cols-[260px_1fr]">
+                <aside>
+                    @RenderSection("SidePanel", required: false)
+                </aside>
+                <section class="min-w-0">
+                    @RenderBody()
+                </section>
+            </div>
+        }
+        else
+        {
+            @RenderBody()
+        }
+    </main>
+
+    <partial name="_Layout.Footer" />
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

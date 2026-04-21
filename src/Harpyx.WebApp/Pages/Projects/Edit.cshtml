@@ -1,0 +1,277 @@
+@page "{id?}"
+@model Harpyx.WebApp.Pages.Projects.EditModel
+@{
+    ViewData["Title"] = Model.IsCreateMode
+        ? "Create Project"
+        : $"{Model.Name} - Edit";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <h1 class="text-2xl font-semibold">@Model.Title</h1>
+            <hr />
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert alert-error">
+                    <span>@Model.ErrorMessage</span>
+                </div>
+            }
+            @if (Model.MustCreateWorkspaceFirst)
+            {
+                <div class="alert alert-warning">
+                    <span>
+                        <strong>No Workspaces yet!</strong>
+                        Before creating a <span class="font-semibold">Project</span>, 
+                        you must create a <a asp-page="/Workspaces/Edit" class="font-semibold">Workspace</a>.
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a asp-page="/Workspaces/Edit" class="btn btn-primary">
+                        <iconify-icon icon="mdi:briefcase-plus-outline"></iconify-icon>
+                        Create Workspace
+                    </a>
+                    <a asp-page="/Projects/Index" class="btn btn-ghost">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Back to Projects
+                    </a>
+                </div>
+            }
+            else
+            {
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ConfirmRagReindex" id="ConfirmRagReindex" value="false" />
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Workspace</span>
+                    </label>
+                    <select asp-for="WorkspaceId" asp-items="Model.WorkspaceOptions" class="select select-bordered w-full"></select>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Name</span>
+                    </label>
+                    <input asp-for="Name" class="input input-bordered w-full" />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Description</span>
+                    </label>
+                    <input asp-for="Description" class="input input-bordered w-full" />
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">Project Lifetime</h2>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Lifetime</span>
+                        </label>
+                        <select asp-for="LifetimePreset" asp-items="Model.LifetimePresetOptions" class="select select-bordered w-full" id="LifetimePreset">
+                            <option value="">Permanent (no expiration)</option>
+                        </select>
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/70">
+                                Default is temporary for 30 days. Available lifetimes are limited by instance settings.
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-control" id="SlidingExpirationContainer">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input asp-for="AutoExtendLifetimeOnActivity" class="checkbox checkbox-sm" />
+                            <span class="label-text">Sliding expiration (extend on project activity)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">Chat Configuration</h2>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Chat LLM mode</span>
+                        </label>
+                        <select asp-for="ChatLlmOverride" asp-items="Model.ChatOverrideOptions" class="select select-bordered w-full" id="ChatLlmOverride"></select>
+                        @if (!Model.HasChatModelOptions)
+                        {
+                            <label class="label">
+                                <span class="label-text-alt text-warning">No specialized Chat provider available in this workspace tenant.</span>
+                            </label>
+                        }
+                    </div>
+                    <div class="form-control" id="ChatModelContainer">
+                        <label class="label">
+                            <span class="label-text">Chat provider</span>
+                        </label>
+                        <select asp-for="ChatModelId" asp-items="Model.ChatModelOptions" class="select select-bordered w-full" id="ChatModelId">
+                            <option value="">Select a Chat provider</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">RAG Configuration</h2>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">RAG LLM mode</span>
+                        </label>
+                        <select asp-for="RagLlmOverride" asp-items="Model.RagOverrideOptions" class="select select-bordered w-full" id="RagLlmOverride"></select>
+                        @if (!Model.HasRagProviderOptions)
+                        {
+                            <label class="label">
+                                <span class="label-text-alt text-warning">No specialized RAG provider available in this workspace tenant.</span>
+                            </label>
+                        }
+                    </div>
+                    <div class="form-control" id="RagProviderContainer">
+                        <label class="label">
+                            <span class="label-text">RAG provider</span>
+                        </label>
+                        <select asp-for="RagEmbeddingModelId" asp-items="Model.RagProviderOptions" class="select select-bordered w-full" id="RagEmbeddingModelId">
+                            <option value="">Select a RAG provider</option>
+                        </select>
+                    </div>
+                    <label class="label">
+                        <span class="label-text-alt text-base-content/70">
+                            If RAG effective provider changes, the project index is reset and documents are reindexed asynchronously.
+                        </span>
+                    </label>
+                </div>
+
+                <div class="rounded-box border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-semibold">OCR Configuration</h2>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">OCR LLM mode</span>
+                        </label>
+                        <select asp-for="OcrLlmOverride" asp-items="Model.OcrOverrideOptions" class="select select-bordered w-full" id="OcrLlmOverride"></select>
+                        @if (!Model.HasOcrModelOptions)
+                        {
+                            <label class="label">
+                                <span class="label-text-alt text-warning">No specialized OCR provider available in this workspace tenant.</span>
+                            </label>
+                        }
+                    </div>
+                    <div class="form-control" id="OcrModelContainer">
+                        <label class="label">
+                            <span class="label-text">OCR provider</span>
+                        </label>
+                        <select asp-for="OcrModelId" asp-items="Model.OcrModelOptions" class="select select-bordered w-full" id="OcrModelId">
+                            <option value="">Select an OCR provider</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary mw-120" id="SaveProjectBtn">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save
+                    </button>
+                    <a asp-page="/Projects/Index" class="btn btn-ghost mw-120">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const idInput = document.getElementById('Id');
+        const workspaceSelect = document.getElementById('WorkspaceId');
+        const chatOverrideSelect = document.getElementById('ChatLlmOverride');
+        const chatSelect = document.getElementById('ChatModelId');
+        const ChatModelContainer = document.getElementById('ChatModelContainer');
+
+        const ragOverrideSelect = document.getElementById('RagLlmOverride');
+        const ragSelect = document.getElementById('RagEmbeddingModelId');
+        const ragProviderContainer = document.getElementById('RagProviderContainer');
+
+        const ocrOverrideSelect = document.getElementById('OcrLlmOverride');
+        const ocrSelect = document.getElementById('OcrModelId');
+        const OcrModelContainer = document.getElementById('OcrModelContainer');
+        const lifetimePresetSelect = document.getElementById('LifetimePreset');
+        const slidingExpirationContainer = document.getElementById('SlidingExpirationContainer');
+        const slidingExpirationInput = document.getElementById('AutoExtendLifetimeOnActivity');
+
+        const confirmInput = document.getElementById('ConfirmRagReindex');
+        const form = document.querySelector('form[method="post"]');
+        if (!chatOverrideSelect || !chatSelect || !ragSelect || !confirmInput || !form || !ragOverrideSelect || !ocrOverrideSelect || !ocrSelect || !lifetimePresetSelect || !slidingExpirationInput) {
+            return;
+        }
+
+        const isEdit = !!(idInput && idInput.value);
+        const originalWorkspace = (workspaceSelect?.value || '').trim();
+        const originalRagOverride = (ragOverrideSelect.value || '').trim();
+        const originalRagProvider = (ragSelect.value || '').trim();
+
+        function applyChatState() {
+            const enabled = (chatOverrideSelect.value || '') === 'Enabled';
+            if (ChatModelContainer) ChatModelContainer.classList.toggle('hidden', !enabled);
+            chatSelect.disabled = !enabled;
+            if (!enabled) chatSelect.value = '';
+        }
+
+        function applyRagState() {
+            const enabled = (ragOverrideSelect.value || '') === 'Enabled';
+            if (ragProviderContainer) ragProviderContainer.classList.toggle('hidden', !enabled);
+            ragSelect.disabled = !enabled;
+            if (!enabled) ragSelect.value = '';
+        }
+
+        function applyOcrState() {
+            const enabled = (ocrOverrideSelect.value || '') === 'Enabled';
+            if (OcrModelContainer) OcrModelContainer.classList.toggle('hidden', !enabled);
+            ocrSelect.disabled = !enabled;
+            if (!enabled) ocrSelect.value = '';
+        }
+
+        function applyLifetimeState() {
+            const isTemporary = (lifetimePresetSelect.value || '').trim().length > 0;
+            if (slidingExpirationContainer) slidingExpirationContainer.classList.toggle('hidden', !isTemporary);
+            slidingExpirationInput.disabled = !isTemporary;
+            if (!isTemporary) {
+                slidingExpirationInput.checked = false;
+            }
+        }
+
+        chatOverrideSelect.addEventListener('change', applyChatState);
+        ragOverrideSelect.addEventListener('change', applyRagState);
+        ocrOverrideSelect.addEventListener('change', applyOcrState);
+        lifetimePresetSelect.addEventListener('change', applyLifetimeState);
+        applyChatState();
+        applyRagState();
+        applyOcrState();
+        applyLifetimeState();
+
+        form.addEventListener('submit', function (event) {
+            const currentWorkspace = (workspaceSelect?.value || '').trim();
+            const currentRagOverride = (ragOverrideSelect.value || '').trim();
+            const currentRagProvider = (ragSelect.value || '').trim();
+            const changed = isEdit &&
+                (currentWorkspace !== originalWorkspace ||
+                currentRagOverride !== originalRagOverride ||
+                currentRagProvider !== originalRagProvider);
+            if (!changed) {
+                confirmInput.value = 'false';
+                return;
+            }
+
+            const ok = confirm(
+                "Changing the RAG embedding provider will clear the current index and reindex all project documents asynchronously. Continue?");
+            if (!ok) {
+                event.preventDefault();
+                confirmInput.value = 'false';
+                return;
+            }
+
+            confirmInput.value = 'true';
+        });
+    })();
+</script>

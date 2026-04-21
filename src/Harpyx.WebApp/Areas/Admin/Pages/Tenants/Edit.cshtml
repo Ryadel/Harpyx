@@ -1,0 +1,78 @@
+@page "{id?}"
+@model Harpyx.WebApp.Areas.Admin.Pages.Tenants.EditModel
+@{
+    ViewData["Title"] = Model.Id is null
+        ? "Admin - Add Tenant"
+        : $"Admin - {Model.Name} - Edit";
+}
+@section SidePanel {
+    <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h1 class="text-2xl font-semibold">@Model.Title</h1>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Create or update tenants and platform visibility settings.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="alert alert-error">
+                    <span>@Model.ErrorMessage</span>
+                </div>
+            }
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Name</span>
+                    </label>
+                    <input asp-for="Name" class="input input-bordered w-full" />
+                </div>
+
+                <div class="form-control">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="IsActive" type="checkbox" class="checkbox" />
+                        <span class="label-text">Active</span>
+                    </label>
+                </div>
+
+                <div class="form-control">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="IsVisibleToAllUsers" type="checkbox" class="checkbox" />
+                        <span class="label-text">Visible to all users</span>
+                    </label>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Owner</span>
+                    </label>
+                    <select asp-for="CreatedByUserId" asp-items="Model.OwnerOptions" class="select select-bordered w-full">
+                        <option value="">No owner</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary mw-120">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save
+                    </button>
+                    <a asp-area="Admin" asp-page="/Tenants/Index" class="btn btn-ghost mw-120">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

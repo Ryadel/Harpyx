@@ -1,0 +1,133 @@
+@page
+@model Harpyx.WebApp.Areas.Admin.Pages.Health.IndexModel
+@{
+    ViewData["Title"] = "Admin - System Health";
+}
+@section SidePanel {
+    <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">System Health</h1>
+                <div class="ml-auto">
+                    <form method="get">
+                        <button type="submit" class="btn btn-outline btn-sm">
+                            <iconify-icon icon="mdi:refresh"></iconify-icon>
+                            Refresh
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Check the services Harpyx depends on and the optional modules that may affect specific features.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <div>
+                <h2 class="text-lg font-semibold">Current Snapshot</h2>
+                <p class="text-sm text-base-content/70">
+                    Overview of required dependencies, optional capabilities, and total probe duration.
+                </p>
+            </div>
+            <div class="grid gap-3 md:grid-cols-4">
+                <div class="rounded-lg border border-base-300 p-4">
+                    <div class="text-xs uppercase text-base-content/60">Required issues</div>
+                    <div class="mt-2 text-3xl font-semibold @(Model.RequiredUnavailableCount == 0 ? "text-success" : "text-error")">
+                        @Model.RequiredUnavailableCount
+                    </div>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <div class="text-xs uppercase text-base-content/60">Optional issues</div>
+                    <div class="mt-2 text-3xl font-semibold @(Model.OptionalUnavailableCount == 0 ? "text-success" : "text-warning")">
+                        @Model.OptionalUnavailableCount
+                    </div>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <div class="text-xs uppercase text-base-content/60">Disabled optional</div>
+                    <div class="mt-2 text-3xl font-semibold text-base-content/80">@Model.DisabledCount</div>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <div class="text-xs uppercase text-base-content/60">Probe duration</div>
+                    <div class="mt-2 text-3xl font-semibold">@Model.TotalDuration.TotalMilliseconds.ToString("0") ms</div>
+                </div>
+            </div>
+            <p class="text-xs text-base-content/60">
+                Last checked at @Model.CheckedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss zzz").
+            </p>
+        </div>
+    </div>
+
+    @if (Model.RequiredUnavailableCount > 0)
+    {
+        <div class="alert alert-error">
+            <span>One or more required services are unavailable. Core workflows may fail until they recover.</span>
+        </div>
+    }
+    else if (Model.OptionalUnavailableCount > 0)
+    {
+        <div class="alert alert-warning">
+            <span>Required services are up, but at least one optional capability is degraded.</span>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success">
+            <span>Required services are healthy.</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Impact</th>
+                            <th>Details</th>
+                            <th class="text-right">Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Dependencies)
+                    {
+                        <tr>
+                            <td>
+                                <div class="font-medium">@item.DisplayName</div>
+                                <div class="text-xs text-base-content/60">@item.Category · @item.Key</div>
+                            </td>
+                            <td>
+                                <span class="badge @item.ImportanceBadgeCss badge-sm">@item.ImportanceLabel</span>
+                            </td>
+                            <td>
+                                <span class="badge @item.StatusBadgeCss badge-sm">@item.StatusLabel</span>
+                            </td>
+                            <td class="max-w-sm text-sm text-base-content/80">@item.Impact</td>
+                            <td class="max-w-md text-sm">
+                                @if (!string.IsNullOrWhiteSpace(item.Description))
+                                {
+                                    <div>@item.Description</div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Error))
+                                {
+                                    <div class="mt-1 text-error">@item.Error</div>
+                                }
+                            </td>
+                            <td class="text-right font-mono text-sm">@item.DurationLabel</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

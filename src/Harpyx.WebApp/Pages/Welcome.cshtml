@@ -1,0 +1,63 @@
+@page
+@model Harpyx.WebApp.Pages.WelcomeModel
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    var brandHero = new BrandHeroViewModel(
+        SharedLocalizer["BrandHeroTitle"].Value,
+        SharedLocalizer["BrandHeroSubtitle"].Value);
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <partial name="_BrandHero" model="brandHero" />
+            <p class="text-sm text-base-content/70">
+                @Localizer["Intro"]
+            </p>
+            <div class="text-sm text-base-content/70">
+                @Localizer["ConfigureProviders"]
+                <ul class="menu bg-base-200 rounded-box border border-base-300 p-2 mt-3">
+                    <li>
+                        <div class="flex items-start gap-3">
+                            <span class="badge badge-primary badge-outline mt-0.5">@Localizer["ChatBadge"]</span>
+                            <div class="leading-snug">
+                                <div class="font-medium text-base-content">@Localizer["ChatProviderTitle"]</div>
+                                <div>@Localizer["ChatProviderDescription"]</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-start gap-3">
+                            <span class="badge badge-info badge-outline mt-0.5">@Localizer["RagBadge"]</span>
+                            <div class="leading-snug">
+                                <div class="font-medium text-base-content">@Localizer["RagProviderTitle"]</div>
+                                <div>@Localizer["RagProviderDescription"]</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-start gap-3">
+                            <span class="badge badge-secondary badge-outline mt-0.5">@Localizer["OcrBadge"]</span>
+                            <div class="leading-snug">
+                                <div class="font-medium text-base-content">@Localizer["OcrProviderTitle"] <span class="text-base-content/60">@Localizer["OptionalLabel"]</span></div>
+                                <div>@Localizer["OcrProviderDescription"]</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <hr />
+            <div class="text-center">
+                <a asp-page="/Profile/Index" class="btn btn-primary mw-120">
+                    <iconify-icon icon="mdi:account-cog"></iconify-icon>
+                    @Localizer["GoToProfile"]
+                </a>
+                <a asp-page="/Index" class="btn btn-ghost mw-120">
+                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                    @Localizer["BackToHome"]
+                </a>
+            </div>
+            <partial name="_SignedInAs" />
+        </div>
+    </div>
+</div>

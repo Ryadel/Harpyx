@@ -1,0 +1,244 @@
+﻿@page
+@model Harpyx.WebApp.Areas.Admin.Pages.HostedModels.IndexModel
+@using Harpyx.Domain.Enums
+@{
+    ViewData["Title"] = "Admin - Hosted Models";
+}
+@section SidePanel {
+    <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">Hosted Models</h1>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Publish provider-backed models managed by this Harpyx instance. Users only see the model names.
+            </p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">
+            <span>@Model.ErrorMessage</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <h2 class="text-lg font-semibold">Add Connection</h2>
+            <form method="post" asp-page-handler="SaveConnection" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Connection.Id" />
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Provider</span></label>
+                    <select asp-for="Connection.Provider" asp-items="Model.ProviderOptions" class="select select-bordered w-full"></select>
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Name</span></label>
+                    <input asp-for="Connection.Name" class="input input-bordered w-full" placeholder="Company GPT-4o" />
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Base URL</span></label>
+                    <input asp-for="Connection.BaseUrl" class="input input-bordered w-full" placeholder="Required for OpenAI-compatible, Azure OpenAI, or Bedrock Mantle" />
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Description</span></label>
+                    <input asp-for="Connection.Description" class="input input-bordered w-full" placeholder="Shown only to admins" />
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">API Key</span></label>
+                    <input asp-for="Connection.ApiKey" type="password" class="input input-bordered w-full" autocomplete="off" placeholder="Optional" />
+                </div>
+                <div class="form-control lg:col-span-2">
+                    <label class="label"><span class="label-text">Notes</span></label>
+                    <textarea asp-for="Connection.Notes" class="textarea textarea-bordered w-full" rows="2"></textarea>
+                </div>
+                <div class="form-control">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input asp-for="Connection.IsEnabled" class="checkbox" />
+                        <span class="label-text">Enabled</span>
+                    </label>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="btn btn-primary mw-120">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save Connection
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Connections.Count == 0)
+    {
+        <div class="card bg-base-100 shadow">
+            <div class="card-body">
+                <p class="text-sm text-base-content/70">No hosted model connections configured yet.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var connection in Model.Connections)
+        {
+            <div class="card bg-base-100 shadow">
+                <div class="card-body space-y-5">
+                    <div class="flex flex-wrap items-start gap-3">
+                        <div>
+                            <h2 class="text-lg font-semibold">@connection.GetName()</h2>
+                            <p class="text-sm text-base-content/70">
+                                @connection.Provider
+                                @if (!string.IsNullOrWhiteSpace(connection.BaseUrl))
+                                {
+                                    <span> - @connection.BaseUrl</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="ml-auto flex flex-wrap gap-2">
+                            <span class="badge @(connection.IsEnabled ? "badge-success" : "badge-ghost")">
+                                @(connection.IsEnabled ? "Enabled" : "Disabled")
+                            </span>
+                            <form method="post" asp-page-handler="DeleteConnection">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="DeleteConnectionId" value="@connection.Id" />
+                                <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('Delete this hosted connection and its models?')">
+                                    <iconify-icon icon="mdi:delete"></iconify-icon>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <details class="rounded-box border border-base-300 p-4">
+                        <summary class="cursor-pointer font-medium">Edit connection</summary>
+                        <form method="post" asp-page-handler="SaveConnection" class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="Connection.Id" value="@connection.Id" />
+                            <select name="Connection.Provider" class="select select-bordered w-full">
+                                @foreach (var provider in Enum.GetValues<LlmProvider>().Where(p => p != LlmProvider.None))
+                                {
+                                    <option value="@provider" selected="@(provider == connection.Provider)">@Harpyx.WebApp.Areas.Admin.Pages.HostedModels.IndexModel.ProviderLabel(provider)</option>
+                                }
+                            </select>
+                            <input name="Connection.Name" class="input input-bordered w-full" value="@connection.Name" />
+                            <input name="Connection.BaseUrl" class="input input-bordered w-full" value="@connection.BaseUrl" placeholder="Required for OpenAI-compatible, Azure OpenAI, or Bedrock Mantle" />
+                            <input name="Connection.Description" class="input input-bordered w-full" value="@connection.Description" />
+                            <input name="Connection.ApiKey" type="password" class="input input-bordered w-full" autocomplete="off" placeholder="Leave empty to keep current key" />
+                            <textarea name="Connection.Notes" class="textarea textarea-bordered w-full lg:col-span-2" rows="2">@connection.Notes</textarea>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="Connection.IsEnabled" value="true" class="checkbox" @(connection.IsEnabled ? "checked" : "") />
+                                <input type="hidden" name="Connection.IsEnabled" value="false" />
+                                <span class="label-text">Enabled</span>
+                            </label>
+                            <button type="submit" class="btn btn-primary mw-120">Save</button>
+                        </form>
+                    </details>
+
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Capability</th>
+                                    <th>Model ID</th>
+                                    <th>Dimensions</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @if (connection.Models.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-sm text-base-content/70">No models published for this connection.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var localModel in connection.Models.OrderBy(m => m.Capability).ThenBy(m => m.DisplayName))
+                                {
+                                    <tr>
+                                        <td class="font-medium">@localModel.GetName()</td>
+                                        <td>@localModel.Capability</td>
+                                        <td class="font-mono text-sm">@localModel.ModelId</td>
+                                        <td>@(localModel.EmbeddingDimensions?.ToString() ?? "-")</td>
+                                        <td>
+                                            <span class="badge @(localModel.IsEnabled && localModel.IsPublished ? "badge-success" : "badge-ghost") badge-sm">
+                                                @(localModel.IsEnabled && localModel.IsPublished ? "Published" : "Hidden")
+                                            </span>
+                                        </td>
+                                        <td class="text-right">
+                                            <form method="post" asp-page-handler="DeleteModel" class="inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="DeleteModelId" value="@localModel.Id" />
+                                                <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('Delete this hosted model?')">
+                                                    <iconify-icon icon="mdi:delete"></iconify-icon>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <details class="rounded-box border border-base-300 p-4">
+                        <summary class="cursor-pointer font-medium">Add model</summary>
+                        <form method="post" asp-page-handler="SaveModel" class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="LocalModel.ConnectionId" value="@connection.Id" />
+                            <div class="form-control">
+                                <label class="label"><span class="label-text">Capability</span></label>
+                                <select name="LocalModel.Capability" class="select select-bordered w-full">
+                                    <option value="@LlmProviderType.Chat">Chat</option>
+                                    <option value="@LlmProviderType.RagEmbedding">RAG Embedding</option>
+                                    <option value="@LlmProviderType.Ocr">OCR</option>
+                                </select>
+                            </div>
+                            <div class="form-control">
+                                <label class="label"><span class="label-text">Display name</span></label>
+                                <input name="LocalModel.DisplayName" class="input input-bordered w-full" placeholder="Llama 3.1 8B" />
+                            </div>
+                            <div class="form-control">
+                                <label class="label"><span class="label-text">Model ID</span></label>
+                                <input name="LocalModel.ModelId" class="input input-bordered w-full" placeholder="llama3.1:8b" />
+                            </div>
+                            <div class="form-control">
+                                <label class="label"><span class="label-text">Embedding dimensions</span></label>
+                                <input name="LocalModel.EmbeddingDimensions" type="number" class="input input-bordered w-full" placeholder="1536" />
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="LocalModel.IsEnabled" value="true" class="checkbox" checked />
+                                <input type="hidden" name="LocalModel.IsEnabled" value="false" />
+                                <span class="label-text">Enabled</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="LocalModel.IsPublished" value="true" class="checkbox" checked />
+                                <input type="hidden" name="LocalModel.IsPublished" value="false" />
+                                <span class="label-text">Published</span>
+                            </label>
+                            <div class="lg:col-span-3">
+                                <button type="submit" class="btn btn-primary mw-120">
+                                    <iconify-icon icon="mdi:plus"></iconify-icon>
+                                    Add Model
+                                </button>
+                            </div>
+                        </form>
+                    </details>
+                </div>
+            </div>
+            }
+        }
+    }
+</div>

@@ -1,0 +1,10 @@
+@layer components {
+    .btn-brand {
+        background-color: var(--brand-500);
+    }
+
+    .mw-120 {
+        min-width: 120px;
+        justify-content: center;
+    }
+}

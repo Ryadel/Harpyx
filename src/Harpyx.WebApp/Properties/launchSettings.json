@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Harpyx.WebApp": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53539;http://localhost:53540"
+    }
+  }
+}

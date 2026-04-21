@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="src/Harpyx.Application/Harpyx.Application.csproj" />
+  <Project Path="src/Harpyx.Domain/Harpyx.Domain.csproj" />
+  <Project Path="src/Harpyx.Infrastructure/Harpyx.Infrastructure.csproj" />
+  <Project Path="src/Harpyx.Shared/Harpyx.Shared.csproj" />
+  <Project Path="src/Harpyx.WebApp/Harpyx.WebApp.csproj" />
+  <Project Path="src/Harpyx.Worker/Harpyx.Worker.csproj" />
+  <Project Path="tests/Harpyx.IntegrationTests/Harpyx.IntegrationTests.csproj" />
+  <Project Path="tests/Harpyx.WebApp.UnitTests/Harpyx.WebApp.UnitTests.csproj" />
+  <Project Path="tests/Harpyx.Worker.UnitTests/Harpyx.Worker.UnitTests.csproj" />
+</Solution>

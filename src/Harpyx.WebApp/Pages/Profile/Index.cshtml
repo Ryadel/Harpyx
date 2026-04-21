@@ -1,0 +1,236 @@
+@page
+@model Harpyx.WebApp.Pages.Profile.IndexModel
+@using Harpyx.Domain.Enums
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-3">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">LLM Providers</h1>
+                <div class="ml-auto">
+                    <div class="flex flex-wrap gap-2">
+                        <a class="btn btn-outline btn-sm" asp-page="/Profile/HostedModels">
+                            <iconify-icon icon="mdi:server-network"></iconify-icon>
+                            Hosted Models
+                        </a>
+                        <a class="btn btn-primary btn-sm" asp-page="/Profile/Edit">
+                            <iconify-icon icon="mdi:plus"></iconify-icon>
+                            Add Provider
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Configure your personal LLM providers. Harpyx supports <strong>three</strong> different model types, which will be used to handle different tasks:
+            </p>
+            <div class="rounded-box border border-base-300 bg-base-200 p-3 text-sm text-base-content/80">
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>
+                        <strong>Chat provider</strong> (<i>required</i>):
+                        Generates answers and powers conversations.
+                        Without this provider, project conversations are unavailable and Harpyx will be (mostly) useless.
+                    </li>
+                    <li>
+                        <strong>RAG Embedding provider</strong> (<i>optional, but recommended</i>):
+                        Creates embeddings for document indexing and retrieval, so the Chat provider can answer using the project's documents content as its context.
+                        Without this provider, documents can still be uploaded but cannot be efficiently indexed.
+                    </li>
+                    <li>
+                        <strong>OCR provider</strong> (<i>optional</i>):
+                        Used to extract text from scanned/visual documents when OCR processing is required.
+                        Without this provider, Harpyx will use its internal OCR capabilities, which are tipically OK (and free) but might be not as good as LLM-based OCR.
+                    </li>
+                </ul>
+            </div>
+            <p class="text-sm text-base-content/70">
+                For the best experience, configure at least the <span class="font-semibold">Chat</span> and the <span class="font-semibold">RAG Embedding</span> providers.
+            </p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">
+            <span>@Model.ErrorMessage</span>
+        </div>
+    }
+
+    @if (!Model.HasChatModelConfigured)
+    {
+        <div class="alert alert-warning">
+            <span>No <strong>Chat</strong> provider configured. Project chat will not be available.</span>
+        </div>
+    }
+    @if (!Model.HasRagProviderConfigured)
+    {
+        <div class="alert alert-warning">
+            <span>No <strong>RAG Embedding</strong> provider configured. Document indexing and retrieval quality will be limited.</span>
+        </div>
+    }
+    @if (!Model.HasOcrModelConfigured)
+    {
+        <div class="alert alert-warning">
+            <span>No <strong>OCR</strong> provider configured. OCR-based text extraction may be unavailable.</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            @if (Model.Providers.Count == 0)
+            {
+                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span>No providers configured yet.</span>
+                        <a class="btn btn-primary btn-sm" asp-page="/Profile/Edit">
+                            <iconify-icon icon="mdi:plus"></iconify-icon>
+                            Add Provider
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Provider</th>
+                                <th>Endpoint</th>
+                                <th>Type</th>
+                                <th>API Key</th>
+                                <th>Chat Model</th>
+                                <th>RAG Model</th>
+                                <th>OCR Model</th>
+                                <th>Default Chat</th>
+                                <th>Default RAG</th>
+                                <th>Default OCR</th>
+                                <th>Used By Projects</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var provider in Model.Providers)
+                        {
+                            <tr>
+                                <td class="font-medium">@(string.IsNullOrWhiteSpace(provider.Name) ? "-" : provider.Name)</td>
+                                <td class="font-medium">@provider.GetName()</td>
+                                <td class="font-mono text-xs">@(string.IsNullOrWhiteSpace(provider.BaseUrl) ? "-" : provider.BaseUrl)</td>
+                                <td>
+                                    @if (provider.SupportsChat)
+                                    {
+                                        <span class="badge badge-outline mr-1">Chat</span>
+                                    }
+                                    @if (provider.SupportsRagEmbedding)
+                                    {
+                                        <span class="badge badge-outline">RAG</span>
+                                    }
+                                    @if (provider.SupportsOcr)
+                                    {
+                                        <span class="badge badge-outline">OCR</span>
+                                    }
+                                </td>
+                                <td><span class="font-mono text-sm">****@provider.ApiKeyLast4</span></td>
+                                <td>@(string.IsNullOrWhiteSpace(provider.ChatModel) ? "-" : provider.ChatModel)</td>
+                                <td>@(string.IsNullOrWhiteSpace(provider.RagEmbeddingModel) ? "-" : provider.RagEmbeddingModel)</td>
+                                <td>@(string.IsNullOrWhiteSpace(provider.OcrModel) ? "-" : provider.OcrModel)</td>
+                                <td>
+                                    <span class="badge @(provider.IsDefaultChat ? "badge-primary" : "badge-ghost") badge-sm">
+                                        @(provider.IsDefaultChat ? "Yes" : "No")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(provider.IsDefaultRagEmbedding ? "badge-primary" : "badge-ghost") badge-sm">
+                                        @(provider.IsDefaultRagEmbedding ? "Yes" : "No")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(provider.IsDefaultOcr ? "badge-primary" : "badge-ghost") badge-sm">
+                                        @(provider.IsDefaultOcr ? "Yes" : "No")
+                                    </span>
+                                </td>
+                                <td>@provider.UsedByProjectCount</td>
+                                <td class="text-right">
+                                    <div class="inline-flex items-center gap-1">
+                                        <a class="btn btn-ghost btn-sm"
+                                           asp-page="/Profile/Edit"
+                                           asp-route-provider="@provider.Provider"
+                                           title="Edit" aria-label="Edit">
+                                            <iconify-icon icon="mdi:pencil"></iconify-icon>
+                                        </a>
+                                        @if (provider.SupportsChat && !provider.IsDefaultChat)
+                                        {
+                                            <form method="post" asp-page-handler="SetDefault" class="inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="SetDefaultUsage" value="@LlmProviderType.Chat" />
+                                                <input type="hidden" name="SetDefaultModelId" value="@provider.ChatModelId" />
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set default Chat" aria-label="Set default Chat">
+                                                    <iconify-icon icon="mdi:chat"></iconify-icon>
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (provider.SupportsRagEmbedding && !provider.IsDefaultRagEmbedding)
+                                        {
+                                            <form method="post" asp-page-handler="SetDefault" class="inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="SetDefaultUsage" value="@LlmProviderType.RagEmbedding" />
+                                                <input type="hidden" name="SetDefaultModelId" value="@provider.RagEmbeddingModelId" />
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set default RAG" aria-label="Set default RAG">
+                                                    <iconify-icon icon="mdi:database-search"></iconify-icon>
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (provider.SupportsOcr && !provider.IsDefaultOcr)
+                                        {
+                                            <form method="post" asp-page-handler="SetDefault" class="inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="SetDefaultUsage" value="@LlmProviderType.Ocr" />
+                                                <input type="hidden" name="SetDefaultModelId" value="@provider.OcrModelId" />
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set default OCR" aria-label="Set default OCR">
+                                                    <iconify-icon icon="mdi:ocr"></iconify-icon>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form method="post" asp-page-handler="Delete" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="DeleteProvider" value="@provider.Provider" />
+                                            <button type="submit" class="btn btn-ghost btn-sm text-error"
+                                                    data-provider-name="@provider.GetName()"
+                                                    onclick="return confirmDelete(this.dataset.providerName, @provider.UsedByProjectCount)"
+                                                    title="Delete" aria-label="Delete">
+                                                <iconify-icon icon="mdi:delete"></iconify-icon>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(provider, usedByProjects) {
+        if (usedByProjects > 0) {
+            return confirm(
+                "This provider is used by " + usedByProjects + " project(s) for RAG indexing. " +
+                "Deleting it will clear those project indexes. Continue?");
+        }
+
+        return confirm("Delete " + provider + " configuration?");
+    }
+</script>

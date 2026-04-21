@@ -1,0 +1,318 @@
+@page
+@model Harpyx.WebApp.Pages.Workspaces.IndexModel
+@{
+    ViewData["Title"] = "Workspaces";
+    var totalWorkspaces = Model.Workspaces.Count;
+    var defaultCollapsed = totalWorkspaces > 3;
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">Workspaces</h1>
+                <div class="ml-auto">
+                    <a class="btn btn-primary btn-sm" asp-page="/Workspaces/Edit">
+                        <iconify-icon icon="mdi:plus"></iconify-icon>
+                        Add Workspace
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                In this section you create and manage <span class="font-semibold">Workspaces</span> 
+                and <span class="font-semibold">Projects</span>.
+                <ul class="text-sm  text-base-content/70 list-disc list-inside">
+                    <li>
+                        <span class="font-semibold">Workspaces</span> 
+                        are containers for projects and can be used to better organize teams, projects, and permissions.
+                    </li>
+                    <li>
+                        <span class="font-semibold">Projects</span>
+                        are the operational units of Harpyx, where documents are uploaded and data is retrieved.
+                    </li>
+                </ul>
+            </p>
+            @if (totalWorkspaces > 0)
+            {
+                <input type="text" id="workspace-search"
+                       placeholder="Search workspaces and projects..."
+                       class="input input-bordered input-sm w-full max-w-sm mt-2" />
+            }
+        </div>
+    </div>
+
+    @if (totalWorkspaces == 0)
+    {
+        <div class="card bg-base-100 shadow">
+            <div class="card-body">
+                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span>No workspaces yet.</span>
+                        <a class="btn btn-primary btn-sm" asp-page="/Workspaces/Edit">
+                            <iconify-icon icon="mdi:plus"></iconify-icon>
+                            Add Workspace
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="workspace-list" class="space-y-4">
+            @foreach (var workspace in Model.Workspaces)
+            {
+                var projects = Model.GetProjectsForWorkspace(workspace.Id);
+                var projectCount = projects.Count;
+                var documentCount = Model.WorkspaceDocumentCountsById.TryGetValue(workspace.Id, out var wDocCount) ? wDocCount : 0;
+                var tenantName = Model.TenantNamesById.TryGetValue(workspace.TenantId, out var tName) ? tName : workspace.TenantId.ToString();
+                var hasMoreThanFive = projectCount > 5;
+
+                <div class="card bg-base-100 shadow" data-workspace-card
+                     data-workspace-name="@workspace.Name.ToLowerInvariant()">
+                    @* --- Workspace Header (clickable to toggle) --- *@
+                    <div class="card-body p-0">
+                        <div class="px-6 py-4 cursor-pointer select-none" data-workspace-toggle>
+                            <div class="flex items-center gap-3">
+                                <div class="w-5 shrink-0 flex items-center justify-center">
+                                    <iconify-icon icon="mdi:chevron-down" class="text-lg transition-transform duration-200"
+                                                  data-workspace-arrow></iconify-icon>
+                                </div>
+                                <div class="workspace-title-group action-hover-scope">
+                                    <span class="font-semibold text-lg">@workspace.Name</span>
+                                    <div class="action-inline-group" data-workspace-actions>
+                                        <a class="btn btn-ghost btn-xs btn-square action-icon-btn"
+                                           asp-page="/Workspaces/Edit"
+                                           asp-route-id="@workspace.Id" title="Edit workspace" aria-label="Edit workspace">
+                                            <iconify-icon icon="mdi:pencil"></iconify-icon>
+                                        </a>
+                                        <form method="post" asp-page-handler="Delete" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@workspace.Id" />
+                                            <button type="submit" class="btn btn-ghost btn-xs btn-square action-icon-btn action-icon-delete"
+                                                    title="Delete workspace" aria-label="Delete workspace">
+                                                <iconify-icon icon="mdi:delete"></iconify-icon>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    @if (!workspace.IsActive)
+                                    {
+                                        <span class="badge badge-ghost badge-sm">Inactive</span>
+                                    }
+                                </div>
+                                <div class="flex items-center gap-3 text-sm text-base-content/60 ml-auto shrink-0">
+                                    <span title="Projects">
+                                        <iconify-icon icon="mdi:folder-outline" class="align-middle"></iconify-icon>
+                                        @projectCount
+                                    </span>
+                                    <span title="Documents">
+                                        <iconify-icon icon="mdi:file-document-outline" class="align-middle"></iconify-icon>
+                                        @documentCount
+                                    </span>
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(workspace.Description))
+                            {
+                                <p class="workspace-card-description text-sm text-base-content/60 mt-0.5 truncate">@workspace.Description</p>
+                            }
+                        </div>
+
+                        @* --- Collapsible Projects Section --- *@
+                        <div class="workspace-projects-body border-t border-base-200 pr-6 py-4 @(defaultCollapsed ? "hidden" : "")"
+                             data-workspace-body>
+                            @if (projectCount == 0)
+                            {
+                                <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/60">
+                                    <span>No projects in this workspace.</span>
+                                    <a class="btn btn-primary btn-xs"
+                                       asp-page="/Projects/Edit" asp-route-workspaceId="@workspace.Id">
+                                        <iconify-icon icon="mdi:plus"></iconify-icon>
+                                        Add Project
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="overflow-x-auto">
+                                    <table class="workspace-projects-table table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th class="workspace-projects-first-col">Project</th>
+                                                <th>Description</th>
+                                                <th class="text-right">Documents</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{ var index = 0; }
+                                            @foreach (var project in projects)
+                                            {
+                                                var docCount = Model.GetProjectDocumentCount(project.Id);
+                                                var isHidden = hasMoreThanFive && index >= 5;
+                                                    <tr data-project-row
+                                                    data-project-name="@project.Name.ToLowerInvariant()"
+                                                    class="@(isHidden ? "hidden" : "")"
+                                                    data-initially-hidden="@(isHidden ? "true" : "false")">
+                                                    <td class="workspace-projects-first-col font-medium">
+                                                        <div class="workspace-project-name-group action-hover-scope">
+                                                            <a class="link link-hover link-primary"
+                                                               asp-page="/Projects/Details"
+                                                               asp-route-id="@project.Id"
+                                                               title="Open @project.Name"
+                                                               aria-label="Open @project.Name">
+                                                                @project.Name
+                                                            </a>
+                                                            <div class="action-inline-group">
+                                                                <a class="btn btn-ghost btn-xs btn-square action-icon-btn"
+                                                                   asp-page="/Projects/Edit" asp-route-id="@project.Id"
+                                                                   title="Edit project" aria-label="Edit project">
+                                                                    <iconify-icon icon="mdi:pencil"></iconify-icon>
+                                                                </a>
+                                                                <form method="post" asp-page-handler="DeleteProject" class="inline">
+                                                                    @Html.AntiForgeryToken()
+                                                                    <input type="hidden" name="id" value="@project.Id" />
+                                                                    <button type="submit"
+                                                                            class="btn btn-ghost btn-xs btn-square action-icon-btn action-icon-delete"
+                                                                            title="Delete project" aria-label="Delete project">
+                                                                        <iconify-icon icon="mdi:delete"></iconify-icon>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-base-content/70 max-w-xs truncate">@project.Description</td>
+                                                    <td class="text-right">@docCount</td>
+                                                </tr>
+                                                index++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                @if (hasMoreThanFive)
+                                {
+                                    <button type="button" class="btn btn-ghost btn-xs mt-2" data-show-all-projects>
+                                        <iconify-icon icon="mdi:dots-horizontal"></iconify-icon>
+                                        Show all @projectCount projects
+                                    </button>
+                                }
+
+                                <div class="mt-3">
+                                    <a class="btn btn-primary btn-xs"
+                                       asp-page="/Projects/Edit" asp-route-workspaceId="@workspace.Id">
+                                        <iconify-icon icon="mdi:plus"></iconify-icon>
+                                        Add Project
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            // --- Collapse / Expand ---
+            document.querySelectorAll('[data-workspace-toggle]').forEach(function (header) {
+                header.addEventListener('click', function (e) {
+                    // Don't toggle if clicking on action buttons or links inside actions area
+                    if (e.target.closest('[data-workspace-actions]')) return;
+                    if (e.target.closest('a') || e.target.closest('button') || e.target.closest('form')) return;
+
+                    var card = header.closest('[data-workspace-card]');
+                    var body = card.querySelector('[data-workspace-body]');
+                    var arrow = card.querySelector('[data-workspace-arrow]');
+                    if (!body) return;
+
+                    var isHidden = body.classList.contains('hidden');
+                    body.classList.toggle('hidden');
+                    if (arrow) {
+                        arrow.style.transform = isHidden ? '' : 'rotate(-90deg)';
+                    }
+                });
+
+                // Set initial arrow state for collapsed cards
+                var card = header.closest('[data-workspace-card]');
+                var body = card.querySelector('[data-workspace-body]');
+                var arrow = card.querySelector('[data-workspace-arrow]');
+                if (body && body.classList.contains('hidden') && arrow) {
+                    arrow.style.transform = 'rotate(-90deg)';
+                }
+            });
+
+            // --- Show All Projects ---
+            document.querySelectorAll('[data-show-all-projects]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var card = btn.closest('[data-workspace-card]');
+                    card.querySelectorAll('[data-project-row].hidden').forEach(function (row) {
+                        if (row.dataset.initiallyHidden === 'true') {
+                            row.classList.remove('hidden');
+                        }
+                    });
+                    btn.classList.add('hidden');
+                });
+            });
+
+            // --- Search / Filter ---
+            var searchInput = document.getElementById('workspace-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    var query = searchInput.value.trim().toLowerCase();
+                    var cards = document.querySelectorAll('[data-workspace-card]');
+
+                    cards.forEach(function (card) {
+                        if (!query) {
+                            // Reset: show all cards, restore initial project visibility
+                            card.classList.remove('hidden');
+                            var body = card.querySelector('[data-workspace-body]');
+                            var arrow = card.querySelector('[data-workspace-arrow]');
+                            // Restore to default collapsed state if needed
+                            var showAllBtn = card.querySelector('[data-show-all-projects]');
+                            card.querySelectorAll('[data-project-row]').forEach(function (row) {
+                                if (row.dataset.initiallyHidden === 'true' && showAllBtn && !showAllBtn.classList.contains('hidden')) {
+                                    // "Show all" wasn't clicked — re-hide
+                                } else if (row.dataset.initiallyHidden === 'true' && showAllBtn && showAllBtn.classList.contains('hidden')) {
+                                    // "Show all" was clicked — keep visible
+                                    row.classList.remove('hidden');
+                                } else {
+                                    row.classList.remove('hidden');
+                                }
+                            });
+                            return;
+                        }
+
+                        var workspaceName = card.dataset.workspaceName || '';
+                        var workspaceMatches = workspaceName.includes(query);
+                        var projectRows = card.querySelectorAll('[data-project-row]');
+                        var anyProjectMatches = false;
+
+                        projectRows.forEach(function (row) {
+                            var projectName = row.dataset.projectName || '';
+                            if (workspaceMatches || projectName.includes(query)) {
+                                row.classList.remove('hidden');
+                                anyProjectMatches = true;
+                            } else {
+                                row.classList.add('hidden');
+                            }
+                        });
+
+                        if (workspaceMatches || anyProjectMatches) {
+                            card.classList.remove('hidden');
+                            // Auto-expand when searching
+                            var body = card.querySelector('[data-workspace-body]');
+                            var arrow = card.querySelector('[data-workspace-arrow]');
+                            if (body) body.classList.remove('hidden');
+                            if (arrow) arrow.style.transform = '';
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+        })();
+    </script>
+}

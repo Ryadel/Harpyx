@@ -1,0 +1,10 @@
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="divider my-2"></div>
+    <div class="text-sm text-base-content/70 text-center">
+        Signed in as
+        <a asp-page="/Profile/Index" class="link link-hover text-base-content">
+            <span class="font-semibold">@User.Identity.Name</span> (@User.GetEmail())
+        </a>
+    </div>
+}

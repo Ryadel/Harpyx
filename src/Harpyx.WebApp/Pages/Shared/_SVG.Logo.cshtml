@@ -1,0 +1,46 @@
+@using System.Collections.Concurrent
+@using System.IO
+@using System.Text.Encodings.Web
+@using System.Text.RegularExpressions
+@inject IWebHostEnvironment Environment
+
+@functions {
+    private static readonly ConcurrentDictionary<string, string> SvgCache = new();
+    private const bool InvertGrayscaleOnDarkThemes = true;
+
+    private static string BuildSvgMarkup(string filePath, string cssClass, bool invertGrayscaleOnDarkThemes)
+    {
+        var cacheKey = $"{filePath}|{cssClass}|{invertGrayscaleOnDarkThemes}";
+        return SvgCache.GetOrAdd(cacheKey, _ =>
+        {
+            var svg = File.ReadAllText(filePath);
+            svg = Regex.Replace(svg, @"<\?xml.*?\?>\s*", string.Empty, RegexOptions.Singleline);
+            svg = Regex.Replace(svg, @"<!--.*?-->\s*", string.Empty, RegexOptions.Singleline);
+            svg = Regex.Replace(svg, @"<defs\b[^>]*/>\s*", string.Empty, RegexOptions.Singleline);
+            svg = Regex.Replace(svg, @"<sodipodi:namedview\b.*?\/>\s*", string.Empty, RegexOptions.Singleline);
+            svg = Regex.Replace(svg, @"\s+xmlns:(inkscape|sodipodi|svg)=""[^""]*""", string.Empty);
+            svg = Regex.Replace(svg, @"\s+(inkscape|sodipodi):[^=]+=""[^""]*""", string.Empty);
+            svg = Regex.Replace(svg, @"\s+(id|width|height|version)=""[^""]*""", string.Empty);
+
+            var encodedClass = HtmlEncoder.Default.Encode(cssClass);
+            var colorSchemeClass = invertGrayscaleOnDarkThemes
+                ? "harpyx-logo harpyx-logo--invert-on-dark"
+                : "harpyx-logo harpyx-logo--preserve-on-dark";
+
+            svg = svg.Replace("style=\"fill:#929292\"", "style=\"fill:var(--harpyx-logo-tone-1);fill-opacity:var(--harpyx-logo-tone-1-opacity)\"")
+                .Replace("style=\"fill:#5c5c5c\"", "style=\"fill:var(--harpyx-logo-tone-2);fill-opacity:var(--harpyx-logo-tone-2-opacity)\"")
+                .Replace("style=\"fill:#141414\"", "style=\"fill:var(--harpyx-logo-tone-3);fill-opacity:var(--harpyx-logo-tone-3-opacity)\"");
+
+            return svg.Replace(
+                "<svg",
+                $"<svg preserveAspectRatio=\"xMidYMid meet\" role=\"img\" aria-label=\"Harpyx logo\" class=\"{encodedClass} {colorSchemeClass}\"");
+        });
+    }
+}
+
+@{
+    var cssClass = (string?)ViewData["Class"] ?? "block h-6 w-auto";
+    var svgPath = System.IO.Path.Combine(Environment.WebRootPath, "img", "logo", "Logo-Grayscale.svg");
+}
+
+@Html.Raw(BuildSvgMarkup(svgPath, cssClass, InvertGrayscaleOnDarkThemes))

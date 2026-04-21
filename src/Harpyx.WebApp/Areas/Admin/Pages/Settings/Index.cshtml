@@ -1,0 +1,273 @@
+@page
+@model Harpyx.WebApp.Areas.Admin.Pages.Settings.IndexModel
+@{
+    ViewData["Title"] = "Admin - Settings";
+}
+@section SidePanel {
+    <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
+}
+
+<div class="space-y-6">
+    @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h1 class="text-2xl font-semibold">General Settings</h1>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Configure global onboarding rules for Harpyx.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-error text-sm"></div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">Prompt Settings</h2>
+                    <p class="text-sm text-base-content/70">
+                        Global defaults and limits for project chat system/user prompts.
+                    </p>
+
+                    <label class="form-control">
+                        <span class="label-text">Default system prompt</span>
+                        <textarea asp-for="DefaultSystemPrompt"
+                                  class="textarea textarea-bordered h-56"
+                                  maxlength="100000"
+                                  placeholder="Global system instruction used when a project has no previous system prompt."></textarea>
+                    </label>
+
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="form-control">
+                            <span class="label-text">System prompt max length (chars)</span>
+                            <input asp-for="SystemPromptMaxLengthChars" type="number" min="1" max="100000" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">User prompt max length (chars)</span>
+                            <input asp-for="UserPromptMaxLengthChars" type="number" min="1" max="100000" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">System prompt history size per project</span>
+                            <input asp-for="SystemPromptHistoryLimitPerProject" type="number" min="0" max="200" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">User prompt history size per project</span>
+                            <input asp-for="UserPromptHistoryLimitPerProject" type="number" min="0" max="200" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Chat history size per project</span>
+                            <input asp-for="ChatHistoryLimitPerProject" type="number" min="0" max="500" class="input input-bordered" />
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-control rounded-lg border border-base-300 p-4">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input asp-for="UserSelfRegistrationEnabled" type="checkbox" class="checkbox mt-1" />
+                        <span>
+                            <span class="font-medium block">Allow user self-registration</span>
+                            <span class="text-sm text-base-content/70">
+                                When enabled, any authenticated user can register automatically and receive a personal tenant.
+                                When disabled, only invited users can register.
+                            </span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="form-control rounded-lg border border-base-300 p-4">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input asp-for="QuarantineEnabled" type="checkbox" class="checkbox mt-1" />
+                        <span>
+                            <span class="font-medium block">Enable upload quarantine</span>
+                            <span class="text-sm text-base-content/70">
+                                When enabled, files flagged by malware scanning are stored in quarantine and never processed by RAG.
+                                When disabled, flagged files are rejected immediately and not stored.
+                            </span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="form-control rounded-lg border border-base-300 p-4">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input asp-for="UrlDocumentsEnabled" type="checkbox" class="checkbox mt-1" />
+                        <span>
+                            <span class="font-medium block">Enable URL documents</span>
+                            <span class="text-sm text-base-content/70">
+                                When enabled, users can add documents by pasting a public URL. The system fetches, scans,
+                                and indexes the content automatically. When disabled, only file uploads are allowed.
+                            </span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-2">
+                    <label class="form-control">
+                        <span class="label-text">Max upload file size (bytes)</span>
+                        <input asp-for="MaxFileSizeBytes" type="number" min="1048576" max="1073741824" class="input input-bordered" />
+                    </label>
+                    <p class="text-sm text-base-content/70">
+                        Global upload limit. Default is 26214400 bytes (25 MB).
+                    </p>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">Container Extraction Security</h2>
+                    <p class="text-sm text-base-content/70">
+                        Safety limits for recursive extraction of archives and email attachments.
+                    </p>
+
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="form-control">
+                            <span class="label-text">Max nesting depth</span>
+                            <input asp-for="ContainerMaxNestingDepth" type="number" min="1" max="10" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Max files per root container</span>
+                            <input asp-for="ContainerMaxFilesPerRoot" type="number" min="1" max="10000" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Max total extracted bytes per root</span>
+                            <input asp-for="ContainerMaxTotalExtractedBytesPerRoot" type="number" min="26214400" max="10737418240" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Max single extracted entry size (bytes)</span>
+                            <input asp-for="ContainerMaxSingleEntrySizeBytes" type="number" min="1048576" max="2147483648" class="input input-bordered" />
+                        </label>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-4">
+                    <h2 class="text-lg font-medium">RAG Runtime Settings</h2>
+                    <p class="text-sm text-base-content/70">
+                        Runtime tuning values used by ingestion/retrieval. OpenSearch endpoint and credentials remain in appsettings.
+                    </p>
+
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="form-control">
+                            <span class="label-text">Top K chunks</span>
+                            <input asp-for="RagTopK" type="number" min="1" max="30" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Max context chars</span>
+                            <input asp-for="RagMaxContextChars" type="number" min="2000" max="50000" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">RRF K</span>
+                            <input asp-for="RagRrfK" type="number" min="1" max="500" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Lexical candidate K</span>
+                            <input asp-for="RagLexicalCandidateK" type="number" min="1" max="200" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Vector candidate K</span>
+                            <input asp-for="RagVectorCandidateK" type="number" min="1" max="200" class="input input-bordered" />
+                        </label>
+
+                        <label class="form-control">
+                            <span class="label-text">Keyword max count</span>
+                            <input asp-for="RagKeywordMaxCount" type="number" min="1" max="100" class="input input-bordered" />
+                        </label>
+
+                        <div class="form-control md:col-span-2 rounded-lg border border-base-300 p-3">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input asp-for="RagUseRakeKeywordExtraction" type="checkbox" class="checkbox mt-1" />
+                                <span>
+                                    <span class="font-medium block">Keyword fetching: Use RAKE</span>
+                                    <span class="text-sm text-base-content/70">
+                                        Enabled: RAKE extraction with automatic fallback to local. Disabled: local keyword extraction only.
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+
+                        <label class="form-control md:col-span-2">
+                            <span class="label-text">Context cache TTL (seconds)</span>
+                            <input asp-for="RagContextCacheTtlSeconds" type="number" min="5" max="3600" class="input input-bordered" />
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input asp-for="RagUseOpenSearchIndexing" type="checkbox" class="checkbox mt-1" />
+                            <span>
+                                <span class="font-medium block">Enable OpenSearch indexing</span>
+                                <span class="text-sm text-base-content/70">
+                                    When enabled, worker writes chunk text/keywords/embedding to OpenSearch.
+                                </span>
+                            </span>
+                        </label>
+
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input asp-for="RagUseOpenSearchRetrieval" type="checkbox" class="checkbox mt-1" />
+                            <span>
+                                <span class="font-medium block">Enable OpenSearch retrieval</span>
+                                <span class="text-sm text-base-content/70">
+                                    When enabled, chat context retrieval uses hybrid OpenSearch queries.
+                                </span>
+                            </span>
+                        </label>
+
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input asp-for="RagFallbackToSqlRetrievalOnOpenSearchFailure" type="checkbox" class="checkbox mt-1" />
+                            <span>
+                                <span class="font-medium block">Fallback to SQL retrieval on OpenSearch failure</span>
+                                <span class="text-sm text-base-content/70">
+                                    Keeps chat operational during temporary OpenSearch errors.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                @if (!Model.UserSelfRegistrationEnabled)
+                {
+                    <div class="alert alert-warning">
+                        <span>
+                            Self-registration is currently disabled. New users must be invited from the `User Invitations` section.
+                        </span>
+                    </div>
+                }
+
+                @if (!Model.QuarantineEnabled)
+                {
+                    <div class="alert alert-info">
+                        <span>
+                            Quarantine is disabled. Malware-flagged uploads will be rejected immediately and not retained.
+                        </span>
+                    </div>
+                }
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary mw-120">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon>
+                        Save
+                    </button>
+                    <a asp-area="Admin" asp-page="/Index" class="btn btn-ghost mw-120">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

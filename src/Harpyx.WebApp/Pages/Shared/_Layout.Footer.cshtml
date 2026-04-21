@@ -1,0 +1,48 @@
+@{
+    var widthPreference = Context?.Request?.Cookies["harpyx_width"]?.ToLowerInvariant();
+    var normalizedWidth = widthPreference switch
+    {
+        "compact" => "compact",
+        "standard" => "standard",
+        "wide" => "wide",
+        "full" => "full",
+        _ => "standard"
+    };
+    var contentWidthClass = normalizedWidth == "full" ? "w-full" : "mx-auto w-full";
+    var contentWidthStyle = normalizedWidth switch
+    {
+        "compact" => "max-width: 72rem;",
+        "standard" => "max-width: 90rem;",
+        "wide" => "max-width: 108rem;",
+        _ => null
+    };
+}
+<footer class="border-t border-base-300 bg-base-100">
+    <div class="@contentWidthClass px-4 py-6 text-sm text-base-content/70" style="@contentWidthStyle">
+        <div class="grid w-full grid-cols-1 gap-2 text-center md:grid-cols-3 md:items-center">
+            <div class="flex items-center justify-center gap-2 md:justify-start">
+                <span>Harpyx</span>
+                <span class="text-base-content/50">&middot;</span>
+                <span>
+                    &copy; <a href="https://www.ryadel.com/" target="_blank" rel="noopener noreferrer" class="font-bold link link-hover">Ryadel</a> 2026
+                </span>
+            </div>
+            <div class="md:text-center">
+                <a asp-page="/Help/Index" class="btn btn-ghost btn-sm">
+                    <iconify-icon icon="mdi:help-circle-outline"></iconify-icon>
+                    Help
+                </a>
+            </div>
+            <div class="flex items-center justify-center gap-3 md:justify-self-end">
+                <div class="flex items-center gap-2">
+                    <span>Theme:</span>
+                    <partial name="_Layout.Themes" />
+                </div>
+                <div class="flex items-center gap-2">
+                    <span>Width:</span>
+                    <partial name="_Layout.Width" />
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

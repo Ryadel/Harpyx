@@ -1,0 +1,114 @@
+@page
+@model Harpyx.WebApp.Pages.Api.EditModel
+@{
+    ViewData["Title"] = "Create API Key";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">Create API Key</h1>
+                <div class="ml-auto">
+                    <a class="btn btn-ghost btn-sm" asp-page="/Api/Index">
+                        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                        Back to API Keys
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Generate a new key for automated access. The full secret will be shown once and cannot be recovered later.
+            </p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">
+            <span>@Model.ErrorMessage</span>
+        </div>
+    }
+
+    @if (!Model.IsApiEnabledForInstance)
+    {
+        <div class="alert alert-warning">
+            <span>API access is disabled for this instance.</span>
+        </div>
+    }
+
+    @if (Model.CreatedApiKey is not null)
+    {
+        <div class="card border border-success bg-success/5">
+            <div class="card-body space-y-3">
+                <h2 class="card-title text-success">Copy API Key Now</h2>
+                <p class="text-sm text-base-content/80">
+                    This is the only time the full secret is shown.
+                </p>
+                <div class="flex w-full items-stretch gap-2">
+                    <input id="created-api-key" type="text" readonly class="input input-bordered flex-1 min-w-0 font-mono text-sm" value="@Model.CreatedApiKey.PlainTextKey" />
+                    <button type="button" class="btn btn-success shrink-0 mw-120" onclick="copyApiKey()">Copy</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <form method="post" class="space-y-4">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-error text-sm"></div>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                    <label class="form-control">
+                        <span class="label-text">Key name</span>
+                        <input asp-for="Name" maxlength="200" class="input input-bordered" placeholder="e.g. CI Pipeline - Production" />
+                    </label>
+                    <label class="form-control">
+                        <span class="label-text">Expiration date (UTC, optional)</span>
+                        <input asp-for="ExpiresAtUtcDate" type="date" class="input input-bordered" />
+                    </label>
+                </div>
+
+                <div class="rounded-lg border border-base-300 p-4 space-y-3">
+                    <h2 class="text-lg font-medium">Permissions</h2>
+                    <div class="grid gap-2 md:grid-cols-2">
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionQueryProjects" type="checkbox" class="checkbox checkbox-sm" /><span>Query</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionUploadDocuments" type="checkbox" class="checkbox checkbox-sm" /><span>Upload documents</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionDeleteDocuments" type="checkbox" class="checkbox checkbox-sm" /><span>Delete documents</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionCreateProjects" type="checkbox" class="checkbox checkbox-sm" /><span>Create projects</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionCreateWorkspaces" type="checkbox" class="checkbox checkbox-sm" /><span>Create workspaces</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionDeleteProjects" type="checkbox" class="checkbox checkbox-sm" /><span>Delete projects</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input asp-for="PermissionDeleteWorkspaces" type="checkbox" class="checkbox checkbox-sm" /><span>Delete workspaces</span></label>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="submit" class="btn btn-primary" @(Model.IsApiEnabledForInstance ? null : "disabled")>
+                        <iconify-icon icon="mdi:key-plus"></iconify-icon>
+                        Generate API Key
+                    </button>
+                    <a class="btn btn-ghost" asp-page="/Api/Index">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyApiKey() {
+        const input = document.getElementById('created-api-key');
+        if (!input) return;
+        input.select();
+        input.setSelectionRange(0, input.value.length);
+        navigator.clipboard.writeText(input.value);
+    }
+</script>

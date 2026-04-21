@@ -1,0 +1,234 @@
+@page
+@model Harpyx.WebApp.Pages.Projects.IndexModel
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">Projects</h1>
+                <div class="ml-auto">
+                    <a class="btn btn-primary btn-sm" asp-page="/Projects/Edit">
+                        <iconify-icon icon="mdi:plus"></iconify-icon>
+                        Add Project
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                Operational overview of all projects across workspaces and tenants.
+                Monitor indexing status, chat activity, and quickly access any project.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body space-y-4">
+            <form method="get" class="flex flex-wrap items-end gap-3">
+                <div class="form-control w-full max-w-xs">
+                    <label class="label"><span class="label-text">Tenant</span></label>
+                    <select asp-for="FilterTenantId" class="select select-bordered select-sm w-full" id="filter-tenant">
+                        <option value="">All tenants</option>
+                        @foreach (var option in Model.TenantOptions)
+                        {
+                            <option value="@option.Value" selected="@option.Selected">@option.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-control w-full max-w-xs">
+                    <label class="label"><span class="label-text">Workspace</span></label>
+                    <select asp-for="FilterWorkspaceId" class="select select-bordered select-sm w-full">
+                        <option value="">All workspaces</option>
+                        @foreach (var option in Model.WorkspaceOptions)
+                        {
+                            <option value="@option.Value" selected="@option.Selected">@option.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-control w-full max-w-xs">
+                    <label class="label"><span class="label-text">Sort by</span></label>
+                    <select asp-for="SortBy" class="select select-bordered select-sm w-full">
+                        <option value="name" selected="@(Model.SortBy == "name")">Name</option>
+                        <option value="activity" selected="@(Model.SortBy == "activity")">Last activity</option>
+                        <option value="docs" selected="@(Model.SortBy == "docs")">Documents</option>
+                        <option value="chat" selected="@(Model.SortBy == "chat")">Chat messages</option>
+                        <option value="status" selected="@(Model.SortBy == "status")">Status</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <iconify-icon icon="mdi:filter-variant"></iconify-icon>
+                    Apply
+                </button>
+
+                @if (Model.FilterTenantId is not null || Model.FilterWorkspaceId is not null || Model.SortBy != "name")
+                {
+                    <a asp-page="/Projects/Index" class="btn btn-ghost btn-sm">
+                        <iconify-icon icon="mdi:filter-remove"></iconify-icon>
+                        Reset
+                    </a>
+                }
+            </form>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            @if (Model.Rows.Count == 0)
+            {
+                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
+                    @if (Model.FilterTenantId is not null || Model.FilterWorkspaceId is not null)
+                    {
+                        <span>No projects match the current filters.</span>
+                    }
+                    else
+                    {
+                        <span>No projects yet. Create one from the
+                            <a asp-page="/Workspaces/Index" class="link link-hover font-semibold">Workspaces</a> page.
+                        </span>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Workspace</th>
+                                <th class="text-center">Docs</th>
+                                <th class="text-center">Chat</th>
+                                <th>Last Activity</th>
+                                <th>Status</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var row in Model.Rows)
+                        {
+                            <tr>
+                                <td>
+                                    <div>
+                                        <a class="link link-hover link-primary font-medium"
+                                           asp-page="/Projects/Details"
+                                           asp-route-id="@row.Id"
+                                           title="Open @row.Name">
+                                            @row.Name
+                                        </a>
+                                        @if (!string.IsNullOrWhiteSpace(row.Description))
+                                        {
+                                            <div class="text-xs text-base-content/60 truncate max-w-xs">@row.Description</div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-sm">@row.WorkspaceName</div>
+                                    <div class="text-xs text-base-content/60">@row.TenantName</div>
+                                </td>
+                                <td class="text-center">
+                                    @if (row.TotalDocs == 0)
+                                    {
+                                        <span class="text-base-content/40">-</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="font-medium" title="@row.IndexedDocs indexed / @row.TotalDocs total">
+                                            @row.IndexedDocs/@row.TotalDocs
+                                        </span>
+                                        @if (row.FailedDocs > 0)
+                                        {
+                                            <span class="text-error text-xs" title="@row.FailedDocs failed">
+                                                (@row.FailedDocs
+                                                <iconify-icon icon="mdi:alert-circle" class="align-middle"></iconify-icon>)
+                                            </span>
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (row.ChatMessages == 0)
+                                    {
+                                        <span class="text-base-content/40">-</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@row.ChatMessages</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="text-sm" title="@row.LastActivity?.ToString("yyyy-MM-dd HH:mm")">
+                                        @Harpyx.WebApp.Pages.Projects.IndexModel.FormatTimeAgo(row.LastActivity)
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var badgeClass = row.Status switch
+                                        {
+                                            "All indexed" => "badge-success",
+                                            "Processing" => "badge-info",
+                                            "Has failures" => "badge-error",
+                                            "Empty" => "badge-ghost",
+                                            _ => "badge-warning"
+                                        };
+                                    }
+                                    <span class="badge badge-sm @badgeClass">@row.Status</span>
+                                </td>
+                                <td class="text-right">
+                                    <div class="inline-flex items-center gap-1">
+                                        <a class="btn btn-ghost btn-xs btn-square"
+                                           asp-page="/Projects/Details" asp-route-id="@row.Id"
+                                           title="Open" aria-label="Open">
+                                            <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon>
+                                        </a>
+                                        <a class="btn btn-ghost btn-xs btn-square"
+                                           asp-page="/Projects/Edit" asp-route-id="@row.Id"
+                                           title="Edit" aria-label="Edit">
+                                            <iconify-icon icon="mdi:pencil"></iconify-icon>
+                                        </a>
+                                        <form method="post" asp-page-handler="Delete" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@row.Id" />
+                                            <button type="submit"
+                                                    class="btn btn-ghost btn-xs btn-square text-error"
+                                                    title="Delete" aria-label="Delete">
+                                                <iconify-icon icon="mdi:delete"></iconify-icon>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-xs text-base-content/60 mt-2">
+                    @Model.Rows.Count project@(Model.Rows.Count != 1 ? "s" : "")
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var tenantSelect = document.getElementById('filter-tenant');
+            if (tenantSelect) {
+                tenantSelect.addEventListener('change', function () {
+                    if (!tenantSelect.value) {
+                        return;
+                    }
+                    var workspaceSelect = document.querySelector('[name="FilterWorkspaceId"]');
+                    if (workspaceSelect) {
+                        workspaceSelect.value = '';
+                    }
+                });
+            }
+        })();
+    </script>
+}

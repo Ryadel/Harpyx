@@ -1,0 +1,33 @@
+@page
+@{
+    ViewData["Title"] = "Access Denied";
+    // Check if the user is authenticated
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+}
+
+<div class="flex items-center justify-center min-h-[50vh]">
+    <div class="card bg-base-100 shadow-lg w-full max-w-md">
+        <div class="card-body items-center text-center space-y-4">
+            <iconify-icon icon="mdi:lock-alert" class="text-5xl text-error"></iconify-icon>
+            <h1 class="card-title text-2xl font-semibold text-error">Access Denied</h1>
+            @if (isAuthenticated)
+            {
+                <p class="text-base-content/70">
+                    Your account cannot access this resource.<br />
+                    If you believe this is an error, please contact your administrator.
+                </p>
+            }
+            else
+            {
+                <p class="text-base-content/70">
+                    You need an account to access Harpyx.<br />
+                    If self-registration is disabled, ask an administrator to send you an invitation.
+                </p>
+            }
+            <a asp-page="/Index" class="btn btn-primary mt-2">
+                <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>

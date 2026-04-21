@@ -1,0 +1,115 @@
+@page
+@model Harpyx.WebApp.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="space-y-6">
+    @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            <span>@Model.SuccessMessage</span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">
+            <span>@Model.ErrorMessage</span>
+        </div>
+    }
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-semibold">Users</h1>
+                <div class="ml-auto">
+                    <a class="btn btn-primary btn-sm" asp-page="/Users/Edit">
+                        <iconify-icon icon="mdi:account-plus"></iconify-icon>
+                        Add User
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                In this section you manage application users, their roles, and tenant assignments to control who can access each workspace.
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            @if (Model.Users.Count == 0)
+            {
+                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span>No users yet.</span>
+                        <a class="btn btn-primary btn-sm" asp-page="/Users/Edit">
+                            <iconify-icon icon="mdi:account-plus"></iconify-icon>
+                            Add User
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th>Last Provider</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td class="font-medium">@user.Email</td>
+                                <td>@user.Role</td>
+                                <td>
+                                    <span class="badge @(user.IsActive ? "badge-success" : "badge-ghost")">
+                                        @(user.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td>
+                                    @(user.LastLoginAt?.ToString("g") ?? "-")
+                                </td>
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(user.LastLoginProvider) ? "-" : user.LastLoginProvider)
+                                </td>
+                                <td class="text-right">
+                                    <div class="inline-flex items-center gap-1">
+                                        <a class="btn btn-ghost btn-sm" asp-page="/Users/Edit" asp-route-id="@user.Id" title="Edit" aria-label="Edit">
+                                            <iconify-icon icon="mdi:pencil"></iconify-icon>
+                                        </a>
+                                        <form method="post" asp-page-handler="Delete" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <button type="submit" class="btn btn-ghost btn-sm text-error"
+                                                    onclick="return confirmDelete('@user.Email')"
+                                                    title="Delete" aria-label="Delete">
+                                                <iconify-icon icon="mdi:delete"></iconify-icon>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(email) {
+        return confirm(
+            "Delete user '" + email + "'? If this user has a Personal tenant, it will also be deleted with all projects and documents.");
+    }
+</script>

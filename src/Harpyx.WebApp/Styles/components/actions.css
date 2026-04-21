@@ -1,0 +1,22 @@
+.action-inline-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.action-icon-btn {
+    color: oklch(var(--bc) / 0.3);
+    opacity: 0.2;
+    transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.action-hover-scope:is(:hover, :focus-within) .action-icon-btn,
+.action-inline-group:is(:hover, :focus-within) .action-icon-btn {
+    color: oklch(var(--bc) / 0.95);
+    opacity: 1;
+}
+
+.action-hover-scope:hover .action-icon-delete,
+.action-inline-group:hover .action-icon-delete {
+    color: oklch(var(--er)) !important;
+}
