@@ -92,19 +92,6 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout (for compose file)
-        uses: actions/checkout@v4
-
-      - name: Copy docker-compose.prod.yml to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          source: docker-compose.prod.yml
-          target: ${{ secrets.DEPLOY_PATH }}
-
       - name: Pull images and restart services
         uses: appleboy/ssh-action@v1.2.0
         with:
