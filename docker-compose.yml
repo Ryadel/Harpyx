@@ -116,8 +116,9 @@ services:
       Authentication__EntraId__ClientSecret: ${Authentication__EntraId__ClientSecret}
       Authentication__Google__ClientId: ${Authentication__Google__ClientId}
       Authentication__Google__ClientSecret: ${Authentication__Google__ClientSecret}
-      SeedAdmin__ObjectId: ${SeedAdmin__ObjectId}
-      SeedAdmin__Email: ${SeedAdmin__Email}
+      SeedOptions__AdminUsers__0__Provider: ${SeedOptions__AdminUsers__0__Provider}
+      SeedOptions__AdminUsers__0__UniqueId: ${SeedOptions__AdminUsers__0__UniqueId}
+      SeedOptions__AdminUsers__0__Email: ${SeedOptions__AdminUsers__0__Email}
       Encryption__MasterKey: ${Encryption__MasterKey}
       Email__Host: ${Email__Host}
       Email__Port: ${Email__Port}
@@ -175,8 +176,6 @@ services:
       Authentication__EntraId__ClientSecret: ${Authentication__EntraId__ClientSecret}
       Authentication__Google__ClientId: ${Authentication__Google__ClientId}
       Authentication__Google__ClientSecret: ${Authentication__Google__ClientSecret}
-      SeedAdmin__ObjectId: ${SeedAdmin__ObjectId}
-      SeedAdmin__Email: ${SeedAdmin__Email}
       Encryption__MasterKey: ${Encryption__MasterKey}
     depends_on:
       sqlserver:
