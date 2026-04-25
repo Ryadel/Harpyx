@@ -21,6 +21,8 @@ services:
     ports:
       - "${Docker__MinioApiPort}:${Docker__MinioApiContainerPort}"
       - "${Docker__MinioConsolePort}:${Docker__MinioConsoleContainerPort}"
+    volumes:
+      - ${Docker__MinioDataPath:-minio-data}:/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
@@ -195,3 +197,4 @@ networks:
 
 volumes:
   clamav-db:
+  minio-data:

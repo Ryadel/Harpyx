@@ -39,7 +39,7 @@ services:
       - "127.0.0.1:${Docker__MinioApiPort}:${Docker__MinioApiContainerPort}"
       - "127.0.0.1:${Docker__MinioConsolePort}:${Docker__MinioConsoleContainerPort}"
     volumes:
-      - minio-data:/data
+      - ${Docker__MinioDataPath:-minio-data}:/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
