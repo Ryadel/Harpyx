@@ -30,16 +30,16 @@
             <div class="md:text-center">
                 <a asp-page="/Help/Index" class="btn btn-ghost btn-sm">
                     <iconify-icon icon="mdi:help-circle-outline"></iconify-icon>
-                    Help
+                    @SharedLocalizer["FooterHelp"]
                 </a>
             </div>
             <div class="flex items-center justify-center gap-3 md:justify-self-end">
                 <div class="flex items-center gap-2">
-                    <span>Theme:</span>
+                    <span>@SharedLocalizer["FooterThemeLabel"]</span>
                     <partial name="_Layout.Themes" />
                 </div>
                 <div class="flex items-center gap-2">
-                    <span>Width:</span>
+                    <span>@SharedLocalizer["FooterWidthLabel"]</span>
                     <partial name="_Layout.Width" />
                 </div>
             </div>

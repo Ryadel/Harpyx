@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PageTitle" xml:space="preserve"><value>Admin - Dashboard</value></data>
+  <data name="PageHeading" xml:space="preserve"><value>Admin Overview</value></data>
+  <data name="Intro" xml:space="preserve"><value>This area contains platform-wide controls. Use these shortcuts for settings, governance, and operational management.</value></data>
+  <data name="GeneralSettingsTitle" xml:space="preserve"><value>General Settings</value></data>
+  <data name="GeneralSettingsDescription" xml:space="preserve"><value>Toggle self-registration and other application-wide policies.</value></data>
+  <data name="UsageLimitsTitle" xml:space="preserve"><value>Usage Limits</value></data>
+  <data name="UsageLimitsDescription" xml:space="preserve"><value>Configure instance-wide limits for tenants, workspaces, documents, storage, and optional capabilities.</value></data>
+  <data name="SystemHealthTitle" xml:space="preserve"><value>System Health</value></data>
+  <data name="SystemHealthDescription" xml:space="preserve"><value>Check required services and optional capabilities.</value></data>
+  <data name="UsersTitle" xml:space="preserve"><value>Users</value></data>
+  <data name="UsersDescription" xml:space="preserve"><value>Review all users, roles, and activation state from one place.</value></data>
+  <data name="HostedModelsTitle" xml:space="preserve"><value>Hosted Models</value></data>
+  <data name="HostedModelsDescription" xml:space="preserve"><value>Maintain hosted models available to users.</value></data>
+  <data name="TenantsTitle" xml:space="preserve"><value>Tenants</value></data>
+  <data name="TenantsDescription" xml:space="preserve"><value>Inspect and edit all tenant entities in the platform.</value></data>
+  <data name="UserInvitationsTitle" xml:space="preserve"><value>User Invitations</value></data>
+  <data name="UserInvitationsDescription" xml:space="preserve"><value>Invite users when self-registration is disabled, then track invitation status.</value></data>
+</root>

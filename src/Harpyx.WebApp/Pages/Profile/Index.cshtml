@@ -2,52 +2,52 @@
 @model Harpyx.WebApp.Pages.Profile.IndexModel
 @using Harpyx.Domain.Enums
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body space-y-3">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">LLM Providers</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto">
                     <div class="flex flex-wrap gap-2">
                         <a class="btn btn-outline btn-sm" asp-page="/Profile/HostedModels">
                             <iconify-icon icon="mdi:server-network"></iconify-icon>
-                            Hosted Models
+                            @Localizer["HostedModelsButton"]
                         </a>
                         <a class="btn btn-primary btn-sm" asp-page="/Profile/Edit">
                             <iconify-icon icon="mdi:plus"></iconify-icon>
-                            Add Provider
+                            @Localizer["AddProviderButton"]
                         </a>
                     </div>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                Configure your personal LLM providers. Harpyx supports <strong>three</strong> different model types, which will be used to handle different tasks:
+                @Localizer["IntroBeforeCount"] <strong>@Localizer["ThreeCount"]</strong> @Localizer["IntroAfterCount"]
             </p>
             <div class="rounded-box border border-base-300 bg-base-200 p-3 text-sm text-base-content/80">
                 <ul class="list-disc pl-5 space-y-1">
                     <li>
-                        <strong>Chat provider</strong> (<i>required</i>):
-                        Generates answers and powers conversations.
-                        Without this provider, project conversations are unavailable and Harpyx will be (mostly) useless.
+                        <strong>@Localizer["ChatProviderTitle"]</strong> (<i>@Localizer["RequiredLabel"]</i>):
+                        @Localizer["ChatProviderDescription"]
+                        @Localizer["ChatProviderWarning"]
                     </li>
                     <li>
-                        <strong>RAG Embedding provider</strong> (<i>optional, but recommended</i>):
-                        Creates embeddings for document indexing and retrieval, so the Chat provider can answer using the project's documents content as its context.
-                        Without this provider, documents can still be uploaded but cannot be efficiently indexed.
+                        <strong>@Localizer["RagProviderTitle"]</strong> (<i>@Localizer["OptionalRecommendedLabel"]</i>):
+                        @Localizer["RagProviderDescription"]
+                        @Localizer["RagProviderWarning"]
                     </li>
                     <li>
-                        <strong>OCR provider</strong> (<i>optional</i>):
-                        Used to extract text from scanned/visual documents when OCR processing is required.
-                        Without this provider, Harpyx will use its internal OCR capabilities, which are tipically OK (and free) but might be not as good as LLM-based OCR.
+                        <strong>@Localizer["OcrProviderTitle"]</strong> (<i>@Localizer["OptionalLabel"]</i>):
+                        @Localizer["OcrProviderDescription"]
+                        @Localizer["OcrProviderWarning"]
                     </li>
                 </ul>
             </div>
             <p class="text-sm text-base-content/70">
-                For the best experience, configure at least the <span class="font-semibold">Chat</span> and the <span class="font-semibold">RAG Embedding</span> providers.
+                @Localizer["BestExperiencePrefix"] <span class="font-semibold">@Localizer["ChatLabel"]</span> @Localizer["BestExperienceMiddle"] <span class="font-semibold">@Localizer["RagLabel"]</span> @Localizer["BestExperienceSuffix"]
             </p>
         </div>
     </div>
@@ -68,19 +68,19 @@
     @if (!Model.HasChatModelConfigured)
     {
         <div class="alert alert-warning">
-            <span>No <strong>Chat</strong> provider configured. Project chat will not be available.</span>
+            <span>@Localizer["NoChatProviderPrefix"] <strong>@Localizer["ChatLabel"]</strong> @Localizer["NoChatProviderSuffix"]</span>
         </div>
     }
     @if (!Model.HasRagProviderConfigured)
     {
         <div class="alert alert-warning">
-            <span>No <strong>RAG Embedding</strong> provider configured. Document indexing and retrieval quality will be limited.</span>
+            <span>@Localizer["NoRagProviderPrefix"] <strong>@Localizer["RagLabel"]</strong> @Localizer["NoRagProviderSuffix"]</span>
         </div>
     }
     @if (!Model.HasOcrModelConfigured)
     {
         <div class="alert alert-warning">
-            <span>No <strong>OCR</strong> provider configured. OCR-based text extraction may be unavailable.</span>
+            <span>@Localizer["NoOcrProviderPrefix"] <strong>@Localizer["OcrLabel"]</strong> @Localizer["NoOcrProviderSuffix"]</span>
         </div>
     }
 
@@ -90,10 +90,10 @@
             {
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>No providers configured yet.</span>
+                        <span>@Localizer["NoProviders"]</span>
                         <a class="btn btn-primary btn-sm" asp-page="/Profile/Edit">
                             <iconify-icon icon="mdi:plus"></iconify-icon>
-                            Add Provider
+                            @Localizer["AddProviderButton"]
                         </a>
                     </div>
                 </div>
@@ -104,19 +104,19 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Provider</th>
-                                <th>Endpoint</th>
-                                <th>Type</th>
-                                <th>API Key</th>
-                                <th>Chat Model</th>
-                                <th>RAG Model</th>
-                                <th>OCR Model</th>
-                                <th>Default Chat</th>
-                                <th>Default RAG</th>
-                                <th>Default OCR</th>
-                                <th>Used By Projects</th>
-                                <th class="text-right">Actions</th>
+                                <th>@Localizer["NameHeader"]</th>
+                                <th>@Localizer["ProviderHeader"]</th>
+                                <th>@Localizer["EndpointHeader"]</th>
+                                <th>@Localizer["TypeHeader"]</th>
+                                <th>@Localizer["ApiKeyHeader"]</th>
+                                <th>@Localizer["ChatModelHeader"]</th>
+                                <th>@Localizer["RagModelHeader"]</th>
+                                <th>@Localizer["OcrModelHeader"]</th>
+                                <th>@Localizer["DefaultChatHeader"]</th>
+                                <th>@Localizer["DefaultRagHeader"]</th>
+                                <th>@Localizer["DefaultOcrHeader"]</th>
+                                <th>@Localizer["UsedByProjectsHeader"]</th>
+                                <th class="text-right">@Localizer["ActionsHeader"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -146,17 +146,17 @@
                                 <td>@(string.IsNullOrWhiteSpace(provider.OcrModel) ? "-" : provider.OcrModel)</td>
                                 <td>
                                     <span class="badge @(provider.IsDefaultChat ? "badge-primary" : "badge-ghost") badge-sm">
-                                        @(provider.IsDefaultChat ? "Yes" : "No")
+                                        @(provider.IsDefaultChat ? Localizer["Yes"] : Localizer["No"])
                                     </span>
                                 </td>
                                 <td>
                                     <span class="badge @(provider.IsDefaultRagEmbedding ? "badge-primary" : "badge-ghost") badge-sm">
-                                        @(provider.IsDefaultRagEmbedding ? "Yes" : "No")
+                                        @(provider.IsDefaultRagEmbedding ? Localizer["Yes"] : Localizer["No"])
                                     </span>
                                 </td>
                                 <td>
                                     <span class="badge @(provider.IsDefaultOcr ? "badge-primary" : "badge-ghost") badge-sm">
-                                        @(provider.IsDefaultOcr ? "Yes" : "No")
+                                        @(provider.IsDefaultOcr ? Localizer["Yes"] : Localizer["No"])
                                     </span>
                                 </td>
                                 <td>@provider.UsedByProjectCount</td>
@@ -165,7 +165,7 @@
                                         <a class="btn btn-ghost btn-sm"
                                            asp-page="/Profile/Edit"
                                            asp-route-provider="@provider.Provider"
-                                           title="Edit" aria-label="Edit">
+                                           title="@Localizer["EditButton"]" aria-label="@Localizer["EditButton"]">
                                             <iconify-icon icon="mdi:pencil"></iconify-icon>
                                         </a>
                                         @if (provider.SupportsChat && !provider.IsDefaultChat)
@@ -174,7 +174,7 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="SetDefaultUsage" value="@LlmProviderType.Chat" />
                                                 <input type="hidden" name="SetDefaultModelId" value="@provider.ChatModelId" />
-                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set default Chat" aria-label="Set default Chat">
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="@Localizer["SetDefaultChatButton"]" aria-label="@Localizer["SetDefaultChatButton"]">
                                                     <iconify-icon icon="mdi:chat"></iconify-icon>
                                                 </button>
                                             </form>
@@ -185,7 +185,7 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="SetDefaultUsage" value="@LlmProviderType.RagEmbedding" />
                                                 <input type="hidden" name="SetDefaultModelId" value="@provider.RagEmbeddingModelId" />
-                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set default RAG" aria-label="Set default RAG">
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="@Localizer["SetDefaultRagButton"]" aria-label="@Localizer["SetDefaultRagButton"]">
                                                     <iconify-icon icon="mdi:database-search"></iconify-icon>
                                                 </button>
                                             </form>
@@ -196,7 +196,7 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="SetDefaultUsage" value="@LlmProviderType.Ocr" />
                                                 <input type="hidden" name="SetDefaultModelId" value="@provider.OcrModelId" />
-                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set default OCR" aria-label="Set default OCR">
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="@Localizer["SetDefaultOcrButton"]" aria-label="@Localizer["SetDefaultOcrButton"]">
                                                     <iconify-icon icon="mdi:ocr"></iconify-icon>
                                                 </button>
                                             </form>
@@ -207,7 +207,7 @@
                                             <button type="submit" class="btn btn-ghost btn-sm text-error"
                                                     data-provider-name="@provider.GetName()"
                                                     onclick="return confirmDelete(this.dataset.providerName, @provider.UsedByProjectCount)"
-                                                    title="Delete" aria-label="Delete">
+                                                    title="@Localizer["DeleteButton"]" aria-label="@Localizer["DeleteButton"]">
                                                 <iconify-icon icon="mdi:delete"></iconify-icon>
                                             </button>
                                         </form>
@@ -227,10 +227,9 @@
     function confirmDelete(provider, usedByProjects) {
         if (usedByProjects > 0) {
             return confirm(
-                "This provider is used by " + usedByProjects + " project(s) for RAG indexing. " +
-                "Deleting it will clear those project indexes. Continue?");
+                "@Localizer["DeleteUsedProviderPrefix"]" + usedByProjects + "@Localizer["DeleteUsedProviderSuffix"]");
         }
 
-        return confirm("Delete " + provider + " configuration?");
+        return confirm("@Localizer["DeleteProviderPrefix"]" + provider + "@Localizer["DeleteProviderSuffix"]");
     }
 </script>

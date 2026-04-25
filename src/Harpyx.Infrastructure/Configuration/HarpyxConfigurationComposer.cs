@@ -34,6 +34,7 @@ public static class HarpyxConfigurationComposer
             InitialCatalog = name,
             UserID = username,
             Password = configuration["Database:Password"] ?? string.Empty,
+            Encrypt = configuration.GetValue<bool?>("Database:Encrypt") ?? true,
             TrustServerCertificate = configuration.GetValue<bool?>("Database:TrustServerCertificate") ?? true
         };
 

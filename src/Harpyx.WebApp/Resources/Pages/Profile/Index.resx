@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PageTitle" xml:space="preserve"><value>Profile</value></data>
+  <data name="PageHeading" xml:space="preserve"><value>LLM Providers</value></data>
+  <data name="HostedModelsButton" xml:space="preserve"><value>Hosted Models</value></data>
+  <data name="AddProviderButton" xml:space="preserve"><value>Add Provider</value></data>
+  <data name="IntroBeforeCount" xml:space="preserve"><value>Configure your personal LLM providers. Harpyx supports</value></data>
+  <data name="ThreeCount" xml:space="preserve"><value>three</value></data>
+  <data name="IntroAfterCount" xml:space="preserve"><value>different model types, which will be used to handle different tasks:</value></data>
+  <data name="ChatProviderTitle" xml:space="preserve"><value>Chat provider</value></data>
+  <data name="RequiredLabel" xml:space="preserve"><value>required</value></data>
+  <data name="ChatProviderDescription" xml:space="preserve"><value>Generates answers and powers conversations.</value></data>
+  <data name="ChatProviderWarning" xml:space="preserve"><value>Without this provider, project conversations are unavailable and Harpyx will be (mostly) useless.</value></data>
+  <data name="RagProviderTitle" xml:space="preserve"><value>RAG Embedding provider</value></data>
+  <data name="OptionalRecommendedLabel" xml:space="preserve"><value>optional, but recommended</value></data>
+  <data name="RagProviderDescription" xml:space="preserve"><value>Creates embeddings for document indexing and retrieval, so the Chat provider can answer using the project's documents content as its context.</value></data>
+  <data name="RagProviderWarning" xml:space="preserve"><value>Without this provider, documents can still be uploaded but cannot be efficiently indexed.</value></data>
+  <data name="OcrProviderTitle" xml:space="preserve"><value>OCR provider</value></data>
+  <data name="OptionalLabel" xml:space="preserve"><value>optional</value></data>
+  <data name="OcrProviderDescription" xml:space="preserve"><value>Used to extract text from scanned/visual documents when OCR processing is required.</value></data>
+  <data name="OcrProviderWarning" xml:space="preserve"><value>Without this provider, Harpyx will use its internal OCR capabilities, which are typically OK (and free) but might be not as good as LLM-based OCR.</value></data>
+  <data name="BestExperiencePrefix" xml:space="preserve"><value>For the best experience, configure at least the</value></data>
+  <data name="BestExperienceMiddle" xml:space="preserve"><value>and the</value></data>
+  <data name="BestExperienceSuffix" xml:space="preserve"><value>providers.</value></data>
+  <data name="ChatLabel" xml:space="preserve"><value>Chat</value></data>
+  <data name="RagLabel" xml:space="preserve"><value>RAG Embedding</value></data>
+  <data name="OcrLabel" xml:space="preserve"><value>OCR</value></data>
+  <data name="NoChatProviderPrefix" xml:space="preserve"><value>No</value></data>
+  <data name="NoChatProviderSuffix" xml:space="preserve"><value>provider configured. Project chat will not be available.</value></data>
+  <data name="NoRagProviderPrefix" xml:space="preserve"><value>No</value></data>
+  <data name="NoRagProviderSuffix" xml:space="preserve"><value>provider configured. Document indexing and retrieval quality will be limited.</value></data>
+  <data name="NoOcrProviderPrefix" xml:space="preserve"><value>No</value></data>
+  <data name="NoOcrProviderSuffix" xml:space="preserve"><value>provider configured. OCR-based text extraction may be unavailable.</value></data>
+  <data name="NoProviders" xml:space="preserve"><value>No providers configured yet.</value></data>
+  <data name="NameHeader" xml:space="preserve"><value>Name</value></data>
+  <data name="ProviderHeader" xml:space="preserve"><value>Provider</value></data>
+  <data name="EndpointHeader" xml:space="preserve"><value>Endpoint</value></data>
+  <data name="TypeHeader" xml:space="preserve"><value>Type</value></data>
+  <data name="ApiKeyHeader" xml:space="preserve"><value>API Key</value></data>
+  <data name="ChatModelHeader" xml:space="preserve"><value>Chat Model</value></data>
+  <data name="RagModelHeader" xml:space="preserve"><value>RAG Model</value></data>
+  <data name="OcrModelHeader" xml:space="preserve"><value>OCR Model</value></data>
+  <data name="DefaultChatHeader" xml:space="preserve"><value>Default Chat</value></data>
+  <data name="DefaultRagHeader" xml:space="preserve"><value>Default RAG</value></data>
+  <data name="DefaultOcrHeader" xml:space="preserve"><value>Default OCR</value></data>
+  <data name="UsedByProjectsHeader" xml:space="preserve"><value>Used By Projects</value></data>
+  <data name="ActionsHeader" xml:space="preserve"><value>Actions</value></data>
+  <data name="Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="No" xml:space="preserve"><value>No</value></data>
+  <data name="EditButton" xml:space="preserve"><value>Edit</value></data>
+  <data name="DeleteButton" xml:space="preserve"><value>Delete</value></data>
+  <data name="SetDefaultChatButton" xml:space="preserve"><value>Set default Chat</value></data>
+  <data name="SetDefaultRagButton" xml:space="preserve"><value>Set default RAG</value></data>
+  <data name="SetDefaultOcrButton" xml:space="preserve"><value>Set default OCR</value></data>
+  <data name="DeleteUsedProviderPrefix" xml:space="preserve"><value>This provider is used by </value></data>
+  <data name="DeleteUsedProviderSuffix" xml:space="preserve"><value> project(s) for RAG indexing. Deleting it will clear those project indexes. Continue?</value></data>
+  <data name="DeleteProviderPrefix" xml:space="preserve"><value>Delete </value></data>
+  <data name="DeleteProviderSuffix" xml:space="preserve"><value> configuration?</value></data>
+</root>

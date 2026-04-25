@@ -12,21 +12,35 @@
     var isMembers = currentArea.Length == 0 && currentPage.StartsWith("/members/");
     var isApi = currentArea.Length == 0 && currentPage.StartsWith("/api/");
     var isUsers = currentArea.Length == 0 && currentPage.StartsWith("/users/");
+    var isHelpIndex = currentArea.Length == 0 && currentPage == "/help/index";
+    var isHelpOverview = currentArea.Length == 0 && currentPage == "/help/overview";
+    var isHelpAccess = currentArea.Length == 0 && currentPage == "/help/access";
+    var isHelpApi = currentArea.Length == 0 && currentPage == "/help/api";
 }
 
 <div class="navbar-center hidden md:flex">
     <ul class="menu menu-horizontal gap-1 px-1">
-        @if (canAccessAdmin)
+        @if (User?.Identity?.IsAuthenticated == true)
         {
-            <li><a asp-area="Admin" asp-page="/Index" class="btn btn-ghost btn-sm @(isAdmin ? "btn-active" : string.Empty)">Admin</a></li>
-            <li><a asp-area="" asp-page="/Tenants/Index" class="btn btn-ghost btn-sm @(isTenants ? "btn-active" : string.Empty)">Tenants</a></li>
-            <li><a asp-area="" asp-page="/Users/Index" class="btn btn-ghost btn-sm @(isUsers ? "btn-active" : string.Empty)">Users</a></li>
+            @if (canAccessAdmin)
+            {
+                <li><a asp-area="Admin" asp-page="/Index" class="btn btn-ghost btn-sm @(isAdmin ? "btn-active" : string.Empty)">@SharedLocalizer["NavAdmin"]</a></li>
+                <li><a asp-area="" asp-page="/Tenants/Index" class="btn btn-ghost btn-sm @(isTenants ? "btn-active" : string.Empty)">@SharedLocalizer["NavTenants"]</a></li>
+                <li><a asp-area="" asp-page="/Users/Index" class="btn btn-ghost btn-sm @(isUsers ? "btn-active" : string.Empty)">@SharedLocalizer["NavUsers"]</a></li>
+            }
+            @* <li><a asp-page="/Index" class="btn btn-ghost btn-sm">Dashboard</a></li> *@
+            <li><a asp-area="" asp-page="/Workspaces/Index" class="btn btn-ghost btn-sm @(isWorkspaces ? "btn-active" : string.Empty)">@SharedLocalizer["NavWorkspaces"]</a></li>
+            <li><a asp-area="" asp-page="/Projects/Index" class="btn btn-ghost btn-sm @(isProjects ? "btn-active" : string.Empty)">@SharedLocalizer["NavProjects"]</a></li>
+            <li><a asp-area="" asp-page="/Members/Index" class="btn btn-ghost btn-sm @(isMembers ? "btn-active" : string.Empty)">@SharedLocalizer["NavMembers"]</a></li>
+            <li><a asp-area="" asp-page="/Api/Index" class="btn btn-ghost btn-sm @(isApi ? "btn-active" : string.Empty)">@SharedLocalizer["NavApi"]</a></li>
         }
-        @* <li><a asp-page="/Index" class="btn btn-ghost btn-sm">Dashboard</a></li> *@
-        <li><a asp-area="" asp-page="/Workspaces/Index" class="btn btn-ghost btn-sm @(isWorkspaces ? "btn-active" : string.Empty)">Workspaces</a></li>
-        <li><a asp-area="" asp-page="/Projects/Index" class="btn btn-ghost btn-sm @(isProjects ? "btn-active" : string.Empty)">Projects</a></li>
-        <li><a asp-area="" asp-page="/Members/Index" class="btn btn-ghost btn-sm @(isMembers ? "btn-active" : string.Empty)">Members</a></li>
-        <li><a asp-area="" asp-page="/Api/Index" class="btn btn-ghost btn-sm @(isApi ? "btn-active" : string.Empty)">API</a></li>
+        else
+        {
+            <li><a asp-area="" asp-page="/Help/Index" class="btn btn-ghost btn-sm @(isHelpIndex ? "btn-active" : string.Empty)">@SharedLocalizer["NavWhatIsHarpyx"]</a></li>
+            <li><a asp-area="" asp-page="/Help/Overview" class="btn btn-ghost btn-sm @(isHelpOverview ? "btn-active" : string.Empty)">@SharedLocalizer["NavOverview"]</a></li>
+            <li><a asp-area="" asp-page="/Help/Access" class="btn btn-ghost btn-sm @(isHelpAccess ? "btn-active" : string.Empty)">@SharedLocalizer["NavAccess"]</a></li>
+            <li><a asp-area="" asp-page="/Help/Api" class="btn btn-ghost btn-sm @(isHelpApi ? "btn-active" : string.Empty)">@SharedLocalizer["NavApi"]</a></li>
+        }
     </ul>
 </div>
 
@@ -39,17 +53,27 @@
         </svg>
     </div>
     <ul tabindex="0" class="menu dropdown-content mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
-        @if (canAccessAdmin)
+        @if (User?.Identity?.IsAuthenticated == true)
         {
-            <li><a asp-area="Admin" asp-page="/Index" class="@(isAdmin ? "active font-semibold" : string.Empty)">Admin</a></li>
-            <li><a asp-area="" asp-page="/Tenants/Index" class="@(isTenants ? "active font-semibold" : string.Empty)">Tenants</a></li>
-            <li><a asp-area="" asp-page="/Users/Index" class="@(isUsers ? "active font-semibold" : string.Empty)">Users</a></li>
-            <li><hr class="my-1 border-base-300" /></li>
+            @if (canAccessAdmin)
+            {
+                <li><a asp-area="Admin" asp-page="/Index" class="@(isAdmin ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavAdmin"]</a></li>
+                <li><a asp-area="" asp-page="/Tenants/Index" class="@(isTenants ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavTenants"]</a></li>
+                <li><a asp-area="" asp-page="/Users/Index" class="@(isUsers ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavUsers"]</a></li>
+                <li><hr class="my-1 border-base-300" /></li>
+            }
+            @* <li><a asp-page="/Index">Dashboard</a></li> *@
+            <li><a asp-area="" asp-page="/Workspaces/Index" class="@(isWorkspaces ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavWorkspaces"]</a></li>
+            <li><a asp-area="" asp-page="/Projects/Index" class="@(isProjects ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavProjects"]</a></li>
+            <li><a asp-area="" asp-page="/Members/Index" class="@(isMembers ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavMembers"]</a></li>
+            <li><a asp-area="" asp-page="/Api/Index" class="@(isApi ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavApi"]</a></li>
         }
-        @* <li><a asp-page="/Index">Dashboard</a></li> *@
-        <li><a asp-area="" asp-page="/Workspaces/Index" class="@(isWorkspaces ? "active font-semibold" : string.Empty)">Workspaces</a></li>
-        <li><a asp-area="" asp-page="/Projects/Index" class="@(isProjects ? "active font-semibold" : string.Empty)">Projects</a></li>
-        <li><a asp-area="" asp-page="/Members/Index" class="@(isMembers ? "active font-semibold" : string.Empty)">Members</a></li>
-        <li><a asp-area="" asp-page="/Api/Index" class="@(isApi ? "active font-semibold" : string.Empty)">API</a></li>
+        else
+        {
+            <li><a asp-area="" asp-page="/Help/Index" class="@(isHelpIndex ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavWhatIsHarpyx"]</a></li>
+            <li><a asp-area="" asp-page="/Help/Overview" class="@(isHelpOverview ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavOverview"]</a></li>
+            <li><a asp-area="" asp-page="/Help/Access" class="@(isHelpAccess ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavAccess"]</a></li>
+            <li><a asp-area="" asp-page="/Help/Api" class="@(isHelpApi ? "active font-semibold" : string.Empty)">@SharedLocalizer["NavApi"]</a></li>
+        }
     </ul>
 </div>

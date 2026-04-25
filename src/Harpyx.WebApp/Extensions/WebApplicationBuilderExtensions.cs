@@ -29,6 +29,7 @@ public static class WebApplicationBuilderExtensions
             options.Conventions.AuthorizeAreaFolder("Admin", "/", "AdminOnly");
             options.Conventions.AllowAnonymousToPage("/Index");
             options.Conventions.AllowAnonymousToPage("/AccessDenied");
+            options.Conventions.AllowAnonymousToFolder("/Help");
         })
             .AddViewLocalization()
             .AddDataAnnotationsLocalization();

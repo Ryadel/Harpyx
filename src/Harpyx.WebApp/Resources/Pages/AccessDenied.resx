@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PageTitle" xml:space="preserve"><value>Access Denied</value></data>
+  <data name="PageHeading" xml:space="preserve"><value>Access Denied</value></data>
+  <data name="AuthenticatedMessageLine1" xml:space="preserve"><value>Your account cannot access this resource.</value></data>
+  <data name="AuthenticatedMessageLine2" xml:space="preserve"><value>If you believe this is an error, please contact your administrator.</value></data>
+  <data name="AnonymousMessageLine1" xml:space="preserve"><value>You need an account to access Harpyx.</value></data>
+  <data name="AnonymousMessageLine2" xml:space="preserve"><value>If self-registration is disabled, ask an administrator to send you an invitation.</value></data>
+  <data name="BackToHome" xml:space="preserve"><value>Back to Home</value></data>
+</root>

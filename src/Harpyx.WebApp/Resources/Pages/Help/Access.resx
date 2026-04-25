@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="PageHeading" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="Intro" xml:space="preserve">
+    <value>Harpyx separates identity from permissions. Signing in proves who you are. Your user status, tenant memberships and roles decide what you can actually see or change.</value>
+  </data>
+  <data name="SigningInTitle" xml:space="preserve">
+    <value>Signing In</value>
+  </data>
+  <data name="SigningInProvider" xml:space="preserve">
+    <value>Use one of the available login providers, such as Google or Microsoft.</value>
+  </data>
+  <data name="SigningInAllowedAccount" xml:space="preserve">
+    <value>If your account is not allowed, Harpyx can deny access even after a successful provider login.</value>
+  </data>
+  <data name="SigningInInvitation" xml:space="preserve">
+    <value>If you are invited to a tenant, your access is tied to that tenant and the role you receive there.</value>
+  </data>
+  <data name="SigningInSignOut" xml:space="preserve">
+    <value>When you sign out, your browser session is cleared.</value>
+  </data>
+  <data name="CurrentTenantTitle" xml:space="preserve">
+    <value>Current Tenant</value>
+  </data>
+  <data name="CurrentTenantDescription" xml:space="preserve">
+    <value>Most work in Harpyx happens inside one tenant at a time. The account menu shows the current tenant. If you belong to more than one tenant, switch before creating workspaces, projects or documents.</value>
+  </data>
+  <data name="CurrentTenantAdmins" xml:space="preserve">
+    <value>Platform admins can work across all tenants, but regular users only see tenants where they have membership.</value>
+  </data>
+  <data name="TenantRolesTitle" xml:space="preserve">
+    <value>Tenant Roles</value>
+  </data>
+  <data name="TenantRolesDescription" xml:space="preserve">
+    <value>Roles are tenant-specific. The same person can have different roles in different tenants.</value>
+  </data>
+  <data name="RoleHeader" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="RoleMeaningHeader" xml:space="preserve">
+    <value>What it means for users</value>
+  </data>
+  <data name="TenantOwnerRole" xml:space="preserve">
+    <value>Tenant Owner</value>
+  </data>
+  <data name="TenantOwnerDescription" xml:space="preserve">
+    <value>Controls the tenant, including members, workspaces and projects.</value>
+  </data>
+  <data name="TenantManagerRole" xml:space="preserve">
+    <value>Tenant Manager</value>
+  </data>
+  <data name="TenantManagerDescription" xml:space="preserve">
+    <value>Manages day-to-day tenant collaboration, usually including members and content areas.</value>
+  </data>
+  <data name="WorkspaceManagerRole" xml:space="preserve">
+    <value>Workspace Manager</value>
+  </data>
+  <data name="WorkspaceManagerDescription" xml:space="preserve">
+    <value>Creates and manages workspaces and projects inside the tenant.</value>
+  </data>
+  <data name="ProjectContributorRole" xml:space="preserve">
+    <value>Project Contributor</value>
+  </data>
+  <data name="ProjectContributorDescription" xml:space="preserve">
+    <value>Works on projects and documents, but does not manage tenant membership.</value>
+  </data>
+  <data name="ReviewerRole" xml:space="preserve">
+    <value>Reviewer</value>
+  </data>
+  <data name="ReviewerDescription" xml:space="preserve">
+    <value>Reviews content and uses chat, with limited editing power.</value>
+  </data>
+  <data name="ViewerRole" xml:space="preserve">
+    <value>Viewer</value>
+  </data>
+  <data name="ViewerDescription" xml:space="preserve">
+    <value>Read-only access. This is the safest role for people who only need to consult content.</value>
+  </data>
+  <data name="MemberManagementTitle" xml:space="preserve">
+    <value>Member Management</value>
+  </data>
+  <data name="MemberManagementCurrentTenant" xml:space="preserve">
+    <value>Members are managed for the current tenant.</value>
+  </data>
+  <data name="MemberManagementCanGrant" xml:space="preserve">
+    <value>Some users can grant access to others; this is shown as Can Grant in the Members page.</value>
+  </data>
+  <data name="MemberManagementTenantRules" xml:space="preserve">
+    <value>Harpyx protects important tenant rules, such as keeping at least one owner.</value>
+  </data>
+  <data name="MemberManagementDelegation" xml:space="preserve">
+    <value>Removing a member can also remove access that depended on that member's delegation.</value>
+  </data>
+  <data name="GoodHabitsTitle" xml:space="preserve">
+    <value>Good Habits</value>
+  </data>
+  <data name="GoodHabitsConfirmTenant" xml:space="preserve">
+    <value>Before creating anything, confirm the current tenant.</value>
+  </data>
+  <data name="GoodHabitsLowestRole" xml:space="preserve">
+    <value>Give people the lowest role that still lets them do their work.</value>
+  </data>
+  <data name="GoodHabitsReadOnlyRoles" xml:space="preserve">
+    <value>Use Viewer or Reviewer when someone only needs to inspect content.</value>
+  </data>
+  <data name="GoodHabitsReviewMembers" xml:space="preserve">
+    <value>Review members after a project or collaboration ends.</value>
+  </data>
+</root>

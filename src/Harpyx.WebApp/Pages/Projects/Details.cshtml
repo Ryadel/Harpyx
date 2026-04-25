@@ -1,9 +1,10 @@
 @page "{id:guid}"
+@using System.Text.Json
 @model Harpyx.WebApp.Pages.Projects.DetailsModel
 @{
     ViewData["Title"] = Model.Project != null
-        ? $"{Model.Project.Name} - Details"
-        : "Project Details";
+        ? Localizer["ProjectDetailsPageTitle", Model.Project.Name].Value
+        : Localizer["ProjectDetails"].Value;
 }
 
 <div class="space-y-6">
@@ -20,13 +21,13 @@
                 <div class="ml-auto flex items-center gap-2">
                     <a class="btn btn-ghost btn-sm" asp-page="/Projects/Index">
                         <iconify-icon icon="mdi:arrow-left"></iconify-icon>
-                        Back to Projects
+                        @Localizer["BackToProjects"]
                     </a>
                     @if (Model.Project is not null)
                     {
                         <a class="btn btn-ghost btn-sm" asp-page="/Projects/Edit" asp-route-id="@Model.Project.Id">
                             <iconify-icon icon="mdi:pencil"></iconify-icon>
-                            Edit Project
+                            @Localizer["EditProject"]
                         </a>
                     }
                 </div>
@@ -58,37 +59,37 @@
             <div class="card bg-base-100 shadow">
                 <div class="card-body space-y-4">
                     <div class="flex items-center gap-4">
-                        <h2 class="text-lg font-semibold">Documents</h2>
+                        <h2 class="text-lg font-semibold">@Localizer["Documents"]</h2>
                         <div class="ml-auto flex items-center gap-1">
-                            <button type="button" class="btn btn-ghost btn-sm" id="select-all-docs" title="Select all documents" aria-label="Select all documents">
+                            <button type="button" class="btn btn-ghost btn-sm" id="select-all-docs" title="@(Localizer["SelectAllDocuments"])" aria-label="@(Localizer["SelectAllDocuments"])">
                                 <iconify-icon icon="mdi:checkbox-multiple-marked"></iconify-icon>
-                                Select all
+                                @Localizer["SelectAll"]
                             </button>
-                            <button type="button" class="btn btn-ghost btn-sm" id="deselect-all-docs" title="Deselect all documents" aria-label="Deselect all documents">
+                            <button type="button" class="btn btn-ghost btn-sm" id="deselect-all-docs" title="@(Localizer["DeselectAllDocuments"])" aria-label="@(Localizer["DeselectAllDocuments"])">
                                 <iconify-icon icon="mdi:checkbox-multiple-blank-outline"></iconify-icon>
-                                Unselect all
+                                @Localizer["UnselectAll"]
                             </button>
                         </div>
                     </div>
 
                     <div class="space-y-2">
                         <label class="label">
-                            <span class="label-text">Add new document</span>
+                            <span class="label-text">@Localizer["AddNewDocument"]</span>
                         </label>
                         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                             <input asp-for="UploadFile" type="file" class="file-input file-input-bordered w-full" />
-                            <button type="submit" class="btn btn-primary sm:btn mw-120" asp-page-handler="Upload" title="Upload document" aria-label="Upload document">
+                            <button type="submit" class="btn btn-primary sm:btn mw-120" asp-page-handler="Upload" title="@(Localizer["UploadDocument"])" aria-label="@(Localizer["UploadDocument"])">
                                 <iconify-icon icon="mdi:upload"></iconify-icon>
-                                Upload
+                                @Localizer["Upload"]
                             </button>
                         </div>
-                        <div class="divider text-xs text-base-content/50 my-1">OR</div>
+                        <div class="divider text-xs text-base-content/50 my-1">@Localizer["Or"]</div>
                         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                             <input asp-for="DocumentUrl" type="url" class="input input-bordered w-full"
                                    placeholder="https://example.com/document.pdf" />
-                            <button type="submit" class="btn btn-secondary sm:btn mw-120" asp-page-handler="AddUrl" title="Add URL document" aria-label="Add URL document">
+                            <button type="submit" class="btn btn-secondary sm:btn mw-120" asp-page-handler="AddUrl" title="@(Localizer["AddUrlDocument"])" aria-label="@(Localizer["AddUrlDocument"])">
                                 <iconify-icon icon="mdi:link-plus"></iconify-icon>
-                                Add URL
+                                @Localizer["AddUrl"]
                             </button>
                         </div>
                     </div>
@@ -98,11 +99,11 @@
                             <thead>
                                 <tr>
                                     <th class="w-10"></th>
-                                    <th>File</th>
-                                    <th>Type</th>
-                                    <th>Size</th>
-                                    <th>Status</th>
-                                    <th class="text-right">Actions</th>
+                                    <th>@Localizer["File"]</th>
+                                    <th>@Localizer["Type"]</th>
+                                    <th>@Localizer["Size"]</th>
+                                    <th>@Localizer["Status"]</th>
+                                    <th class="text-right">@Localizer["Actions"]</th>
                                 </tr>
                             </thead>
                             <tbody id="documents-tbody">
@@ -110,7 +111,7 @@
                             {
                                 <tr>
                                     <td colspan="6" class="text-center text-base-content/70">
-                                        No documents uploaded yet.
+                                        @Localizer["NoDocumentsUploaded"]
                                     </td>
                                 </tr>
                             }
@@ -174,8 +175,8 @@
                                                         name="RetryDocumentId"
                                                         value="@doc.Id"
                                                         data-doc-retry
-                                                        aria-label="Retry document processing"
-                                                        title="Retry document processing">
+                                                        aria-label="@(Localizer["RetryDocumentProcessing"])"
+                                                        title="@(Localizer["RetryDocumentProcessing"])">
                                                     <iconify-icon icon="mdi:refresh"></iconify-icon>
                                                 </button>
                                             }
@@ -186,14 +187,14 @@
                                                         class="btn btn-ghost btn-sm"
                                                         data-doc-id="@doc.Id"
                                                         data-doc-view
-                                                        aria-label="View details"
+                                                        aria-label="@(Localizer["ViewDetails"])"
                                                         data-doc-name="@doc.FileName"
                                                         data-doc-type="@doc.ContentType"
                                                         data-doc-size="@Model.FormatBytes(doc.SizeBytes)"
                                                         data-doc-state="@doc.State"
                                                         data-doc-container-path="@(doc.ContainerPath ?? "")"
                                                         data-doc-extraction-state="@doc.ExtractionState"
-                                                        title="View details"
+                                                        title="@(Localizer["ViewDetails"])"
                                                         onclick="openDocInfo(this)">
                                                     <iconify-icon icon="mdi:file-eye"></iconify-icon>
                                                 </button>
@@ -201,8 +202,8 @@
                                                         class="btn btn-ghost btn-sm"
                                                         data-doc-id="@doc.Id"
                                                         data-doc-name="@doc.FileName"
-                                                        aria-label="Rename file"
-                                                        title="Rename file"
+                                                        aria-label="@(Localizer["RenameFile"])"
+                                                        title="@(Localizer["RenameFile"])"
                                                         onclick="renameDocument(this)">
                                                     <iconify-icon icon="mdi:rename"></iconify-icon>
                                                 </button>
@@ -211,9 +212,9 @@
                                                         asp-page-handler="Delete"
                                                         name="DeleteDocumentId"
                                                         value="@doc.Id"
-                                                        aria-label="Delete file"
-                                                        title="Delete file"
-                                                        onclick="return confirm('Delete @doc.FileName?')">
+                                                        aria-label="@(Localizer["DeleteFile"])"
+                                                        title="@(Localizer["DeleteFile"])"
+                                                        onclick='return confirm(@Html.Raw(JsonSerializer.Serialize(Localizer["DeleteFileConfirmation", doc.FileName].Value)))'>
                                                     <iconify-icon icon="mdi:delete"></iconify-icon>
                                                 </button>
                                             </div>
@@ -226,10 +227,10 @@
                     </div>
 
                     <div>
-                        <span class="text-xs font-semibold">Supported formats:</span>
+                        <span class="text-xs font-semibold">@Localizer["SupportedFormats"]</span>
                         <span class="text-xs text-base-content/80 break-words leading-6">
                             <i>@string.Join(", ", Model.SupportedExtensions).</i>
-                            Archives will be recursively extracted into individual files.
+                            @Localizer["ArchiveExtractionHint"]
                         </span>
                     </div>
                 </div>
@@ -242,9 +243,9 @@
                 <div class="card-body space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center gap-4">
-                            <h2 class="text-lg font-semibold">Project Chat</h2>
+                            <h2 class="text-lg font-semibold">@Localizer["ProjectChat"]</h2>
                             <div id="selected-docs-counter" class="ml-auto text-sm text-base-content/60">
-                                Selected documents: @Model.SelectedDocumentIds.Count / @Model.Documents.Count
+                                @Localizer["SelectedDocuments", Model.SelectedDocumentIds.Count, Model.Documents.Count]
                             </div>
                         </div>
 
@@ -252,9 +253,9 @@
                         {
                             <div class="alert alert-warning">
                                 <span>
-                                    No LLM model configured. Set one in your
-                                    <a href="/Profile" class="link link-hover font-semibold">Profile</a>
-                                    to enable chat.
+                                    @Localizer["NoLlmPrefix"]
+                                    <a href="/Profile" class="link link-hover font-semibold">@Localizer["Profile"]</a>
+                                    @Localizer["NoLlmSuffix"]
                                 </span>
                             </div>
                         }
@@ -267,7 +268,7 @@
                             @if (Model.ChatHistory.Count == 0)
                             {
                                 <div id="chat-empty-state" class="text-base-content/60 text-sm">
-                                    Start by sending a user prompt. Selected documents will be used as context.
+                                    @Localizer["ChatEmptyState"]
                                 </div>
                             }
                             else
@@ -276,7 +277,7 @@
                                 {
                                     <div class="chat @(message.Role == "user" ? "chat-end" : "chat-start")">
                                         <div class="chat-header text-xs text-base-content/60">
-                                            @(message.Role == "user" ? "You" : "Assistant") &bull; @message.Timestamp.ToLocalTime().ToString("HH:mm")
+                                            @(message.Role == "user" ? Localizer["You"] : Localizer["Assistant"]) &bull; @message.Timestamp.ToLocalTime().ToString("HH:mm")
                                         </div>
                                         <div class="chat-bubble @(message.Role == "user" ? "chat-bubble-primary" : "")">
                                             @message.Content
@@ -290,10 +291,10 @@
                             <button type="button"
                                     id="chat-send-history-button"
                                     class="btn btn-outline btn-sm"
-                                    aria-label="Sends the chat history to the chat model to resync the context"
-                                    title="Sends the chat history to the chat model to resync the context">
+                                    aria-label="@(Localizer["ResendHistoryTitle"])"
+                                    title="@(Localizer["ResendHistoryTitle"])">
                                 <iconify-icon icon="mdi:history"></iconify-icon>
-                                Re-send Chat History
+                                @Localizer["ResendChatHistory"]
                             </button>
                         </div>
                     </div>
@@ -303,8 +304,8 @@
                             <input type="checkbox" class="min-h-0" />
                             <div class="collapse-title">
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="font-medium">System Prompt</span>
-                                    <span id="system-prompt-counter" class="text-xs text-base-content/60">0 / @Model.SystemPromptMaxLengthChars chars</span>
+                                    <span class="font-medium">@Localizer["SystemPrompt"]</span>
+                                    <span id="system-prompt-counter" class="text-xs text-base-content/60">@Localizer["CharsCounter", 0, Model.SystemPromptMaxLengthChars]</span>
                                 </div>
                             </div>
                             <div class="collapse-content space-y-3">
@@ -312,19 +313,19 @@
                                           class="textarea textarea-bordered w-full"
                                           rows="7"
                                           maxlength="@Model.SystemPromptMaxLengthChars"
-                                          placeholder="Defines assistant behavior and rules. This instruction is applied before user prompt and RAG context."></textarea>
+                                          placeholder="@(Localizer["SystemPromptPlaceholder"])"></textarea>
                                 <p class="text-xs text-base-content/70">
-                                    Use this for stable instructions (style, constraints, allowed behavior). If empty, the admin default is used.
+                                    @Localizer["SystemPromptHint"]
                                 </p>
 
                                 <div class="rounded-lg border border-base-300 p-3 space-y-3">
                                     <div class="flex items-center justify-between gap-3">
-                                        <div class="text-xs font-semibold uppercase text-base-content/60">System Prompt Library</div>
-                                        <div id="system-prompt-library-count" class="text-xs text-base-content/60">@Model.GetSystemPromptLibraryItems().Count items</div>
+                                        <div class="text-xs font-semibold uppercase text-base-content/60">@Localizer["SystemPromptLibrary"]</div>
+                                        <div id="system-prompt-library-count" class="text-xs text-base-content/60">@Localizer["ItemsCount", Model.GetSystemPromptLibraryItems().Count]</div>
                                     </div>
                                     <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                                         <select id="system-prompt-library" class="select select-bordered select-sm w-full" data-prompt-type="@((int)Harpyx.Domain.Enums.ProjectPromptType.System)">
-                                            <option value="">Select a saved system prompt...</option>
+                                            <option value="">@Localizer["SelectSavedSystemPrompt"]</option>
                                             @foreach (var item in Model.GetSystemPromptLibraryItems())
                                             {
                                                 var prefix = item.IsFavorite ? "* " : "";
@@ -338,15 +339,15 @@
                                         <button type="button"
                                                 id="system-prompt-use"
                                                 class="btn btn-ghost btn-sm"
-                                                aria-label="Use selected system prompt"
-                                                title="Use selected system prompt">
+                                                aria-label="@(Localizer["UseSelectedSystemPrompt"])"
+                                                title="@(Localizer["UseSelectedSystemPrompt"])">
                                             <iconify-icon icon="mdi:history"></iconify-icon>
                                         </button>
                                         <button type="button"
                                                 id="system-prompt-favorite"
                                                 class="btn btn-ghost btn-sm"
-                                                aria-label="Toggle favorite for selected system prompt"
-                                                title="Toggle favorite for selected system prompt">
+                                                aria-label="@(Localizer["ToggleFavoriteSystemPrompt"])"
+                                                title="@(Localizer["ToggleFavoriteSystemPrompt"])">
                                             <iconify-icon icon="mdi:star-outline"></iconify-icon>
                                         </button>
                                     </div>
@@ -358,8 +359,8 @@
                             <input type="checkbox" class="min-h-0" checked />
                             <div class="collapse-title">
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="font-medium">User Prompt</span>
-                                    <span id="user-prompt-counter" class="text-xs text-base-content/60">0 / @Model.UserPromptMaxLengthChars chars</span>
+                                    <span class="font-medium">@Localizer["UserPrompt"]</span>
+                                    <span id="user-prompt-counter" class="text-xs text-base-content/60">@Localizer["CharsCounter", 0, Model.UserPromptMaxLengthChars]</span>
                                 </div>
                             </div>
                             <div class="collapse-content space-y-3">
@@ -367,19 +368,19 @@
                                           class="textarea textarea-bordered w-full"
                                           rows="5"
                                           maxlength="@Model.UserPromptMaxLengthChars"
-                                          placeholder="Type the question or task for this chat turn."></textarea>
+                                          placeholder="@(Localizer["UserPromptPlaceholder"])"></textarea>
                                 <p class="text-xs text-base-content/70">
-                                    This is the actual request sent to the assistant for the current turn.
+                                    @Localizer["UserPromptHint"]
                                 </p>
 
                                 <div class="rounded-lg border border-base-300 p-3 space-y-3">
                                     <div class="flex items-center justify-between gap-3">
-                                        <div class="text-xs font-semibold uppercase text-base-content/60">User Prompt Library</div>
-                                        <div id="user-prompt-library-count" class="text-xs text-base-content/60">@Model.GetUserPromptLibraryItems().Count items</div>
+                                        <div class="text-xs font-semibold uppercase text-base-content/60">@Localizer["UserPromptLibrary"]</div>
+                                        <div id="user-prompt-library-count" class="text-xs text-base-content/60">@Localizer["ItemsCount", Model.GetUserPromptLibraryItems().Count]</div>
                                     </div>
                                     <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                                         <select id="user-prompt-library" class="select select-bordered select-sm w-full" data-prompt-type="@((int)Harpyx.Domain.Enums.ProjectPromptType.User)">
-                                            <option value="">Select a saved user prompt...</option>
+                                            <option value="">@Localizer["SelectSavedUserPrompt"]</option>
                                             @foreach (var item in Model.GetUserPromptLibraryItems())
                                             {
                                                 var prefix = item.IsFavorite ? "* " : "";
@@ -393,15 +394,15 @@
                                         <button type="button"
                                                 id="user-prompt-use"
                                                 class="btn btn-ghost btn-sm"
-                                                aria-label="Use selected user prompt"
-                                                title="Use selected user prompt">
+                                                aria-label="@(Localizer["UseSelectedUserPrompt"])"
+                                                title="@(Localizer["UseSelectedUserPrompt"])">
                                             <iconify-icon icon="mdi:history"></iconify-icon>
                                         </button>
                                         <button type="button"
                                                 id="user-prompt-favorite"
                                                 class="btn btn-ghost btn-sm"
-                                                aria-label="Toggle favorite for selected user prompt"
-                                                title="Toggle favorite for selected user prompt">
+                                                aria-label="@(Localizer["ToggleFavoriteUserPrompt"])"
+                                                title="@(Localizer["ToggleFavoriteUserPrompt"])">
                                             <iconify-icon icon="mdi:star-outline"></iconify-icon>
                                         </button>
                                     </div>
@@ -413,7 +414,7 @@
                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div class="form-control">
                             <label class="label">
-                                <span class="label-text">Provider</span>
+                                <span class="label-text">@Localizer["Provider"]</span>
                             </label>
                             <select asp-for="SelectedModelId" asp-items="Model.ModelOptions" class="select select-bordered w-full">
                                 <option value="">@Model.DefaultModelOptionLabel</option>
@@ -426,7 +427,7 @@
                                     class="btn btn-primary w-full sm:w-auto mw-120"
                                     asp-page-handler="Chat">
                                 <iconify-icon icon="mdi:send"></iconify-icon>
-                                Send
+                                @Localizer["Send"]
                             </button>
                         </div>
                     </div>
@@ -440,23 +441,23 @@
 
 <dialog id="doc-info-modal" class="modal">
     <div class="modal-box">
-        <h3 class="text-lg font-bold">Document Details</h3>
+        <h3 class="text-lg font-bold">@Localizer["DocumentDetails"]</h3>
         <div class="mt-4 space-y-2 text-sm">
-            <div><span class="font-semibold">File:</span> <span id="doc-info-name"></span></div>
-            <div><span class="font-semibold">Type:</span> <span id="doc-info-type"></span></div>
-            <div><span class="font-semibold">Size:</span> <span id="doc-info-size"></span></div>
-            <div><span class="font-semibold">Status:</span> <span id="doc-info-state"></span></div>
-            <div id="doc-info-container-path-row" class="hidden"><span class="font-semibold">Container Path:</span> <span id="doc-info-container-path"></span></div>
-            <div id="doc-info-extraction-state-row" class="hidden"><span class="font-semibold">Extraction:</span> <span id="doc-info-extraction-state"></span></div>
+            <div><span class="font-semibold">@Localizer["FileLabel"]</span> <span id="doc-info-name"></span></div>
+            <div><span class="font-semibold">@Localizer["TypeLabel"]</span> <span id="doc-info-type"></span></div>
+            <div><span class="font-semibold">@Localizer["SizeLabel"]</span> <span id="doc-info-size"></span></div>
+            <div><span class="font-semibold">@Localizer["StatusLabel"]</span> <span id="doc-info-state"></span></div>
+            <div id="doc-info-container-path-row" class="hidden"><span class="font-semibold">@Localizer["ContainerPathLabel"]</span> <span id="doc-info-container-path"></span></div>
+            <div id="doc-info-extraction-state-row" class="hidden"><span class="font-semibold">@Localizer["ExtractionLabel"]</span> <span id="doc-info-extraction-state"></span></div>
         </div>
         <div class="modal-action">
             <form method="dialog">
-                <button class="btn btn-ghost">Close</button>
+                <button class="btn btn-ghost">@Localizer["Close"]</button>
             </form>
         </div>
     </div>
     <form method="dialog" class="modal-backdrop">
-        <button>close</button>
+        <button>@Localizer["CloseLowercase"]</button>
     </form>
 </dialog>
 
@@ -476,6 +477,9 @@
         const userPrompt = document.getElementById('UserPrompt');
         const userPromptCounter = document.getElementById('user-prompt-counter');
         const retryButtonClassName = 'btn btn-error btn-sm ml-2';
+        const selectedCounterFormat = @Html.Raw(JsonSerializer.Serialize(Localizer["SelectedShortFormat"].Value));
+        const retryDocumentProcessingText = @Html.Raw(JsonSerializer.Serialize(Localizer["RetryDocumentProcessing"].Value));
+        const charsSuffix = @Html.Raw(JsonSerializer.Serialize(Localizer["CharsSuffix"].Value));
 
         function getCheckboxes() {
             return form.querySelectorAll('input[name="SelectedDocumentIds"]:not(:disabled)');
@@ -488,7 +492,9 @@
 
             const selectedCount = documentsTbody.querySelectorAll('input[name="SelectedDocumentIds"]:checked').length;
             const totalCount = documentsTbody.querySelectorAll('[data-doc-row]').length;
-            selectedDocsCounter.textContent = `Selected: ${selectedCount} / ${totalCount}`;
+            selectedDocsCounter.textContent = selectedCounterFormat
+                .replace('{0}', selectedCount)
+                .replace('{1}', totalCount);
         }
 
         function normalizeDocumentState(state) {
@@ -554,8 +560,8 @@
             retryButton.formAction = `${window.location.pathname}?handler=Retry`;
             retryButton.formMethod = 'post';
             retryButton.setAttribute('data-doc-retry', '');
-            retryButton.setAttribute('aria-label', 'Retry document processing');
-            retryButton.setAttribute('title', 'Retry document processing');
+            retryButton.setAttribute('aria-label', retryDocumentProcessingText);
+            retryButton.setAttribute('title', retryDocumentProcessingText);
             retryButton.innerHTML = '<iconify-icon icon="mdi:refresh"></iconify-icon>';
             statusCell.appendChild(retryButton);
         }
@@ -695,7 +701,7 @@
 
             const update = function () {
                 const used = textarea.value.length;
-                counter.textContent = `${used} / ${safeMax} chars`;
+                counter.textContent = `${used} / ${safeMax} ${charsSuffix}`;
             };
 
             textarea.addEventListener('input', update);

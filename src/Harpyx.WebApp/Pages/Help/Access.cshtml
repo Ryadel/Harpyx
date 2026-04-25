@@ -1,0 +1,113 @@
+@page
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                @Localizer["Intro"]
+            </p>
+        </div>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["SigningInTitle"]</h2>
+                <ul class="list-disc pl-5 text-sm space-y-1">
+                    <li>@Localizer["SigningInProvider"]</li>
+                    <li>@Localizer["SigningInAllowedAccount"]</li>
+                    <li>@Localizer["SigningInInvitation"]</li>
+                    <li>@Localizer["SigningInSignOut"]</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["CurrentTenantTitle"]</h2>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["CurrentTenantDescription"]
+                </p>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["CurrentTenantAdmins"]
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">@Localizer["TenantRolesTitle"]</h2>
+            <p class="text-sm text-base-content/70">
+                @Localizer["TenantRolesDescription"]
+            </p>
+            <div class="overflow-x-auto">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["RoleHeader"]</th>
+                            <th>@Localizer["RoleMeaningHeader"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="font-semibold">@Localizer["TenantOwnerRole"]</span></td>
+                            <td>@Localizer["TenantOwnerDescription"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="font-semibold">@Localizer["TenantManagerRole"]</span></td>
+                            <td>@Localizer["TenantManagerDescription"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="font-semibold">@Localizer["WorkspaceManagerRole"]</span></td>
+                            <td>@Localizer["WorkspaceManagerDescription"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="font-semibold">@Localizer["ProjectContributorRole"]</span></td>
+                            <td>@Localizer["ProjectContributorDescription"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="font-semibold">@Localizer["ReviewerRole"]</span></td>
+                            <td>@Localizer["ReviewerDescription"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="font-semibold">@Localizer["ViewerRole"]</span></td>
+                            <td>@Localizer["ViewerDescription"]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["MemberManagementTitle"]</h2>
+                <ul class="list-disc pl-5 text-sm space-y-1">
+                    <li>@Localizer["MemberManagementCurrentTenant"]</li>
+                    <li>@Localizer["MemberManagementCanGrant"]</li>
+                    <li>@Localizer["MemberManagementTenantRules"]</li>
+                    <li>@Localizer["MemberManagementDelegation"]</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["GoodHabitsTitle"]</h2>
+                <ul class="list-disc pl-5 text-sm space-y-1">
+                    <li>@Localizer["GoodHabitsConfirmTenant"]</li>
+                    <li>@Localizer["GoodHabitsLowestRole"]</li>
+                    <li>@Localizer["GoodHabitsReadOnlyRoles"]</li>
+                    <li>@Localizer["GoodHabitsReviewMembers"]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

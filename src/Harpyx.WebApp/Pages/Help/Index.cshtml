@@ -1,217 +1,63 @@
 @page
 @{
-    ViewData["Title"] = "Help";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body">
-            <h1 class="text-2xl font-semibold">What is Harpyx?</h1>
+            <h1 class="text-2xl font-semibold">@Localizer["HeroTitle"]</h1>
             <hr />
             <p class="text-sm text-base-content/70">
-                Harpyx is a multi-tenant knowledge platform for organizing workspaces and projects, ingesting documents,
-                indexing content, and enabling retrieval/chat workflows with role-based collaboration.
+                @Localizer["HeroIntro"]
             </p>
             <p class="text-sm text-base-content/70">
-                The following sections explain in detail the main components of the platform infrastructure and how they interact.
+                @Localizer["HeroTenantIsolation"]
             </p>
         </div>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid gap-6 lg:grid-cols-3">
         <div class="card h-full bg-base-100 shadow">
             <div class="card-body">
-                <h2 class="card-title">Core Concepts</h2>
-                <div class="text-sm text-base-content/70">
-                    Harpyx is structured in layers. Understanding this model helps avoid configuration mistakes and clarifies where
-                    permissions, resources and collaboration boundaries are applied.
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Concept</th>
-                                <th>Meaning</th>
-                                <th>Example</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="badge badge-outline">Tenant</span></td>
-                                <td>Security and ownership boundary. Users can belong to one or more tenants.</td>
-                                <td>Customer, business unit, or team domain.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="badge badge-outline">Workspace</span></td>
-                                <td>Logical container inside a tenant to organize projects.</td>
-                                <td>Marketing, Legal, Support.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="badge badge-outline">Project</span></td>
-                                <td>Operational unit where files are processed and queried.</td>
-                                <td>Q1 Policies, Product Docs, Contract Set.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="badge badge-outline">Document</span></td>
-                                <td>Source file ingested, parsed, chunked and indexed for retrieval/chat.</td>
-                                <td>PDF, DOCX/TXT export, knowledge article.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="space-y-2 text-sm">
-                    <p><span class="font-semibold">Hierarchy:</span> Tenant contains Workspaces, Workspaces contain Projects, Projects contain Documents.</p>
-                    <p><span class="font-semibold">Operational impact:</span> always confirm the correct tenant/workspace before creating or moving resources.</p>
+                <h2 class="card-title">@Localizer["OverviewTitle"]</h2>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["OverviewDescription"]
+                </p>
+                <div class="card-actions justify-end">
+                    <a asp-page="/Help/Overview" class="btn btn-primary btn-sm">
+                        <iconify-icon icon="mdi:map-outline"></iconify-icon>
+                        @Localizer["OverviewButton"]
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="card h-full bg-base-100 shadow">
-            <div class="card-body">
-                <h2 class="card-title">Permissions Model</h2>
-                <div class="text-sm text-base-content/70">
-                    Permissions are tenant-scoped: your current tenant (top-right switcher) defines what you can view, edit, or manage
-                    across Members, Workspaces, Projects and related APIs. The same user can be Owner in one tenant and Viewer in another.
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Role</th>
-                                <th>Typical Capabilities</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="font-semibold">Tenant Owner</span></td>
-                                <td>Full tenant control, member management and delegation.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-semibold">Tenant Manager</span></td>
-                                <td>Member management and delegation, without owner-level governance actions.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-semibold">Workspace Manager</span></td>
-                                <td>Can manage workspaces and downstream project operations within the current tenant.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-semibold">Project Contributor</span></td>
-                                <td>Can create/update project content (for example document workflows) but not member governance.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-semibold">Reviewer</span></td>
-                                <td>Read-focused role with chat usage and limited modification powers.</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-semibold">Viewer</span></td>
-                                <td>Visibility role for consultation with minimal operational permissions.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="space-y-2 text-sm">
-                    <p><span class="font-semibold">Least privilege:</span> assign the minimum role needed for each member responsibility.</p>
-                    <p><span class="font-semibold">Delegation:</span> delegated member management is controlled and revocable, not implicit.</p>
-                    <p><span class="font-semibold">Cross-tenant isolation:</span> membership and visibility never propagate automatically across tenants.</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="card bg-base-100 shadow">
-        <div class="card-body">
-            <h2 class="card-title">Workflow</h2>
-            <p class="text-sm text-base-content/70">
-                Typical end-user flow from first access to document-based chat.
-            </p>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Step</th>
-                            <th>What To Do</th>
-                            <th>Where</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="badge badge-primary">1</span></td>
-                            <td>Create your account and sign in to Harpyx.</td>
-                            <td><a asp-page="/Welcome" class="link link-hover">Welcome</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">2</span></td>
-                            <td>Configure your personal LLM providers (Chat, RAG Embedding, optional OCR) and set defaults.</td>
-                            <td><a asp-page="/Profile/Index" class="link link-hover">Profile</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">3</span></td>
-                            <td>Create or select the tenant context where your work should live.</td>
-                            <td><a asp-page="/Tenants/Index" class="link link-hover">Tenants</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">4</span></td>
-                            <td>Invite members and assign roles for collaboration (if needed).</td>
-                            <td><a asp-page="/Members/Index" class="link link-hover">Members</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">5</span></td>
-                            <td>Create workspaces in the selected tenant.</td>
-                            <td><a asp-page="/Workspaces/Index" class="link link-hover">Workspaces</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">6</span></td>
-                            <td>Create projects in a workspace and define scope plus AI settings.</td>
-                            <td><a asp-page="/Projects/Index" class="link link-hover">Projects</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">7</span></td>
-                            <td>Upload documents; Harpyx parses, extracts and prepares chunks for retrieval.</td>
-                            <td><a asp-page="/Projects/Index" class="link link-hover">Project Details</a></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">8</span></td>
-                            <td>Indexing pipeline enriches content and enables semantic/keyword retrieval.</td>
-                            <td><span class="text-base-content/70">Automatic background processing</span></td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge badge-primary">9</span></td>
-                            <td>Use chat/Q&A against indexed project knowledge.</td>
-                            <td><a asp-page="/Projects/Index" class="link link-hover">Project Details / Chat</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid gap-6 lg:grid-cols-2">
         <div class="card h-full bg-base-100 shadow">
             <div class="card-body">
-                <h2 class="card-title">Collaboration Across Tenants</h2>
-                <div class="text-sm text-base-content/70">
-                    You can work in multiple tenants. Membership can be granted directly or via invitation flows.
+                <h2 class="card-title">@Localizer["AccessTitle"]</h2>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["AccessDescription"]
+                </p>
+                <div class="card-actions justify-end">
+                    <a asp-page="/Help/Access" class="btn btn-primary btn-sm">
+                        <iconify-icon icon="mdi:shield-account-outline"></iconify-icon>
+                        @Localizer["AccessButton"]
+                    </a>
                 </div>
-                <ul class="list-disc pl-5 text-sm space-y-1">
-                    <li>Create and manage your own tenants.</li>
-                    <li>Invite users into a tenant and assign permissions with Members.</li>
-                    <li>Be invited into other tenants and switch current tenant from the top-right menu.</li>
-                    <li>Use Members to assign tenant roles and delegation permissions.</li>
-                </ul>
             </div>
         </div>
+
         <div class="card h-full bg-base-100 shadow">
             <div class="card-body">
-                <h2 class="card-title">Operational Checklist</h2>
-                <ul class="list-disc pl-5 text-sm space-y-1">
-                    <li>Confirm you are in the correct current tenant before creating/editing resources.</li>
-                    <li>Use least-privilege role assignments for members.</li>
-                    <li>Monitor ingestion/indexing health for document-heavy projects.</li>
-                    <li>Validate provider credentials and quotas when chat/indexing are degraded.</li>
-                </ul>
-                <div class="pt-2">
-                    <a asp-page="/Index" class="btn btn-primary btn-sm">
-                        <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon>
-                        Go to Dashboard
+                <h2 class="card-title">@Localizer["ApiTitle"]</h2>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["ApiDescription"]
+                </p>
+                <div class="card-actions justify-end">
+                    <a asp-page="/Help/Api" class="btn btn-primary btn-sm">
+                        <iconify-icon icon="mdi:api"></iconify-icon>
+                        @Localizer["ApiButton"]
                     </a>
                 </div>
             </div>

@@ -1,18 +1,18 @@
 @page
 @model Harpyx.WebApp.Pages.Documents.UploadModel
 @{
-    ViewData["Title"] = "Upload Document";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body space-y-4">
-            <h1 class="text-2xl font-semibold">Upload Document</h1>
+            <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
             <p class="text-base-content/70">
-                Document uploads are now available inside each project dashboard.
+                @Localizer["Intro"]
             </p>
             <a class="btn btn-primary btn-sm" asp-page="/Projects/Index">
-                Go to Projects
+                @Localizer["GoToProjects"]
             </a>
         </div>
     </div>

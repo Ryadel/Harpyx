@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="PageHeading" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="Intro" xml:space="preserve">
+    <value>The API is for automation: scripts, integrations, CI pipelines or other systems that need to work with Harpyx without using the browser. Most users do not need it for normal day-to-day work.</value>
+  </data>
+  <data name="ApiKeysTitle" xml:space="preserve">
+    <value>API Keys</value>
+  </data>
+  <data name="ApiKeysCreate" xml:space="preserve">
+    <value>Create keys from the API Keys page after signing in.</value>
+  </data>
+  <data name="ApiKeysShownOnce" xml:space="preserve">
+    <value>The full key is shown only once, when it is created.</value>
+  </data>
+  <data name="ApiKeysUseHeader" xml:space="preserve">
+    <value>Use the key in requests with</value>
+  </data>
+  <data name="ApiKeyAuthorizationHeader" xml:space="preserve">
+    <value>Authorization: ApiKey &lt;your-key&gt;</value>
+  </data>
+  <data name="ApiKeysRevoke" xml:space="preserve">
+    <value>Revoke keys you no longer use.</value>
+  </data>
+  <data name="PermissionsTitle" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="PermissionsDescription" xml:space="preserve">
+    <value>Each key should only receive the permissions it needs. This limits what an automation can do if the key is leaked or misused.</value>
+  </data>
+  <data name="PermissionQueryProjects" xml:space="preserve">
+    <value>Query projects</value>
+  </data>
+  <data name="PermissionUploadDocuments" xml:space="preserve">
+    <value>Upload documents</value>
+  </data>
+  <data name="PermissionDeleteDocuments" xml:space="preserve">
+    <value>Delete documents</value>
+  </data>
+  <data name="PermissionCreateProjects" xml:space="preserve">
+    <value>Create projects</value>
+  </data>
+  <data name="PermissionCreateWorkspaces" xml:space="preserve">
+    <value>Create workspaces</value>
+  </data>
+  <data name="PermissionDeleteProjects" xml:space="preserve">
+    <value>Delete projects</value>
+  </data>
+  <data name="PermissionDeleteWorkspaces" xml:space="preserve">
+    <value>Delete workspaces</value>
+  </data>
+  <data name="ApiCapabilitiesTitle" xml:space="preserve">
+    <value>What The API Can Do</value>
+  </data>
+  <data name="OrganizeWorkTitle" xml:space="preserve">
+    <value>Organize work</value>
+  </data>
+  <data name="OrganizeWorkDescription" xml:space="preserve">
+    <value>Create workspaces and projects when your process needs to prepare them automatically.</value>
+  </data>
+  <data name="MoveDocumentsTitle" xml:space="preserve">
+    <value>Move documents</value>
+  </data>
+  <data name="MoveDocumentsDescription" xml:space="preserve">
+    <value>Upload files into projects or delete documents when your integration manages the document lifecycle.</value>
+  </data>
+  <data name="AskQuestionsTitle" xml:space="preserve">
+    <value>Ask questions</value>
+  </data>
+  <data name="AskQuestionsDescription" xml:space="preserve">
+    <value>Query a project and receive an answer based on the prepared project documents.</value>
+  </data>
+  <data name="DetailsTitle" xml:space="preserve">
+    <value>Where To Find Details</value>
+  </data>
+  <data name="DetailsDescription" xml:space="preserve">
+    <value>The public help explains the idea. The exact endpoints, examples and Swagger page are available after sign-in from the API area.</value>
+  </data>
+  <data name="ApiKeysButton" xml:space="preserve">
+    <value>API Keys</value>
+  </data>
+  <data name="ApiDocsButton" xml:space="preserve">
+    <value>API Docs</value>
+  </data>
+</root>

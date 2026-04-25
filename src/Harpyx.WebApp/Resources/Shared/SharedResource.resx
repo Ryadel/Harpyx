@@ -18,4 +18,160 @@
   <data name="BrandHeroSubtitle" xml:space="preserve">
     <value>AI-powered knowledge assistant and document analysis platform</value>
   </data>
+  <data name="NavAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="NavTenants" xml:space="preserve">
+    <value>Tenants</value>
+  </data>
+  <data name="NavUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="NavWorkspaces" xml:space="preserve">
+    <value>Workspaces</value>
+  </data>
+  <data name="NavProjects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="NavMembers" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="NavApi" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="NavWhatIsHarpyx" xml:space="preserve">
+    <value>What is Harpyx?</value>
+  </data>
+  <data name="NavOverview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="NavAccess" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="FooterHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="FooterThemeLabel" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="FooterWidthLabel" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="LoginWithLabel" xml:space="preserve">
+    <value>Login with</value>
+  </data>
+  <data name="GoogleProvider" xml:space="preserve">
+    <value>Google</value>
+  </data>
+  <data name="MicrosoftProvider" xml:space="preserve">
+    <value>Microsoft</value>
+  </data>
+  <data name="AllTenants" xml:space="preserve">
+    <value>All tenants</value>
+  </data>
+  <data name="NoTenant" xml:space="preserve">
+    <value>No tenant</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logged in as:</value>
+  </data>
+  <data name="CurrentTenantLabel" xml:space="preserve">
+    <value>Current tenant:</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>View all</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="WidthCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="WidthStandard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WidthWide" xml:space="preserve">
+    <value>Wide</value>
+  </data>
+  <data name="WidthFull" xml:space="preserve">
+    <value>Full</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>Reset to default</value>
+  </data>
+  <data name="LlmProviderNotConfiguredTitle" xml:space="preserve">
+    <value>LLM Provider Not Configured</value>
+  </data>
+  <data name="LlmProviderNotConfiguredMessage" xml:space="preserve">
+    <value>No LLM provider and API key are configured for your account. Please configure your LLM provider in the Profile section to use AI features.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="CloseLowercase" xml:space="preserve">
+    <value>close</value>
+  </data>
+  <data name="GoToProfile" xml:space="preserve">
+    <value>Go to Profile</value>
+  </data>
+  <data name="AdminMenuTitle" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="AdminOverviewTitle" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="AdminOverviewDescription" xml:space="preserve">
+    <value>Entry point for administrative tools and platform-level controls.</value>
+  </data>
+  <data name="AdminGeneralSettingsTitle" xml:space="preserve">
+    <value>General Settings</value>
+  </data>
+  <data name="AdminGeneralSettingsDescription" xml:space="preserve">
+    <value>Configure global options like user self-registration policy.</value>
+  </data>
+  <data name="AdminSystemHealthTitle" xml:space="preserve">
+    <value>System Health</value>
+  </data>
+  <data name="AdminSystemHealthDescription" xml:space="preserve">
+    <value>Review required services and optional capabilities from one place.</value>
+  </data>
+  <data name="AdminUsageLimitsTitle" xml:space="preserve">
+    <value>Usage Limits</value>
+  </data>
+  <data name="AdminUsageLimitsDescription" xml:space="preserve">
+    <value>Define instance-wide resource, storage, and capability limits.</value>
+  </data>
+  <data name="AdminHostedModelsTitle" xml:space="preserve">
+    <value>Hosted Models</value>
+  </data>
+  <data name="AdminHostedModelsDescription" xml:space="preserve">
+    <value>Publish hosted models for users.</value>
+  </data>
+  <data name="AdminUsersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="AdminUsersDescription" xml:space="preserve">
+    <value>Browse all users, edit role/activation, and manage tenant memberships.</value>
+  </data>
+  <data name="AdminTenantsTitle" xml:space="preserve">
+    <value>Tenants</value>
+  </data>
+  <data name="AdminTenantsDescription" xml:space="preserve">
+    <value>Browse and maintain all tenants from a platform-wide perspective.</value>
+  </data>
+  <data name="AdminUserInvitationsTitle" xml:space="preserve">
+    <value>User Invitations</value>
+  </data>
+  <data name="AdminUserInvitationsDescription" xml:space="preserve">
+    <value>Invite users by email and manage pending, accepted, or revoked invites.</value>
+  </data>
 </root>

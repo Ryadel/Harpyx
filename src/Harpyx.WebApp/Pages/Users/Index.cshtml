@@ -1,7 +1,7 @@
 @page
 @model Harpyx.WebApp.Pages.Users.IndexModel
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
@@ -21,17 +21,17 @@
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">Users</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto">
                     <a class="btn btn-primary btn-sm" asp-page="/Users/Edit">
                         <iconify-icon icon="mdi:account-plus"></iconify-icon>
-                        Add User
+                        @Localizer["AddUserButton"]
                     </a>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                In this section you manage application users, their roles, and tenant assignments to control who can access each workspace.
+                @Localizer["Intro"]
             </p>
         </div>
     </div>
@@ -42,10 +42,10 @@
             {
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>No users yet.</span>
+                        <span>@Localizer["NoUsers"]</span>
                         <a class="btn btn-primary btn-sm" asp-page="/Users/Edit">
                             <iconify-icon icon="mdi:account-plus"></iconify-icon>
-                            Add User
+                            @Localizer["AddUserButton"]
                         </a>
                     </div>
                 </div>
@@ -56,12 +56,12 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Last Login</th>
-                                <th>Last Provider</th>
-                                <th class="text-right">Actions</th>
+                                <th>@Localizer["EmailHeader"]</th>
+                                <th>@Localizer["RoleHeader"]</th>
+                                <th>@Localizer["StatusHeader"]</th>
+                                <th>@Localizer["LastLoginHeader"]</th>
+                                <th>@Localizer["LastProviderHeader"]</th>
+                                <th class="text-right">@Localizer["ActionsHeader"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,7 +72,7 @@
                                 <td>@user.Role</td>
                                 <td>
                                     <span class="badge @(user.IsActive ? "badge-success" : "badge-ghost")">
-                                        @(user.IsActive ? "Active" : "Inactive")
+                                        @(user.IsActive ? Localizer["ActiveStatus"] : Localizer["InactiveStatus"])
                                     </span>
                                 </td>
                                 <td>
@@ -83,7 +83,7 @@
                                 </td>
                                 <td class="text-right">
                                     <div class="inline-flex items-center gap-1">
-                                        <a class="btn btn-ghost btn-sm" asp-page="/Users/Edit" asp-route-id="@user.Id" title="Edit" aria-label="Edit">
+                                        <a class="btn btn-ghost btn-sm" asp-page="/Users/Edit" asp-route-id="@user.Id" title="@Localizer["EditButton"]" aria-label="@Localizer["EditButton"]">
                                             <iconify-icon icon="mdi:pencil"></iconify-icon>
                                         </a>
                                         <form method="post" asp-page-handler="Delete" class="inline">
@@ -91,7 +91,7 @@
                                             <input type="hidden" name="id" value="@user.Id" />
                                             <button type="submit" class="btn btn-ghost btn-sm text-error"
                                                     onclick="return confirmDelete('@user.Email')"
-                                                    title="Delete" aria-label="Delete">
+                                                    title="@Localizer["DeleteButton"]" aria-label="@Localizer["DeleteButton"]">
                                                 <iconify-icon icon="mdi:delete"></iconify-icon>
                                             </button>
                                         </form>
@@ -110,6 +110,6 @@
 <script>
     function confirmDelete(email) {
         return confirm(
-            "Delete user '" + email + "'? If this user has a Personal tenant, it will also be deleted with all projects and documents.");
+            "@Localizer["DeleteConfirmationPrefix"]" + email + "@Localizer["DeleteConfirmationSuffix"]");
     }
 </script>

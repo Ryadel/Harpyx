@@ -1,84 +1,84 @@
 <div class="card bg-base-100 shadow">
     <div class="card-body p-4 space-y-4">
-        <h2 class="text-lg font-semibold">Admin</h2>
+        <h2 class="text-lg font-semibold">@SharedLocalizer["AdminMenuTitle"]</h2>
 
         <a asp-area="Admin" asp-page="/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon>
-                Overview
+                @SharedLocalizer["AdminOverviewTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Entry point for administrative tools and platform-level controls.
+                @SharedLocalizer["AdminOverviewDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/Settings/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:tune"></iconify-icon>
-                General Settings
+                @SharedLocalizer["AdminGeneralSettingsTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Configure global options like user self-registration policy.
+                @SharedLocalizer["AdminGeneralSettingsDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/Health/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:heart-pulse"></iconify-icon>
-                System Health
+                @SharedLocalizer["AdminSystemHealthTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Review required services and optional capabilities from one place.
+                @SharedLocalizer["AdminSystemHealthDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/UsageLimits/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:gauge"></iconify-icon>
-                Usage Limits
+                @SharedLocalizer["AdminUsageLimitsTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Define instance-wide resource, storage, and capability limits.
+                @SharedLocalizer["AdminUsageLimitsDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/HostedModels/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:server-network"></iconify-icon>
-                Hosted Models
+                @SharedLocalizer["AdminHostedModelsTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Publish hosted models for users.
+                @SharedLocalizer["AdminHostedModelsDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/Users/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
-                Users
+                @SharedLocalizer["AdminUsersTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Browse all users, edit role/activation, and manage tenant memberships.
+                @SharedLocalizer["AdminUsersDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/Tenants/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:office-building-outline"></iconify-icon>
-                Tenants
+                @SharedLocalizer["AdminTenantsTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Browse and maintain all tenants from a platform-wide perspective.
+                @SharedLocalizer["AdminTenantsDescription"]
             </p>
         </a>
 
         <a asp-area="Admin" asp-page="/Invitations/Index" class="block rounded-lg border border-base-300 p-3 hover:bg-base-200">
             <div class="flex items-center gap-2 font-medium">
                 <iconify-icon icon="mdi:email-fast-outline"></iconify-icon>
-                User Invitations
+                @SharedLocalizer["AdminUserInvitationsTitle"]
             </div>
             <p class="mt-1 text-xs text-base-content/70">
-                Invite users by email and manage pending, accepted, or revoked invites.
+                @SharedLocalizer["AdminUserInvitationsDescription"]
             </p>
         </a>
     </div>

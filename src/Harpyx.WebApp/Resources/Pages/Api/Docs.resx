@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>API Docs</value>
+  </data>
+  <data name="Heading" xml:space="preserve">
+    <value>API Documentation</value>
+  </data>
+  <data name="BackToApiKeys" xml:space="preserve">
+    <value>Back to API Keys</value>
+  </data>
+  <data name="OpenSwagger" xml:space="preserve">
+    <value>Open Swagger</value>
+  </data>
+  <data name="BaseUrl" xml:space="preserve">
+    <value>Base URL:</value>
+  </data>
+  <data name="UseAuthorizationHeaderPrefix" xml:space="preserve">
+    <value>Use header</value>
+  </data>
+  <data name="EndpointsUnderApiPrefix" xml:space="preserve">
+    <value>All endpoints are under</value>
+  </data>
+  <data name="LeastPrivilegeKeys" xml:space="preserve">
+    <value>Always create keys with least-privilege permissions.</value>
+  </data>
+  <data name="Quickstart" xml:space="preserve">
+    <value>Quickstart</value>
+  </data>
+  <data name="ApiCalls" xml:space="preserve">
+    <value>API Calls</value>
+  </data>
+  <data name="CreateWorkspace" xml:space="preserve">
+    <value>Create workspace</value>
+  </data>
+  <data name="CreateProject" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="QueryProject" xml:space="preserve">
+    <value>Query project (RAG + chat)</value>
+  </data>
+  <data name="UploadDocument" xml:space="preserve">
+    <value>Upload document</value>
+  </data>
+  <data name="DeleteDocument" xml:space="preserve">
+    <value>Delete document</value>
+  </data>
+  <data name="DeleteProject" xml:space="preserve">
+    <value>Delete project</value>
+  </data>
+  <data name="DeleteWorkspace" xml:space="preserve">
+    <value>Delete workspace</value>
+  </data>
+</root>

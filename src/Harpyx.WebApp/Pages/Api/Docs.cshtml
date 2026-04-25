@@ -1,34 +1,34 @@
 @page
 @model Harpyx.WebApp.Pages.Api.DocsModel
 @{
-    ViewData["Title"] = "API Docs";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">API Documentation</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["Heading"]</h1>
                 <div class="ml-auto flex items-center gap-2">
                     <a class="btn btn-ghost btn-sm" asp-page="/Api/Index">
                         <iconify-icon icon="mdi:arrow-left"></iconify-icon>
-                        Back to API Keys
+                        @Localizer["BackToApiKeys"]
                     </a>
                     <a class="btn btn-primary btn-sm" href="/swagger" target="_blank" rel="noopener">
                         <iconify-icon icon="mdi:file-document-edit-outline"></iconify-icon>
-                        Open Swagger
+                        @Localizer["OpenSwagger"]
                     </a>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                Base URL: <code>@Model.BaseUrl</code>
+                @Localizer["BaseUrl"] <code>@Model.BaseUrl</code>
             </p>
             <div class="rounded-lg border border-base-300 bg-base-200 p-3 text-sm">
                 <ul class="list-disc pl-5 space-y-1 text-base-content/80">
-                    <li>Use header <code>Authorization: ApiKey &lt;your-api-key&gt;</code>.</li>
-                    <li>All endpoints are under <code>/api</code>.</li>
-                    <li>Always create keys with least-privilege permissions.</li>
+                    <li>@Localizer["UseAuthorizationHeaderPrefix"] <code>Authorization: ApiKey &lt;your-api-key&gt;</code>.</li>
+                    <li>@Localizer["EndpointsUnderApiPrefix"] <code>/api</code>.</li>
+                    <li>@Localizer["LeastPrivilegeKeys"]</li>
                 </ul>
             </div>
         </div>
@@ -36,7 +36,7 @@
 
     <div class="card bg-base-100 shadow">
         <div class="card-body space-y-4">
-            <h2 class="text-xl font-semibold">Quickstart</h2>
+            <h2 class="text-xl font-semibold">@Localizer["Quickstart"]</h2>
             <div class="rounded-lg border border-base-300 bg-base-200 p-3">
                 <pre class="whitespace-pre-wrap text-xs"><code>export HARPYX_BASE_URL="@Model.BaseUrl"
 export HARPYX_API_KEY="hk_..."
@@ -49,10 +49,10 @@ curl -s "$HARPYX_BASE_URL/api/workspaces" \
 
     <div class="card bg-base-100 shadow">
         <div class="card-body space-y-4">
-            <h2 class="text-xl font-semibold">API Calls</h2>
+            <h2 class="text-xl font-semibold">@Localizer["ApiCalls"]</h2>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Create workspace</h3>
+                <h3 class="text-lg font-medium">@Localizer["CreateWorkspace"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X POST "$HARPYX_BASE_URL/api/workspaces" \
   -H "Authorization: ApiKey $HARPYX_API_KEY" \
   -H "Content-Type: application/json" \
@@ -71,7 +71,7 @@ curl -s "$HARPYX_BASE_URL/api/workspaces" \
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Create project</h3>
+                <h3 class="text-lg font-medium">@Localizer["CreateProject"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X POST "$HARPYX_BASE_URL/api/projects" \
   -H "Authorization: ApiKey $HARPYX_API_KEY" \
   -H "Content-Type: application/json" \
@@ -88,7 +88,7 @@ curl -s "$HARPYX_BASE_URL/api/workspaces" \
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Query project (RAG + chat)</h3>
+                <h3 class="text-lg font-medium">@Localizer["QueryProject"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X POST "$HARPYX_BASE_URL/api/projects/{projectId}/query" \
   -H "Authorization: ApiKey $HARPYX_API_KEY" \
   -H "Content-Type: application/json" \
@@ -104,26 +104,26 @@ curl -s "$HARPYX_BASE_URL/api/workspaces" \
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Upload document</h3>
+                <h3 class="text-lg font-medium">@Localizer["UploadDocument"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X POST "$HARPYX_BASE_URL/api/documents/project/{projectId}/upload" \
   -H "Authorization: ApiKey $HARPYX_API_KEY" \
   -F "file=@@C:/docs/contract.pdf"</code></pre>
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Delete document</h3>
+                <h3 class="text-lg font-medium">@Localizer["DeleteDocument"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X DELETE "$HARPYX_BASE_URL/api/documents/{documentId}" \
   -H "Authorization: ApiKey $HARPYX_API_KEY"</code></pre>
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Delete project</h3>
+                <h3 class="text-lg font-medium">@Localizer["DeleteProject"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X DELETE "$HARPYX_BASE_URL/api/projects/{projectId}" \
   -H "Authorization: ApiKey $HARPYX_API_KEY"</code></pre>
             </div>
 
             <div class="space-y-2">
-                <h3 class="text-lg font-medium">Delete workspace</h3>
+                <h3 class="text-lg font-medium">@Localizer["DeleteWorkspace"]</h3>
                 <pre class="whitespace-pre-wrap rounded-lg border border-base-300 bg-base-200 p-3 text-xs"><code>curl -X DELETE "$HARPYX_BASE_URL/api/workspaces/{workspaceId}" \
   -H "Authorization: ApiKey $HARPYX_API_KEY"</code></pre>
             </div>

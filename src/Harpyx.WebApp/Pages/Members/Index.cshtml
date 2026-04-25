@@ -2,7 +2,7 @@
 @using Harpyx.Domain.Enums
 @model Harpyx.WebApp.Pages.Members.IndexModel
 @{
-    ViewData["Title"] = "Members";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
@@ -21,13 +21,13 @@
 
     <div class="card bg-base-100 shadow">
         <div class="card-body">
-            <h1 class="text-2xl font-semibold">Members</h1>
+            <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
             <hr />
             <p class="text-sm text-base-content/70">
-                Current tenant: <strong>@Model.CurrentTenantLabel</strong>
+                @Localizer["CurrentTenantLabel"] <strong>@Model.CurrentTenantLabel</strong>
             </p>
             <p class="text-xs text-base-content/70">
-                Roles are tenant-scoped. Permissions inherit from the current tenant context only.
+                @Localizer["TenantScopedPermissions"]
             </p>
         </div>
     </div>
@@ -38,12 +38,12 @@
             {
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>No members in this tenant yet.</span>
+                        <span>@Localizer["NoMembers"]</span>
                         @if (Model.CanManage)
                         {
                             <a class="btn btn-primary btn-sm" asp-page="/Users/Index">
                                 <iconify-icon icon="mdi:account-plus"></iconify-icon>
-                                Manage Users
+                                @Localizer["ManageUsersButton"]
                             </a>
                         }
                     </div>
@@ -55,12 +55,12 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Role</th>
-                                <th>Can Grant</th>
-                                <th>Granted By</th>
-                                <th>Granted At</th>
-                                <th class="text-right">Actions</th>
+                                <th>@Localizer["UserHeader"]</th>
+                                <th>@Localizer["RoleHeader"]</th>
+                                <th>@Localizer["CanGrantHeader"]</th>
+                                <th>@Localizer["GrantedByHeader"]</th>
+                                <th>@Localizer["GrantedAtHeader"]</th>
+                                <th class="text-right">@Localizer["ActionsHeader"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,7 +90,7 @@
                                                     }
                                                 }
                                             </select>
-                                            <button type="submit" class="btn btn-ghost btn-sm" title="Save" aria-label="Save">
+                                            <button type="submit" class="btn btn-ghost btn-sm" title="@Localizer["SaveButton"]" aria-label="@Localizer["SaveButton"]">
                                                 <iconify-icon icon="mdi:content-save"></iconify-icon>
                                             </button>
                                         </form>
@@ -102,7 +102,7 @@
                                 </td>
                                 <td>
                                     <span class="badge @(member.CanGrant ? "badge-info" : "badge-ghost")">
-                                        @(member.CanGrant ? "Yes" : "No")
+                                        @(member.CanGrant ? Localizer["Yes"] : Localizer["No"])
                                     </span>
                                 </td>
                                 <td>@(string.IsNullOrWhiteSpace(member.GrantedByEmail) ? "-" : member.GrantedByEmail)</td>
@@ -116,8 +116,8 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="userId" value="@member.UserId" />
                                                 <button type="submit" class="btn btn-ghost btn-sm text-error"
-                                                        onclick="return confirm('Remove this membership and delegated descendants?');"
-                                                        title="Remove" aria-label="Remove">
+                                                        onclick="return confirm('@Localizer["RemoveConfirmation"]');"
+                                                        title="@Localizer["RemoveButton"]" aria-label="@Localizer["RemoveButton"]">
                                                     <iconify-icon icon="mdi:account-remove"></iconify-icon>
                                                 </button>
                                             </form>

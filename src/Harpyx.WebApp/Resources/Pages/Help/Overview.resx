@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="PageHeading" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Intro" xml:space="preserve">
+    <value>Harpyx is organized like a set of shared libraries. Each library belongs to a tenant, is divided into workspaces, and contains projects where documents are uploaded and used by chat.</value>
+  </data>
+  <data name="BuildingBlocksTitle" xml:space="preserve">
+    <value>The Main Building Blocks</value>
+  </data>
+  <data name="BuildingBlocksNameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BuildingBlocksMeaningHeader" xml:space="preserve">
+    <value>Plain meaning</value>
+  </data>
+  <data name="BuildingBlocksUsageHeader" xml:space="preserve">
+    <value>How you use it</value>
+  </data>
+  <data name="TenantLabel" xml:space="preserve">
+    <value>Tenant</value>
+  </data>
+  <data name="TenantMeaning" xml:space="preserve">
+    <value>A separate area for a customer, team or organization.</value>
+  </data>
+  <data name="TenantUsage" xml:space="preserve">
+    <value>Pick the current tenant from the account menu before working.</value>
+  </data>
+  <data name="WorkspaceLabel" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="WorkspaceMeaning" xml:space="preserve">
+    <value>A container that groups related projects.</value>
+  </data>
+  <data name="WorkspaceUsage" xml:space="preserve">
+    <value>Create workspaces for departments, clients or major topics.</value>
+  </data>
+  <data name="ProjectLabel" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="ProjectMeaning" xml:space="preserve">
+    <value>The place where documents, prompts and chat live.</value>
+  </data>
+  <data name="ProjectUsage" xml:space="preserve">
+    <value>Open a project to upload files and ask questions about them.</value>
+  </data>
+  <data name="DocumentLabel" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="DocumentMeaning" xml:space="preserve">
+    <value>A file or URL added to a project.</value>
+  </data>
+  <data name="DocumentUsage" xml:space="preserve">
+    <value>Wait until it is ready before using it as chat context.</value>
+  </data>
+  <data name="TypicalDayTitle" xml:space="preserve">
+    <value>A Typical Day In Harpyx</value>
+  </data>
+  <data name="TypicalDayStepSignIn" xml:space="preserve">
+    <value>Sign in with Google or Microsoft.</value>
+  </data>
+  <data name="TypicalDayStepTenant" xml:space="preserve">
+    <value>Check the current tenant in the account menu.</value>
+  </data>
+  <data name="TypicalDayStepWorkspaces" xml:space="preserve">
+    <value>Open Workspaces and choose where the work belongs.</value>
+  </data>
+  <data name="TypicalDayStepProject" xml:space="preserve">
+    <value>Create or open a project.</value>
+  </data>
+  <data name="TypicalDayStepUpload" xml:space="preserve">
+    <value>Upload files, archives, emails or add a document URL.</value>
+  </data>
+  <data name="TypicalDayStepProcessing" xml:space="preserve">
+    <value>Wait for document processing to finish.</value>
+  </data>
+  <data name="TypicalDayStepChat" xml:space="preserve">
+    <value>Select the documents you want to use and ask the project chat a question.</value>
+  </data>
+  <data name="AfterUploadTitle" xml:space="preserve">
+    <value>What Happens After Upload</value>
+  </data>
+  <data name="AfterUploadChecks" xml:space="preserve">
+    <value>Harpyx does not simply store a file. After upload, it first checks that the file is allowed and safe to process. If the file passes those checks, Harpyx keeps the original document and starts preparing a searchable version of its content.</value>
+  </data>
+  <data name="AfterUploadPreparationBeforeStatus" xml:space="preserve">
+    <value>During preparation, Harpyx extracts text from the document. For long files, archives, emails or scanned material, this can take a little time. The document status tells you where it is in the process: </value>
+  </data>
+  <data name="DocumentStatusPending" xml:space="preserve">
+    <value>pending</value>
+  </data>
+  <data name="AfterUploadPreparationBetweenStatuses" xml:space="preserve">
+    <value> or </value>
+  </data>
+  <data name="DocumentStatusProcessing" xml:space="preserve">
+    <value>processing</value>
+  </data>
+  <data name="AfterUploadPreparationAfterProcessing" xml:space="preserve">
+    <value> means Harpyx is still working; </value>
+  </data>
+  <data name="DocumentStatusReady" xml:space="preserve">
+    <value>ready</value>
+  </data>
+  <data name="AfterUploadPreparationAfterReady" xml:space="preserve">
+    <value> means the document can be used by search and chat.</value>
+  </data>
+  <data name="AfterUploadSearchableParts" xml:space="preserve">
+    <value>Once the content is ready, Harpyx breaks it into smaller searchable parts. This helps the app find the passages that matter for a specific question instead of sending the whole document every time.</value>
+  </data>
+  <data name="AfterUploadQuestionFlow" xml:space="preserve">
+    <value>When you ask a question, Harpyx looks at the documents selected in the project, finds the most relevant prepared passages, and sends that context to the configured chat model. In practice, the assistant answers with help from the project documents rather than relying only on general knowledge.</value>
+  </data>
+  <data name="DocumentsAndChatTitle" xml:space="preserve">
+    <value>Documents And Chat</value>
+  </data>
+  <data name="DocumentStatusCardTitle" xml:space="preserve">
+    <value>Document status matters</value>
+  </data>
+  <data name="DocumentStatusCardDescription" xml:space="preserve">
+    <value>Pending or processing documents are still being prepared. Ready documents can be used for search and chat.</value>
+  </data>
+  <data name="SelectedDocumentsCardTitle" xml:space="preserve">
+    <value>Selected documents guide chat</value>
+  </data>
+  <data name="SelectedDocumentsCardDescription" xml:space="preserve">
+    <value>In a project, select the documents you want the assistant to use before sending your prompt.</value>
+  </data>
+  <data name="ProvidersCardTitle" xml:space="preserve">
+    <value>Providers power AI features</value>
+  </data>
+  <data name="ProvidersCardDescription" xml:space="preserve">
+    <value>Chat needs a chat model. Document retrieval works best when an embedding model is also configured.</value>
+  </data>
+</root>

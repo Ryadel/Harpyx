@@ -1,0 +1,102 @@
+@page
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                @Localizer["Intro"]
+            </p>
+        </div>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["ApiKeysTitle"]</h2>
+                <ul class="list-disc pl-5 text-sm space-y-1">
+                    <li>@Localizer["ApiKeysCreate"]</li>
+                    <li>@Localizer["ApiKeysShownOnce"]</li>
+                    <li>@Localizer["ApiKeysUseHeader"] <code>@Localizer["ApiKeyAuthorizationHeader"]</code>.</li>
+                    <li>@Localizer["ApiKeysRevoke"]</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["PermissionsTitle"]</h2>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["PermissionsDescription"]
+                </p>
+                <div class="flex flex-wrap gap-2 text-sm">
+                    <span class="badge badge-outline">@Localizer["PermissionQueryProjects"]</span>
+                    <span class="badge badge-outline">@Localizer["PermissionUploadDocuments"]</span>
+                    <span class="badge badge-outline">@Localizer["PermissionDeleteDocuments"]</span>
+                    <span class="badge badge-outline">@Localizer["PermissionCreateProjects"]</span>
+                    <span class="badge badge-outline">@Localizer["PermissionCreateWorkspaces"]</span>
+                    <span class="badge badge-outline">@Localizer["PermissionDeleteProjects"]</span>
+                    <span class="badge badge-outline">@Localizer["PermissionDeleteWorkspaces"]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">@Localizer["ApiCapabilitiesTitle"]</h2>
+            <div class="grid gap-4 md:grid-cols-3">
+                <div class="rounded-lg border border-base-300 p-4">
+                    <h3 class="inline-flex items-center gap-2 font-semibold">
+                        <iconify-icon icon="mdi:folder-cog-outline"></iconify-icon>
+                        @Localizer["OrganizeWorkTitle"]
+                    </h3>
+                    <p class="text-sm text-base-content/70">
+                        @Localizer["OrganizeWorkDescription"]
+                    </p>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <h3 class="inline-flex items-center gap-2 font-semibold">
+                        <iconify-icon icon="mdi:file-upload-outline"></iconify-icon>
+                        @Localizer["MoveDocumentsTitle"]
+                    </h3>
+                    <p class="text-sm text-base-content/70">
+                        @Localizer["MoveDocumentsDescription"]
+                    </p>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <h3 class="inline-flex items-center gap-2 font-semibold">
+                        <iconify-icon icon="mdi:message-question-outline"></iconify-icon>
+                        @Localizer["AskQuestionsTitle"]
+                    </h3>
+                    <p class="text-sm text-base-content/70">
+                        @Localizer["AskQuestionsDescription"]
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">@Localizer["DetailsTitle"]</h2>
+            <p class="text-sm text-base-content/70">
+                @Localizer["DetailsDescription"]
+            </p>
+            <div class="card-actions justify-end">
+                <a asp-page="/Api/Index" class="btn btn-primary btn-sm">
+                    <iconify-icon icon="mdi:key-outline"></iconify-icon>
+                    @Localizer["ApiKeysButton"]
+                </a>
+                <a asp-page="/Api/Docs" class="btn btn-outline btn-sm">
+                    <iconify-icon icon="mdi:file-document-outline"></iconify-icon>
+                    @Localizer["ApiDocsButton"]
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

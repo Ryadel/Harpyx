@@ -1,24 +1,24 @@
 @page
 @model Harpyx.WebApp.Pages.Tenants.IndexModel
 @{
-    ViewData["Title"] = "Tenants";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">Tenants</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto">
                     <a class="btn btn-primary btn-sm" asp-page="/Tenants/Edit">
                         <iconify-icon icon="mdi:plus"></iconify-icon>
-                        Add Tenant
+                        @Localizer["AddTenantButton"]
                     </a>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                In this section you manage tenant workspaces. Tenants control project ownership and user visibility boundaries across the platform.
+                @Localizer["Intro"]
             </p>
         </div>
     </div>
@@ -29,10 +29,10 @@
             {
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>No tenants yet.</span>
+                        <span>@Localizer["NoTenants"]</span>
                         <a class="btn btn-primary btn-sm" asp-page="/Tenants/Edit">
                             <iconify-icon icon="mdi:plus"></iconify-icon>
-                            Add Tenant
+                            @Localizer["AddTenantButton"]
                         </a>
                     </div>
                 </div>
@@ -43,11 +43,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Owner</th>
-                                <th>Status</th>
-                                <th>Public</th>
-                                <th class="text-right">Actions</th>
+                                <th>@Localizer["NameHeader"]</th>
+                                <th>@Localizer["OwnerHeader"]</th>
+                                <th>@Localizer["StatusHeader"]</th>
+                                <th>@Localizer["PublicHeader"]</th>
+                                <th class="text-right">@Localizer["ActionsHeader"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,19 +59,19 @@
                                         <span>@tenant.Name</span>
                                         @if (tenant.IsPersonal)
                                         {
-                                            <span class="badge badge-secondary badge-sm">Personal</span>
+                                            <span class="badge badge-secondary badge-sm">@Localizer["PersonalBadge"]</span>
                                         }
                                     </span>
                                 </td>
                                 <td>@Model.OwnerEmailByTenantId[tenant.Id]</td>
                                 <td>
                                     <span class="badge @(tenant.IsActive ? "badge-success" : "badge-ghost")">
-                                        @(tenant.IsActive ? "Active" : "Inactive")
+                                        @(tenant.IsActive ? Localizer["ActiveStatus"] : Localizer["InactiveStatus"])
                                     </span>
                                 </td>
                                 <td>
                                     <span class="badge @(tenant.IsVisibleToAllUsers ? "badge-info" : "badge-ghost")">
-                                        @(tenant.IsVisibleToAllUsers ? "Yes" : "No")
+                                        @(tenant.IsVisibleToAllUsers ? Localizer["Yes"] : Localizer["No"])
                                     </span>
                                 </td>
                                 <td class="text-right">
@@ -81,12 +81,12 @@
                                             <form method="post" asp-page-handler="SetCurrent" class="inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@tenant.Id" />
-                                                <button type="submit" class="btn btn-ghost btn-sm" title="Set Current" aria-label="Set Current">
+                                                <button type="submit" class="btn btn-ghost btn-sm" title="@Localizer["SetCurrentButton"]" aria-label="@Localizer["SetCurrentButton"]">
                                                     <iconify-icon icon="mdi:target-account"></iconify-icon>
                                                 </button>
                                             </form>
                                         }
-                                        <a class="btn btn-ghost btn-sm" asp-page="/Tenants/Edit" asp-route-id="@tenant.Id" title="Edit" aria-label="Edit">
+                                        <a class="btn btn-ghost btn-sm" asp-page="/Tenants/Edit" asp-route-id="@tenant.Id" title="@Localizer["EditButton"]" aria-label="@Localizer["EditButton"]">
                                             <iconify-icon icon="mdi:pencil"></iconify-icon>
                                         </a>
                                         @if (!tenant.IsPersonal)
@@ -94,7 +94,7 @@
                                             <form method="post" asp-page-handler="Delete" class="inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@tenant.Id" />
-                                                <button type="submit" class="btn btn-ghost btn-sm text-error" title="Delete" aria-label="Delete">
+                                                <button type="submit" class="btn btn-ghost btn-sm text-error" title="@Localizer["DeleteButton"]" aria-label="@Localizer["DeleteButton"]">
                                                     <iconify-icon icon="mdi:delete"></iconify-icon>
                                                 </button>
                                             </form>

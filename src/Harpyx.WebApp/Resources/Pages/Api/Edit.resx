@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PageTitle" xml:space="preserve"><value>Create API Key</value></data>
+  <data name="PageHeading" xml:space="preserve"><value>Create API Key</value></data>
+  <data name="BackToApiKeys" xml:space="preserve"><value>Back to API Keys</value></data>
+  <data name="Intro" xml:space="preserve"><value>Generate a new key for automated access. The full secret will be shown once and cannot be recovered later.</value></data>
+  <data name="ApiDisabled" xml:space="preserve"><value>API access is disabled for this instance.</value></data>
+  <data name="CopyKeyTitle" xml:space="preserve"><value>Copy API Key Now</value></data>
+  <data name="CopyKeyDescription" xml:space="preserve"><value>This is the only time the full secret is shown.</value></data>
+  <data name="CopyButton" xml:space="preserve"><value>Copy</value></data>
+  <data name="KeyNameLabel" xml:space="preserve"><value>Key name</value></data>
+  <data name="KeyNamePlaceholder" xml:space="preserve"><value>e.g. CI Pipeline - Production</value></data>
+  <data name="ExpirationDateLabel" xml:space="preserve"><value>Expiration date (UTC, optional)</value></data>
+  <data name="PermissionsTitle" xml:space="preserve"><value>Permissions</value></data>
+  <data name="PermissionQuery" xml:space="preserve"><value>Query</value></data>
+  <data name="PermissionUploadDocuments" xml:space="preserve"><value>Upload documents</value></data>
+  <data name="PermissionDeleteDocuments" xml:space="preserve"><value>Delete documents</value></data>
+  <data name="PermissionCreateProjects" xml:space="preserve"><value>Create projects</value></data>
+  <data name="PermissionCreateWorkspaces" xml:space="preserve"><value>Create workspaces</value></data>
+  <data name="PermissionDeleteProjects" xml:space="preserve"><value>Delete projects</value></data>
+  <data name="PermissionDeleteWorkspaces" xml:space="preserve"><value>Delete workspaces</value></data>
+  <data name="GenerateButton" xml:space="preserve"><value>Generate API Key</value></data>
+  <data name="CancelButton" xml:space="preserve"><value>Cancel</value></data>
+</root>

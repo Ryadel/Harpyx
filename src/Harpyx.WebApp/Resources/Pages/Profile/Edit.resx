@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EditPageTitle" xml:space="preserve">
+    <value>{0} - Edit LLM Provider</value>
+  </data>
+  <data name="AddPageTitle" xml:space="preserve">
+    <value>Add LLM Provider</value>
+  </data>
+  <data name="EditHeading" xml:space="preserve">
+    <value>Edit LLM Provider</value>
+  </data>
+  <data name="AddHeading" xml:space="preserve">
+    <value>Add LLM Provider</value>
+  </data>
+  <data name="IntroPrefix" xml:space="preserve">
+    <value>Configure one provider for</value>
+  </data>
+  <data name="IntroSuffix" xml:space="preserve">
+    <value>or any combination.</value>
+  </data>
+  <data name="EditModePrefix" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="EditMode" xml:space="preserve">
+    <value>Edit mode</value>
+  </data>
+  <data name="EditModeSuffix" xml:space="preserve">
+    <value>API Key can be left empty to keep the existing key.</value>
+  </data>
+  <data name="EndpointIntro" xml:space="preserve">
+    <value>Azure OpenAI and Amazon Bedrock require the endpoint/base URL from your cloud account.</value>
+  </data>
+  <data name="HostedModelsIntro" xml:space="preserve">
+    <value>OpenAI-compatible and local endpoints are published by admins as hosted models.</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Provider</value>
+  </data>
+  <data name="SelectProvider" xml:space="preserve">
+    <value>-- Select provider --</value>
+  </data>
+  <data name="NameOptional" xml:space="preserve">
+    <value>Name (optional)</value>
+  </data>
+  <data name="NamePlaceholder" xml:space="preserve">
+    <value>e.g. Team Assistant</value>
+  </data>
+  <data name="DescriptionOptional" xml:space="preserve">
+    <value>Description (optional)</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Short description for this provider config</value>
+  </data>
+  <data name="NotesOptional" xml:space="preserve">
+    <value>Notes (optional)</value>
+  </data>
+  <data name="NotesPlaceholder" xml:space="preserve">
+    <value>Internal notes</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="ApiKeyPlaceholder" xml:space="preserve">
+    <value>Enter API key. Leave empty only to keep existing key.</value>
+  </data>
+  <data name="EndpointBaseUrl" xml:space="preserve">
+    <value>Endpoint / Base URL</value>
+  </data>
+  <data name="EndpointPlaceholder" xml:space="preserve">
+    <value>Azure: https://resource.openai.azure.com/openai/v1, Bedrock: https://bedrock-mantle.region.api.aws/v1</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Required for Azure OpenAI and Amazon Bedrock. Leave empty for OpenAI, Anthropic Claude, and Google.</value>
+  </data>
+  <data name="ChatConfiguration" xml:space="preserve">
+    <value>Chat Configuration</value>
+  </data>
+  <data name="ChatDescription" xml:space="preserve">
+    <value>Used for project chat and final answer generation.</value>
+  </data>
+  <data name="UseForChat" xml:space="preserve">
+    <value>Use for Chat</value>
+  </data>
+  <data name="ChatModelOptional" xml:space="preserve">
+    <value>Chat Model (optional)</value>
+  </data>
+  <data name="ChatModelPlaceholder" xml:space="preserve">
+    <value>e.g. gpt-4o</value>
+  </data>
+  <data name="DefaultForChat" xml:space="preserve">
+    <value>Set as default for Chat</value>
+  </data>
+  <data name="RagConfiguration" xml:space="preserve">
+    <value>RAG Embedding Configuration</value>
+  </data>
+  <data name="RagDescription" xml:space="preserve">
+    <value>Used for document indexing and retrieval context.</value>
+  </data>
+  <data name="UseForRag" xml:space="preserve">
+    <value>Use for RAG Embedding</value>
+  </data>
+  <data name="RagModelOptional" xml:space="preserve">
+    <value>RAG Embedding Model (optional)</value>
+  </data>
+  <data name="RagModelPlaceholder" xml:space="preserve">
+    <value>e.g. text-embedding-3-large</value>
+  </data>
+  <data name="DefaultForRag" xml:space="preserve">
+    <value>Set as default for RAG Embedding</value>
+  </data>
+  <data name="OcrConfiguration" xml:space="preserve">
+    <value>OCR Configuration</value>
+  </data>
+  <data name="OcrDescription" xml:space="preserve">
+    <value>Used for OCR capabilities when extracting text from scanned content.</value>
+  </data>
+  <data name="UseForOcr" xml:space="preserve">
+    <value>Use for OCR</value>
+  </data>
+  <data name="OcrModelOptional" xml:space="preserve">
+    <value>OCR Model (optional)</value>
+  </data>
+  <data name="OcrModelPlaceholder" xml:space="preserve">
+    <value>e.g. gpt-4o-mini</value>
+  </data>
+  <data name="DefaultForOcr" xml:space="preserve">
+    <value>Set as default for OCR</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="RagUnavailable" xml:space="preserve">
+    <value>RAG embeddings are not available for this provider yet.</value>
+  </data>
+  <data name="OcrUnavailable" xml:space="preserve">
+    <value>OCR is not available for this provider yet.</value>
+  </data>
+</root>

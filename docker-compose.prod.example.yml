@@ -114,6 +114,7 @@ services:
       Database__Name: ${Database__Name}
       Database__Username: ${Database__Username}
       Database__Password: ${Database__Password}
+      Database__Encrypt: ${Database__Encrypt:-true}
       Database__TrustServerCertificate: ${Database__TrustServerCertificate}
       Database__ApplyMigrationsOnStartup: ${Database__ApplyMigrationsOnStartup:-true}
       Minio__Endpoint: ${Minio__Endpoint}
@@ -180,6 +181,7 @@ services:
       Database__Name: ${Database__Name}
       Database__Username: ${Database__Username}
       Database__Password: ${Database__Password}
+      Database__Encrypt: ${Database__Encrypt:-true}
       Database__TrustServerCertificate: ${Database__TrustServerCertificate}
       Minio__Endpoint: ${Minio__Endpoint}
       Minio__AccessKey: ${Minio__AccessKey}

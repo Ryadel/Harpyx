@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HeroTitle" xml:space="preserve">
+    <value>What is Harpyx?</value>
+  </data>
+  <data name="HeroIntro" xml:space="preserve">
+    <value>Harpyx helps teams turn documents into organized, searchable knowledge. You create a place for your work, upload files or links, wait for Harpyx to prepare them, and then ask questions using the project chat.</value>
+  </data>
+  <data name="HeroTenantIsolation" xml:space="preserve">
+    <value>It is built for work that must stay separated by customer, team or business unit. That separation is handled through tenants, workspaces, projects, roles and permissions.</value>
+  </data>
+  <data name="OverviewTitle" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="OverviewDescription" xml:space="preserve">
+    <value>Follow the normal user flow: sign in, choose the right tenant, create workspaces and projects, add documents, then ask questions over the prepared content.</value>
+  </data>
+  <data name="OverviewButton" xml:space="preserve">
+    <value>Read overview</value>
+  </data>
+  <data name="AccessTitle" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="AccessDescription" xml:space="preserve">
+    <value>Learn why signing in is only the first step, how tenant membership works, and what each role can do.</value>
+  </data>
+  <data name="AccessButton" xml:space="preserve">
+    <value>Read access guide</value>
+  </data>
+  <data name="ApiTitle" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="ApiDescription" xml:space="preserve">
+    <value>Understand when to use API keys, how permissions limit automation, and where to find the technical docs after sign-in.</value>
+  </data>
+  <data name="ApiButton" xml:space="preserve">
+    <value>Read API guide</value>
+  </data>
+</root>

@@ -1,7 +1,7 @@
 @page
 @model Harpyx.WebApp.Pages.Api.IndexModel
 @{
-    ViewData["Title"] = "API Keys";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
     var createApiButtonClass = Model.IsApiEnabledForInstance
         ? "btn btn-primary btn-sm"
         : "btn btn-primary btn-sm btn-disabled";
@@ -11,27 +11,27 @@
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">API Keys</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto flex items-center gap-2">
                     <a class="btn btn-ghost btn-sm" asp-page="/Api/Docs">
                         <iconify-icon icon="mdi:file-document-outline"></iconify-icon>
-                        API Docs
+                        @Localizer["ApiDocsButton"]
                     </a>
                     <a class="@createApiButtonClass" asp-page="/Api/Edit">
                         <iconify-icon icon="mdi:key-plus"></iconify-icon>
-                        Create API Key
+                        @Localizer["CreateApiKeyButton"]
                     </a>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                Manage API keys for server-to-server integrations. Use least-privilege permissions and rotate keys regularly.
+                @Localizer["Intro"]
             </p>
             <div class="rounded-lg border border-base-300 bg-base-200 p-3 text-sm">
                 <ul class="list-disc pl-5 space-y-1 text-base-content/80">
-                    <li>Use <code>Authorization: ApiKey &lt;your-key&gt;</code> for API requests.</li>
-                    <li>Store keys in a secure secret manager, never in frontend code or logs.</li>
-                    <li>Full key values are only visible at creation time.</li>
+                    <li>@Localizer["UseHeaderPrefix"] <code>@Localizer["ApiKeyAuthorizationHeader"]</code> @Localizer["UseHeaderSuffix"]</li>
+                    <li>@Localizer["StoreKeysSecurely"]</li>
+                    <li>@Localizer["KeysShownOnce"]</li>
                 </ul>
             </div>
         </div>
@@ -53,18 +53,18 @@
     @if (!Model.IsApiEnabledForInstance)
     {
         <div class="alert alert-warning">
-            <span>API access is disabled for this instance.</span>
+            <span>@Localizer["ApiDisabled"]</span>
         </div>
     }
 
     <div class="card bg-base-100 shadow">
         <div class="card-body space-y-3">
-            <h2 class="text-xl font-semibold">Keys</h2>
+            <h2 class="text-xl font-semibold">@Localizer["KeysTitle"]</h2>
             @if (Model.ApiKeys.Count == 0)
             {
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
-                    No API keys yet. Create one from the
-                    <a asp-page="/Api/Edit" class="link link-hover font-semibold">Create API Key</a> page.
+                    @Localizer["NoKeysPrefix"]
+                    <a asp-page="/Api/Edit" class="link link-hover font-semibold">@Localizer["CreateApiKeyButton"]</a> @Localizer["NoKeysSuffix"]
                 </div>
             }
             else
@@ -73,13 +73,13 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Preview</th>
-                                <th>Permissions</th>
-                                <th>Status</th>
-                                <th>Last used</th>
-                                <th>Expires</th>
-                                <th class="text-right">Actions</th>
+                                <th>@Localizer["NameHeader"]</th>
+                                <th>@Localizer["PreviewHeader"]</th>
+                                <th>@Localizer["PermissionsHeader"]</th>
+                                <th>@Localizer["StatusHeader"]</th>
+                                <th>@Localizer["LastUsedHeader"]</th>
+                                <th>@Localizer["ExpiresHeader"]</th>
+                                <th class="text-right">@Localizer["ActionsHeader"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,7 +95,7 @@
                                     }
                                 </td>
                                 <td>
-                                    <span class="badge @(key.IsActive ? "badge-success" : "badge-ghost")">@(key.IsActive ? "Active" : "Revoked")</span>
+                                    <span class="badge @(key.IsActive ? "badge-success" : "badge-ghost")">@(key.IsActive ? Localizer["ActiveStatus"] : Localizer["RevokedStatus"])</span>
                                 </td>
                                 <td>@(key.LastUsedAtUtc?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
                                 <td>@(key.ExpiresAtUtc?.ToString("yyyy-MM-dd") ?? "-")</td>
@@ -105,7 +105,7 @@
                                         <form method="post" asp-page-handler="Revoke" class="inline">
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="RevokeApiKeyId" value="@key.Id" />
-                                            <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('Revoke this API key?')">
+                                            <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('@Localizer["RevokeConfirmation"]')">
                                                 <iconify-icon icon="mdi:key-remove"></iconify-icon>
                                             </button>
                                         </form>
@@ -115,7 +115,7 @@
                                         <form method="post" asp-page-handler="Delete" class="inline">
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="DeleteApiKeyId" value="@key.Id" />
-                                            <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('Delete this revoked API key permanently?')">
+                                            <button type="submit" class="btn btn-ghost btn-sm text-error" onclick="return confirm('@Localizer["DeleteRevokedConfirmation"]')">
                                                 <iconify-icon icon="mdi:delete"></iconify-icon>
                                             </button>
                                         </form>

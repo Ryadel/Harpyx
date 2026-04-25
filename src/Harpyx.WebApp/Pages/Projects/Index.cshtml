@@ -1,25 +1,24 @@
 @page
 @model Harpyx.WebApp.Pages.Projects.IndexModel
 @{
-    ViewData["Title"] = "Projects";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">Projects</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["Heading"]</h1>
                 <div class="ml-auto">
                     <a class="btn btn-primary btn-sm" asp-page="/Projects/Edit">
                         <iconify-icon icon="mdi:plus"></iconify-icon>
-                        Add Project
+                        @Localizer["AddProject"]
                     </a>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                Operational overview of all projects across workspaces and tenants.
-                Monitor indexing status, chat activity, and quickly access any project.
+                @Localizer["Intro"]
             </p>
         </div>
     </div>
@@ -28,9 +27,9 @@
         <div class="card-body space-y-4">
             <form method="get" class="flex flex-wrap items-end gap-3">
                 <div class="form-control w-full max-w-xs">
-                    <label class="label"><span class="label-text">Tenant</span></label>
+                    <label class="label"><span class="label-text">@Localizer["Tenant"]</span></label>
                     <select asp-for="FilterTenantId" class="select select-bordered select-sm w-full" id="filter-tenant">
-                        <option value="">All tenants</option>
+                        <option value="">@Localizer["AllTenants"]</option>
                         @foreach (var option in Model.TenantOptions)
                         {
                             <option value="@option.Value" selected="@option.Selected">@option.Text</option>
@@ -39,9 +38,9 @@
                 </div>
 
                 <div class="form-control w-full max-w-xs">
-                    <label class="label"><span class="label-text">Workspace</span></label>
+                    <label class="label"><span class="label-text">@Localizer["Workspace"]</span></label>
                     <select asp-for="FilterWorkspaceId" class="select select-bordered select-sm w-full">
-                        <option value="">All workspaces</option>
+                        <option value="">@Localizer["AllWorkspaces"]</option>
                         @foreach (var option in Model.WorkspaceOptions)
                         {
                             <option value="@option.Value" selected="@option.Selected">@option.Text</option>
@@ -50,26 +49,26 @@
                 </div>
 
                 <div class="form-control w-full max-w-xs">
-                    <label class="label"><span class="label-text">Sort by</span></label>
+                    <label class="label"><span class="label-text">@Localizer["SortBy"]</span></label>
                     <select asp-for="SortBy" class="select select-bordered select-sm w-full">
-                        <option value="name" selected="@(Model.SortBy == "name")">Name</option>
-                        <option value="activity" selected="@(Model.SortBy == "activity")">Last activity</option>
-                        <option value="docs" selected="@(Model.SortBy == "docs")">Documents</option>
-                        <option value="chat" selected="@(Model.SortBy == "chat")">Chat messages</option>
-                        <option value="status" selected="@(Model.SortBy == "status")">Status</option>
+                        <option value="name" selected="@(Model.SortBy == "name")">@Localizer["SortName"]</option>
+                        <option value="activity" selected="@(Model.SortBy == "activity")">@Localizer["SortLastActivity"]</option>
+                        <option value="docs" selected="@(Model.SortBy == "docs")">@Localizer["SortDocuments"]</option>
+                        <option value="chat" selected="@(Model.SortBy == "chat")">@Localizer["SortChatMessages"]</option>
+                        <option value="status" selected="@(Model.SortBy == "status")">@Localizer["SortStatus"]</option>
                     </select>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-sm">
                     <iconify-icon icon="mdi:filter-variant"></iconify-icon>
-                    Apply
+                    @Localizer["Apply"]
                 </button>
 
                 @if (Model.FilterTenantId is not null || Model.FilterWorkspaceId is not null || Model.SortBy != "name")
                 {
                     <a asp-page="/Projects/Index" class="btn btn-ghost btn-sm">
                         <iconify-icon icon="mdi:filter-remove"></iconify-icon>
-                        Reset
+                        @Localizer["Reset"]
                     </a>
                 }
             </form>
@@ -83,12 +82,13 @@
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     @if (Model.FilterTenantId is not null || Model.FilterWorkspaceId is not null)
                     {
-                        <span>No projects match the current filters.</span>
+                        <span>@Localizer["NoProjectsForFilters"]</span>
                     }
                     else
                     {
-                        <span>No projects yet. Create one from the
-                            <a asp-page="/Workspaces/Index" class="link link-hover font-semibold">Workspaces</a> page.
+                        <span>@Localizer["NoProjectsPrefix"]
+                            <a asp-page="/Workspaces/Index" class="link link-hover font-semibold">@Localizer["WorkspacesLink"]</a>
+                            @Localizer["NoProjectsSuffix"]
                         </span>
                     }
                 </div>
@@ -99,13 +99,13 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>Project</th>
-                                <th>Workspace</th>
-                                <th class="text-center">Docs</th>
-                                <th class="text-center">Chat</th>
-                                <th>Last Activity</th>
-                                <th>Status</th>
-                                <th class="text-right">Actions</th>
+                                <th>@Localizer["Project"]</th>
+                                <th>@Localizer["Workspace"]</th>
+                                <th class="text-center">@Localizer["Docs"]</th>
+                                <th class="text-center">@Localizer["Chat"]</th>
+                                <th>@Localizer["LastActivity"]</th>
+                                <th>@Localizer["Status"]</th>
+                                <th class="text-right">@Localizer["Actions"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,7 +117,7 @@
                                         <a class="link link-hover link-primary font-medium"
                                            asp-page="/Projects/Details"
                                            asp-route-id="@row.Id"
-                                           title="Open @row.Name">
+                                           title="@(Localizer["OpenProjectTitle", row.Name])">
                                             @row.Name
                                         </a>
                                         @if (!string.IsNullOrWhiteSpace(row.Description))
@@ -137,12 +137,12 @@
                                     }
                                     else
                                     {
-                                        <span class="font-medium" title="@row.IndexedDocs indexed / @row.TotalDocs total">
+                                        <span class="font-medium" title="@(Localizer["IndexedDocsTitle", row.IndexedDocs, row.TotalDocs])">
                                             @row.IndexedDocs/@row.TotalDocs
                                         </span>
                                         @if (row.FailedDocs > 0)
                                         {
-                                            <span class="text-error text-xs" title="@row.FailedDocs failed">
+                                            <span class="text-error text-xs" title="@(Localizer["FailedDocsTitle", row.FailedDocs])">
                                                 (@row.FailedDocs
                                                 <iconify-icon icon="mdi:alert-circle" class="align-middle"></iconify-icon>)
                                             </span>
@@ -181,12 +181,12 @@
                                     <div class="inline-flex items-center gap-1">
                                         <a class="btn btn-ghost btn-xs btn-square"
                                            asp-page="/Projects/Details" asp-route-id="@row.Id"
-                                           title="Open" aria-label="Open">
+                                           title="@(Localizer["Open"])" aria-label="@(Localizer["Open"])">
                                             <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon>
                                         </a>
                                         <a class="btn btn-ghost btn-xs btn-square"
                                            asp-page="/Projects/Edit" asp-route-id="@row.Id"
-                                           title="Edit" aria-label="Edit">
+                                           title="@(Localizer["Edit"])" aria-label="@(Localizer["Edit"])">
                                             <iconify-icon icon="mdi:pencil"></iconify-icon>
                                         </a>
                                         <form method="post" asp-page-handler="Delete" class="inline">
@@ -194,7 +194,7 @@
                                             <input type="hidden" name="id" value="@row.Id" />
                                             <button type="submit"
                                                     class="btn btn-ghost btn-xs btn-square text-error"
-                                                    title="Delete" aria-label="Delete">
+                                                    title="@(Localizer["Delete"])" aria-label="@(Localizer["Delete"])">
                                                 <iconify-icon icon="mdi:delete"></iconify-icon>
                                             </button>
                                         </form>
@@ -207,7 +207,9 @@
                 </div>
 
                 <div class="text-xs text-base-content/60 mt-2">
-                    @Model.Rows.Count project@(Model.Rows.Count != 1 ? "s" : "")
+                    @(Model.Rows.Count == 1
+                        ? Localizer["OneProject"]
+                        : Localizer["ProjectCount", Model.Rows.Count])
                 </div>
             }
         </div>

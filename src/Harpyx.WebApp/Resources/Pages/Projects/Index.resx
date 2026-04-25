@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="Heading" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="AddProject" xml:space="preserve">
+    <value>Add Project</value>
+  </data>
+  <data name="Intro" xml:space="preserve">
+    <value>Operational overview of all projects across workspaces and tenants. Monitor indexing status, chat activity, and quickly access any project.</value>
+  </data>
+  <data name="Tenant" xml:space="preserve">
+    <value>Tenant</value>
+  </data>
+  <data name="AllTenants" xml:space="preserve">
+    <value>All tenants</value>
+  </data>
+  <data name="Workspace" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="AllWorkspaces" xml:space="preserve">
+    <value>All workspaces</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="SortName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SortLastActivity" xml:space="preserve">
+    <value>Last activity</value>
+  </data>
+  <data name="SortDocuments" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="SortChatMessages" xml:space="preserve">
+    <value>Chat messages</value>
+  </data>
+  <data name="SortStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="NoProjectsForFilters" xml:space="preserve">
+    <value>No projects match the current filters.</value>
+  </data>
+  <data name="NoProjectsPrefix" xml:space="preserve">
+    <value>No projects yet. Create one from the</value>
+  </data>
+  <data name="WorkspacesLink" xml:space="preserve">
+    <value>Workspaces</value>
+  </data>
+  <data name="NoProjectsSuffix" xml:space="preserve">
+    <value>page.</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="Docs" xml:space="preserve">
+    <value>Docs</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="LastActivity" xml:space="preserve">
+    <value>Last Activity</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="OpenProjectTitle" xml:space="preserve">
+    <value>Open {0}</value>
+  </data>
+  <data name="IndexedDocsTitle" xml:space="preserve">
+    <value>{0} indexed / {1} total</value>
+  </data>
+  <data name="FailedDocsTitle" xml:space="preserve">
+    <value>{0} failed</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="OneProject" xml:space="preserve">
+    <value>1 project</value>
+  </data>
+  <data name="ProjectCount" xml:space="preserve">
+    <value>{0} projects</value>
+  </data>
+</root>

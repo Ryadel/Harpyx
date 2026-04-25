@@ -1,7 +1,7 @@
 @page
 @model Harpyx.WebApp.Areas.Admin.Pages.IndexModel
 @{
-    ViewData["Title"] = "Admin - Dashboard";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 @section SidePanel {
     <partial name="/Areas/Admin/Pages/Shared/_AdminSideMenu.cshtml" />
@@ -9,9 +9,9 @@
 
 <div class="space-y-6">
     <div>
-        <h1 class="text-2xl font-semibold">Admin Overview</h1>
+        <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
         <p class="mt-2 text-sm text-base-content/70">
-            This area contains platform-wide controls. Use these shortcuts for settings, governance, and operational management.
+            @Localizer["Intro"]
         </p>
     </div>
 
@@ -20,10 +20,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:tune"></iconify-icon>
-                    General Settings
+                    @Localizer["GeneralSettingsTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Toggle self-registration and other application-wide policies.
+                    @Localizer["GeneralSettingsDescription"]
                 </p>
             </div>
         </a>
@@ -32,10 +32,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:gauge"></iconify-icon>
-                    Usage Limits
+                    @Localizer["UsageLimitsTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Configure instance-wide limits for tenants, workspaces, documents, storage, and optional capabilities.
+                    @Localizer["UsageLimitsDescription"]
                 </p>
             </div>
         </a>
@@ -44,10 +44,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:heart-pulse"></iconify-icon>
-                    System Health
+                    @Localizer["SystemHealthTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Check required services and optional capabilities.
+                    @Localizer["SystemHealthDescription"]
                 </p>
             </div>
         </a>
@@ -56,10 +56,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
-                    Users
+                    @Localizer["UsersTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Review all users, roles, and activation state from one place.
+                    @Localizer["UsersDescription"]
                 </p>
             </div>
         </a>
@@ -68,10 +68,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:server-network"></iconify-icon>
-                    Hosted Models
+                    @Localizer["HostedModelsTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Maintain hosted models available to users.
+                    @Localizer["HostedModelsDescription"]
                 </p>
             </div>
         </a>
@@ -80,10 +80,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:office-building-outline"></iconify-icon>
-                    Tenants
+                    @Localizer["TenantsTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Inspect and edit all tenant entities in the platform.
+                    @Localizer["TenantsDescription"]
                 </p>
             </div>
         </a>
@@ -92,10 +92,10 @@
             <div class="card-body">
                 <div class="flex items-center gap-2 text-lg font-semibold">
                     <iconify-icon icon="mdi:email-fast-outline"></iconify-icon>
-                    User Invitations
+                    @Localizer["UserInvitationsTitle"]
                 </div>
                 <p class="text-sm text-base-content/70">
-                    Invite users when self-registration is disabled, then track invitation status.
+                    @Localizer["UserInvitationsDescription"]
                 </p>
             </div>
         </a>

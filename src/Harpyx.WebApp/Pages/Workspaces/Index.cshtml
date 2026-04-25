@@ -1,7 +1,7 @@
 @page
 @model Harpyx.WebApp.Pages.Workspaces.IndexModel
 @{
-    ViewData["Title"] = "Workspaces";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
     var totalWorkspaces = Model.Workspaces.Count;
     var defaultCollapsed = totalWorkspaces > 3;
 }
@@ -10,33 +10,33 @@
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">Workspaces</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto">
                     <a class="btn btn-primary btn-sm" asp-page="/Workspaces/Edit">
                         <iconify-icon icon="mdi:plus"></iconify-icon>
-                        Add Workspace
+                        @Localizer["AddWorkspaceButton"]
                     </a>
                 </div>
             </div>
             <hr />
             <p class="text-sm text-base-content/70">
-                In this section you create and manage <span class="font-semibold">Workspaces</span> 
-                and <span class="font-semibold">Projects</span>.
+                @Localizer["IntroPrefix"] <span class="font-semibold">@Localizer["WorkspacesLabel"]</span> 
+                @Localizer["IntroMiddle"] <span class="font-semibold">@Localizer["ProjectsLabel"]</span>.
                 <ul class="text-sm  text-base-content/70 list-disc list-inside">
                     <li>
-                        <span class="font-semibold">Workspaces</span> 
-                        are containers for projects and can be used to better organize teams, projects, and permissions.
+                        <span class="font-semibold">@Localizer["WorkspacesLabel"]</span> 
+                        @Localizer["WorkspacesDescription"]
                     </li>
                     <li>
-                        <span class="font-semibold">Projects</span>
-                        are the operational units of Harpyx, where documents are uploaded and data is retrieved.
+                        <span class="font-semibold">@Localizer["ProjectsLabel"]</span>
+                        @Localizer["ProjectsDescription"]
                     </li>
                 </ul>
             </p>
             @if (totalWorkspaces > 0)
             {
                 <input type="text" id="workspace-search"
-                       placeholder="Search workspaces and projects..."
+                       placeholder="@Localizer["SearchPlaceholder"]"
                        class="input input-bordered input-sm w-full max-w-sm mt-2" />
             }
         </div>
@@ -48,10 +48,10 @@
             <div class="card-body">
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span>No workspaces yet.</span>
+                        <span>@Localizer["NoWorkspaces"]</span>
                         <a class="btn btn-primary btn-sm" asp-page="/Workspaces/Edit">
                             <iconify-icon icon="mdi:plus"></iconify-icon>
-                            Add Workspace
+                            @Localizer["AddWorkspaceButton"]
                         </a>
                     </div>
                 </div>
@@ -84,29 +84,29 @@
                                     <div class="action-inline-group" data-workspace-actions>
                                         <a class="btn btn-ghost btn-xs btn-square action-icon-btn"
                                            asp-page="/Workspaces/Edit"
-                                           asp-route-id="@workspace.Id" title="Edit workspace" aria-label="Edit workspace">
+                                           asp-route-id="@workspace.Id" title="@Localizer["EditWorkspaceTitle"]" aria-label="@Localizer["EditWorkspaceTitle"]">
                                             <iconify-icon icon="mdi:pencil"></iconify-icon>
                                         </a>
                                         <form method="post" asp-page-handler="Delete" class="inline">
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="id" value="@workspace.Id" />
                                             <button type="submit" class="btn btn-ghost btn-xs btn-square action-icon-btn action-icon-delete"
-                                                    title="Delete workspace" aria-label="Delete workspace">
+                                                    title="@Localizer["DeleteWorkspaceTitle"]" aria-label="@Localizer["DeleteWorkspaceTitle"]">
                                                 <iconify-icon icon="mdi:delete"></iconify-icon>
                                             </button>
                                         </form>
                                     </div>
                                     @if (!workspace.IsActive)
                                     {
-                                        <span class="badge badge-ghost badge-sm">Inactive</span>
+                                        <span class="badge badge-ghost badge-sm">@Localizer["InactiveBadge"]</span>
                                     }
                                 </div>
                                 <div class="flex items-center gap-3 text-sm text-base-content/60 ml-auto shrink-0">
-                                    <span title="Projects">
+                                    <span title="@Localizer["ProjectsLabel"]">
                                         <iconify-icon icon="mdi:folder-outline" class="align-middle"></iconify-icon>
                                         @projectCount
                                     </span>
-                                    <span title="Documents">
+                                    <span title="@Localizer["DocumentsLabel"]">
                                         <iconify-icon icon="mdi:file-document-outline" class="align-middle"></iconify-icon>
                                         @documentCount
                                     </span>
@@ -124,11 +124,11 @@
                             @if (projectCount == 0)
                             {
                                 <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/60">
-                                    <span>No projects in this workspace.</span>
+                                    <span>@Localizer["NoProjectsInWorkspace"]</span>
                                     <a class="btn btn-primary btn-xs"
                                        asp-page="/Projects/Edit" asp-route-workspaceId="@workspace.Id">
                                         <iconify-icon icon="mdi:plus"></iconify-icon>
-                                        Add Project
+                                        @Localizer["AddProjectButton"]
                                     </a>
                                 </div>
                             }
@@ -138,9 +138,9 @@
                                     <table class="workspace-projects-table table table-sm">
                                         <thead>
                                             <tr>
-                                                <th class="workspace-projects-first-col">Project</th>
-                                                <th>Description</th>
-                                                <th class="text-right">Documents</th>
+                                                <th class="workspace-projects-first-col">@Localizer["ProjectHeader"]</th>
+                                                <th>@Localizer["DescriptionHeader"]</th>
+                                                <th class="text-right">@Localizer["DocumentsHeader"]</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -158,14 +158,14 @@
                                                             <a class="link link-hover link-primary"
                                                                asp-page="/Projects/Details"
                                                                asp-route-id="@project.Id"
-                                                               title="Open @project.Name"
-                                                               aria-label="Open @project.Name">
+                                                               title="@string.Format(Localizer["OpenProjectTitle"].Value, project.Name)"
+                                                               aria-label="@string.Format(Localizer["OpenProjectTitle"].Value, project.Name)">
                                                                 @project.Name
                                                             </a>
                                                             <div class="action-inline-group">
                                                                 <a class="btn btn-ghost btn-xs btn-square action-icon-btn"
                                                                    asp-page="/Projects/Edit" asp-route-id="@project.Id"
-                                                                   title="Edit project" aria-label="Edit project">
+                                                                   title="@Localizer["EditProjectTitle"]" aria-label="@Localizer["EditProjectTitle"]">
                                                                     <iconify-icon icon="mdi:pencil"></iconify-icon>
                                                                 </a>
                                                                 <form method="post" asp-page-handler="DeleteProject" class="inline">
@@ -173,7 +173,7 @@
                                                                     <input type="hidden" name="id" value="@project.Id" />
                                                                     <button type="submit"
                                                                             class="btn btn-ghost btn-xs btn-square action-icon-btn action-icon-delete"
-                                                                            title="Delete project" aria-label="Delete project">
+                                                                            title="@Localizer["DeleteProjectTitle"]" aria-label="@Localizer["DeleteProjectTitle"]">
                                                                         <iconify-icon icon="mdi:delete"></iconify-icon>
                                                                     </button>
                                                                 </form>
@@ -193,7 +193,7 @@
                                 {
                                     <button type="button" class="btn btn-ghost btn-xs mt-2" data-show-all-projects>
                                         <iconify-icon icon="mdi:dots-horizontal"></iconify-icon>
-                                        Show all @projectCount projects
+                                        @string.Format(Localizer["ShowAllProjects"].Value, projectCount)
                                     </button>
                                 }
 
@@ -201,7 +201,7 @@
                                     <a class="btn btn-primary btn-xs"
                                        asp-page="/Projects/Edit" asp-route-workspaceId="@workspace.Id">
                                         <iconify-icon icon="mdi:plus"></iconify-icon>
-                                        Add Project
+                                        @Localizer["AddProjectButton"]
                                     </a>
                                 </div>
                             }

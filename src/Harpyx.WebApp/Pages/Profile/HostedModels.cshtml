@@ -1,23 +1,23 @@
 @page
 @model Harpyx.WebApp.Pages.Profile.HostedModelsModel
 @{
-    ViewData["Title"] = "Hosted Models";
+    ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
 <div class="space-y-6">
     <div class="card bg-base-100 shadow">
         <div class="card-body space-y-3">
             <div class="flex flex-wrap items-center gap-3">
-                <h1 class="text-2xl font-semibold">Hosted Models</h1>
+                <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto">
                     <a class="btn btn-ghost btn-sm" asp-page="/Profile/Index">
                         <iconify-icon icon="mdi:arrow-left"></iconify-icon>
-                        Back to Profile
+                        @Localizer["BackToProfile"]
                     </a>
                 </div>
             </div>
             <p class="text-sm text-base-content/70">
-                Choose models already configured by this Harpyx instance. No API key or internal URL is required here.
+                @Localizer["Intro"]
             </p>
         </div>
     </div>
@@ -39,13 +39,13 @@
     {
         <div class="card bg-base-100 shadow">
             <div class="card-body space-y-3">
-                <h2 class="text-lg font-semibold">No hosted models available</h2>
+                <h2 class="text-lg font-semibold">@Localizer["NoModelsTitle"]</h2>
                 <p class="text-sm text-base-content/70">
-                    The platform has not published hosted models yet. You can keep using your personal API providers.
+                    @Localizer["NoModelsDescription"]
                 </p>
                 <a class="btn btn-primary btn-sm w-fit" asp-page="/Profile/Edit">
                     <iconify-icon icon="mdi:plus"></iconify-icon>
-                    Add Provider
+                    @Localizer["AddProviderButton"]
                 </a>
             </div>
         </div>
@@ -57,26 +57,26 @@
             <div class="card-body space-y-4">
                 <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
                     <div class="rounded-box border border-base-300 bg-base-200 p-4">
-                        <h2 class="text-lg font-semibold">Chat</h2>
-                        <p class="text-sm text-base-content/70">Answers and conversations.</p>
+                        <h2 class="text-lg font-semibold">@Localizer["ChatTitle"]</h2>
+                        <p class="text-sm text-base-content/70">@Localizer["ChatDescription"]</p>
                         <select asp-for="ChatModelId" asp-items="Model.ChatOptions" class="select select-bordered mt-3 w-full">
-                            <option value="">Keep current default</option>
+                            <option value="">@Localizer["KeepCurrentDefault"]</option>
                         </select>
                     </div>
 
                     <div class="rounded-box border border-base-300 bg-base-200 p-4">
-                        <h2 class="text-lg font-semibold">RAG Embedding</h2>
-                        <p class="text-sm text-base-content/70">Document indexing and retrieval.</p>
+                        <h2 class="text-lg font-semibold">@Localizer["RagTitle"]</h2>
+                        <p class="text-sm text-base-content/70">@Localizer["RagDescription"]</p>
                         <select asp-for="RagEmbeddingModelId" asp-items="Model.RagOptions" class="select select-bordered mt-3 w-full">
-                            <option value="">Keep current default</option>
+                            <option value="">@Localizer["KeepCurrentDefault"]</option>
                         </select>
                     </div>
 
                     <div class="rounded-box border border-base-300 bg-base-200 p-4">
-                        <h2 class="text-lg font-semibold">OCR</h2>
-                        <p class="text-sm text-base-content/70">Text extraction from visual documents.</p>
+                        <h2 class="text-lg font-semibold">@Localizer["OcrTitle"]</h2>
+                        <p class="text-sm text-base-content/70">@Localizer["OcrDescription"]</p>
                         <select asp-for="OcrModelId" asp-items="Model.OcrOptions" class="select select-bordered mt-3 w-full">
-                            <option value="">Keep current default</option>
+                            <option value="">@Localizer["KeepCurrentDefault"]</option>
                         </select>
                     </div>
                 </div>
@@ -84,10 +84,10 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="submit" class="btn btn-primary mw-120">
                         <iconify-icon icon="mdi:content-save"></iconify-icon>
-                        Save
+                        @Localizer["SaveButton"]
                     </button>
                     <a asp-page="/Profile/Index" class="btn btn-ghost mw-120">
-                        Cancel
+                        @Localizer["CancelButton"]
                     </a>
                 </div>
             </div>

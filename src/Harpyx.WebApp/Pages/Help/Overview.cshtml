@@ -1,0 +1,122 @@
+@page
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+}
+
+<div class="space-y-6">
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
+            <hr />
+            <p class="text-sm text-base-content/70">
+                @Localizer["Intro"]
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">@Localizer["BuildingBlocksTitle"]</h2>
+            <div class="overflow-x-auto">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["BuildingBlocksNameHeader"]</th>
+                            <th>@Localizer["BuildingBlocksMeaningHeader"]</th>
+                            <th>@Localizer["BuildingBlocksUsageHeader"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-outline">@Localizer["TenantLabel"]</span></td>
+                            <td>@Localizer["TenantMeaning"]</td>
+                            <td>@Localizer["TenantUsage"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-outline">@Localizer["WorkspaceLabel"]</span></td>
+                            <td>@Localizer["WorkspaceMeaning"]</td>
+                            <td>@Localizer["WorkspaceUsage"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-outline">@Localizer["ProjectLabel"]</span></td>
+                            <td>@Localizer["ProjectMeaning"]</td>
+                            <td>@Localizer["ProjectUsage"]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-outline">@Localizer["DocumentLabel"]</span></td>
+                            <td>@Localizer["DocumentMeaning"]</td>
+                            <td>@Localizer["DocumentUsage"]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["TypicalDayTitle"]</h2>
+                <ol class="list-decimal pl-5 text-sm space-y-2">
+                    <li>@Localizer["TypicalDayStepSignIn"]</li>
+                    <li>@Localizer["TypicalDayStepTenant"]</li>
+                    <li>@Localizer["TypicalDayStepWorkspaces"]</li>
+                    <li>@Localizer["TypicalDayStepProject"]</li>
+                    <li>@Localizer["TypicalDayStepUpload"]</li>
+                    <li>@Localizer["TypicalDayStepProcessing"]</li>
+                    <li>@Localizer["TypicalDayStepChat"]</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="card h-full bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title">@Localizer["AfterUploadTitle"]</h2>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["AfterUploadChecks"]
+                </p>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["AfterUploadPreparationBeforeStatus"]
+                    <i>@Localizer["DocumentStatusPending"]</i>
+                    @Localizer["AfterUploadPreparationBetweenStatuses"]
+                    <i>@Localizer["DocumentStatusProcessing"]</i>
+                    @Localizer["AfterUploadPreparationAfterProcessing"]
+                    <i>@Localizer["DocumentStatusReady"]</i>
+                    @Localizer["AfterUploadPreparationAfterReady"]
+                </p>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["AfterUploadSearchableParts"]
+                </p>
+                <p class="text-sm text-base-content/70">
+                    @Localizer["AfterUploadQuestionFlow"]
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">@Localizer["DocumentsAndChatTitle"]</h2>
+            <div class="grid gap-4 md:grid-cols-3">
+                <div class="rounded-lg border border-base-300 p-4">
+                    <h3 class="font-semibold">@Localizer["DocumentStatusCardTitle"]</h3>
+                    <p class="text-sm text-base-content/70">
+                        @Localizer["DocumentStatusCardDescription"]
+                    </p>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <h3 class="font-semibold">@Localizer["SelectedDocumentsCardTitle"]</h3>
+                    <p class="text-sm text-base-content/70">
+                        @Localizer["SelectedDocumentsCardDescription"]
+                    </p>
+                </div>
+                <div class="rounded-lg border border-base-300 p-4">
+                    <h3 class="font-semibold">@Localizer["ProvidersCardTitle"]</h3>
+                    <p class="text-sm text-base-content/70">
+                        @Localizer["ProvidersCardDescription"]
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

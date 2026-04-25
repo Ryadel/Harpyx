@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PageTitle" xml:space="preserve"><value>API Keys</value></data>
+  <data name="PageHeading" xml:space="preserve"><value>API Keys</value></data>
+  <data name="ApiDocsButton" xml:space="preserve"><value>API Docs</value></data>
+  <data name="CreateApiKeyButton" xml:space="preserve"><value>Create API Key</value></data>
+  <data name="Intro" xml:space="preserve"><value>Manage API keys for server-to-server integrations. Use least-privilege permissions and rotate keys regularly.</value></data>
+  <data name="UseHeaderPrefix" xml:space="preserve"><value>Use</value></data>
+  <data name="ApiKeyAuthorizationHeader" xml:space="preserve"><value>Authorization: ApiKey &lt;your-key&gt;</value></data>
+  <data name="UseHeaderSuffix" xml:space="preserve"><value>for API requests.</value></data>
+  <data name="StoreKeysSecurely" xml:space="preserve"><value>Store keys in a secure secret manager, never in frontend code or logs.</value></data>
+  <data name="KeysShownOnce" xml:space="preserve"><value>Full key values are only visible at creation time.</value></data>
+  <data name="ApiDisabled" xml:space="preserve"><value>API access is disabled for this instance.</value></data>
+  <data name="KeysTitle" xml:space="preserve"><value>Keys</value></data>
+  <data name="NoKeysPrefix" xml:space="preserve"><value>No API keys yet. Create one from the</value></data>
+  <data name="NoKeysSuffix" xml:space="preserve"><value>page.</value></data>
+  <data name="NameHeader" xml:space="preserve"><value>Name</value></data>
+  <data name="PreviewHeader" xml:space="preserve"><value>Preview</value></data>
+  <data name="PermissionsHeader" xml:space="preserve"><value>Permissions</value></data>
+  <data name="StatusHeader" xml:space="preserve"><value>Status</value></data>
+  <data name="LastUsedHeader" xml:space="preserve"><value>Last used</value></data>
+  <data name="ExpiresHeader" xml:space="preserve"><value>Expires</value></data>
+  <data name="ActionsHeader" xml:space="preserve"><value>Actions</value></data>
+  <data name="ActiveStatus" xml:space="preserve"><value>Active</value></data>
+  <data name="RevokedStatus" xml:space="preserve"><value>Revoked</value></data>
+  <data name="RevokeConfirmation" xml:space="preserve"><value>Revoke this API key?</value></data>
+  <data name="DeleteRevokedConfirmation" xml:space="preserve"><value>Delete this revoked API key permanently?</value></data>
+</root>

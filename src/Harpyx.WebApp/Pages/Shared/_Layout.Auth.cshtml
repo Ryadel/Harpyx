@@ -7,13 +7,13 @@
 @if (!User.Identity?.IsAuthenticated ?? true)
 {
     <div class="flex items-center gap-2 text-sm">
-        Login with
+        @SharedLocalizer["LoginWithLabel"]
         <form asp-controller="Account" asp-action="LoginGoogle" method="post" class="m-0">
-            <button type="submit" class="link link-hover font-semibold">Google</button>
+            <button type="submit" class="link link-hover font-semibold">@SharedLocalizer["GoogleProvider"]</button>
         </form>
         <span class="text-base-content/50">|</span>
         <form asp-controller="Account" asp-action="LoginEntra" method="post" class="m-0">
-            <button type="submit" class="link link-hover font-semibold">Microsoft</button>
+            <button type="submit" class="link link-hover font-semibold">@SharedLocalizer["MicrosoftProvider"]</button>
         </form>
     </div>
 }
@@ -33,10 +33,10 @@ else
     var hasMoreTenantsThanMenuLimit = tenantOptions.Count > maxTenantMenuItems;
     var tenantOptionsToDisplay = tenantOptions.Take(maxTenantMenuItems).ToList();
     var currentTenantLabel = scope.IsAllTenants
-        ? "All tenants"
+        ? SharedLocalizer["AllTenants"].Value
         : scope.CurrentTenantId is Guid currentTenantId && tenantNamesById.TryGetValue(currentTenantId, out var tenantName)
             ? tenantName
-            : "No tenant";
+            : SharedLocalizer["NoTenant"].Value;
 
     <div class="flex items-center gap-2">
         <span class="text-sm text-base-content/70">
@@ -55,13 +55,13 @@ else
                 <li>
                     <span class="max-w-full truncate text-xs text-base-content/70">
                         <a asp-page="/Profile/Index">
-                            Logged in as: <strong>@User.GetEmail()</strong>
+                            @SharedLocalizer["LoggedInAs"] <strong>@User.GetEmail()</strong>
                         </a>
                     </span>
                 </li>
                 <li>
                     <span class="max-w-full truncate text-xs text-base-content/70">
-                        Current tenant: <strong>@currentTenantLabel</strong>
+                        @SharedLocalizer["CurrentTenantLabel"] <strong>@currentTenantLabel</strong>
                     </span>
                 </li>
                 @if (tenantOptions.Count > 0)
@@ -77,7 +77,7 @@ else
                                class="flex w-full items-center justify-between gap-2 text-left @(scope.IsAllTenants ? "font-semibold" : string.Empty)">
                                 <span class="inline-flex items-center gap-2">
                                     <iconify-icon icon="mdi:domain"></iconify-icon>
-                                    All tenants
+                                    @SharedLocalizer["AllTenants"]
                                 </span>
                                 @if (scope.IsAllTenants)
                                 {
@@ -113,7 +113,7 @@ else
                         <li>
                             <a asp-page="/Tenants/Index" class="flex items-center gap-2">
                                 <iconify-icon icon="mdi:format-list-bulleted"></iconify-icon>
-                                View all
+                                @SharedLocalizer["ViewAll"]
                             </a>
                         </li>
                     }
@@ -122,7 +122,7 @@ else
                 <li>
                     <a asp-page="/Profile/Index" class="flex items-center gap-2">
                         <iconify-icon icon="mdi:account-outline"></iconify-icon>
-                        Profile
+                        @SharedLocalizer["Profile"]
                     </a>
                 </li>
                 <li>
@@ -130,7 +130,7 @@ else
                         @Html.AntiForgeryToken()
                         <button type="submit" class="flex w-full items-center gap-2 text-left">
                             <iconify-icon icon="mdi:logout"></iconify-icon>
-                            Logout
+                            @SharedLocalizer["Logout"]
                         </button>
                     </form>
                 </li>
