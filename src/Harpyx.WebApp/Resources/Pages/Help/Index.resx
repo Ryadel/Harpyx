@@ -19,10 +19,16 @@
     <value>What is Harpyx?</value>
   </data>
   <data name="HeroIntro" xml:space="preserve">
-    <value>Harpyx helps teams turn documents into organized, searchable knowledge. You create a place for your work, upload files or links, wait for Harpyx to prepare them, and then ask questions using the project chat.</value>
+    <value>Harpyx helps teams turn large collections of documents into organized, searchable knowledge. Instead of reading every file manually or asking an AI model to answer from memory, you give Harpyx the material you want to work with and use chat to ask questions grounded in that content.</value>
+  </data>
+  <data name="HeroWorkflow" xml:space="preserve">
+    <value>The normal flow is simple: choose the right tenant, create a workspace, create a project, upload files or add document links, and wait while Harpyx prepares them. After processing, the project chat can search the prepared content, retrieve the most relevant parts, and send that context to the configured model.</value>
   </data>
   <data name="HeroTenantIsolation" xml:space="preserve">
-    <value>It is built for work that must stay separated by customer, team or business unit. That separation is handled through tenants, workspaces, projects, roles and permissions.</value>
+    <value>Harpyx is built for work that must stay separated by customer, team, department, or business unit. That separation is handled through tenants, workspaces, projects, roles, and permissions, so users see and manage only the areas they are allowed to access.</value>
+  </data>
+  <data name="HeroUseCases" xml:space="preserve">
+    <value>Use it to explore contracts, reports, technical documentation, internal policies, research material, customer files, or any other document set where answers should come from known sources. Harpyx keeps the structure of the work visible while making the content easier to search, compare, summarise, and reuse.</value>
   </data>
   <data name="OverviewTitle" xml:space="preserve">
     <value>Overview</value>

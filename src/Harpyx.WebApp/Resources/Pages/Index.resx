@@ -13,39 +13,132 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageTitle" xml:space="preserve">
-    <value>Dashboard</value>
+    <value>Open-source document intelligence</value>
   </data>
-  <data name="LoginWithGoogle" xml:space="preserve">
-    <value>Login with Google</value>
+  <data name="HeroBadge" xml:space="preserve">
+    <value>Open source · MIT licensed · self-hostable</value>
   </data>
-  <data name="LoginWithMicrosoft" xml:space="preserve">
-    <value>Login with Microsoft</value>
+  <data name="HeroTitle" xml:space="preserve">
+    <value>Turn large document collections into searchable, chat-ready knowledge.</value>
   </data>
-  <data name="GoToProjects" xml:space="preserve">
-    <value>Go to Projects</value>
+  <data name="HeroText" xml:space="preserve">
+    <value>Harpyx is an open-source platform that helps teams transform scattered documents into structured, searchable knowledge. It gives organizations control over workspaces, permissions, hosting and AI model configuration, while letting users ask focused questions over the content of each project.</value>
   </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+  <data name="OpenWorkspaces" xml:space="preserve">
+    <value>Open Workspaces</value>
   </data>
-  <data name="SystemStatus" xml:space="preserve">
-    <value>System Status</value>
+  <data name="OpenProjects" xml:space="preserve">
+    <value>Open Projects</value>
   </data>
-  <data name="Environment" xml:space="preserve">
-    <value>Environment</value>
+  <data name="ViewOnGitHub" xml:space="preserve">
+    <value>View on GitHub</value>
   </data>
-  <data name="TotalUsers" xml:space="preserve">
-    <value>Total Users</value>
+  <data name="PillOpenSource" xml:space="preserve">
+    <value>MIT license</value>
   </data>
-  <data name="TotalTenants" xml:space="preserve">
-    <value>Total Tenants</value>
+  <data name="PillSelfHosted" xml:space="preserve">
+    <value>Self-hosted or SaaS</value>
   </data>
-  <data name="TotalWorkspaces" xml:space="preserve">
-    <value>Total Workspaces</value>
+  <data name="PillDocuments" xml:space="preserve">
+    <value>Many document types</value>
   </data>
-  <data name="TotalProjects" xml:space="preserve">
-    <value>Total Projects</value>
+  <data name="PillLocalModels" xml:space="preserve">
+    <value>Configurable AI providers</value>
   </data>
-  <data name="TotalDocuments" xml:space="preserve">
-    <value>Total Documents</value>
+  <data name="PreviewSubtitle" xml:space="preserve">
+    <value>Project knowledge workspace</value>
+  </data>
+  <data name="PreviewStatus" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="PreviewProjectTitle" xml:space="preserve">
+    <value>Customer research hub</value>
+  </data>
+  <data name="PreviewProjectCount" xml:space="preserve">
+    <value>hundreds of sources</value>
+  </data>
+  <data name="PreviewDocPdf" xml:space="preserve">
+    <value>PDF reports</value>
+  </data>
+  <data name="PreviewDocWeb" xml:space="preserve">
+    <value>Web links</value>
+  </data>
+  <data name="PreviewDocOffice" xml:space="preserve">
+    <value>Office files</value>
+  </data>
+  <data name="WorkflowUpload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="WorkflowIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="WorkflowAsk" xml:space="preserve">
+    <value>Ask</value>
+  </data>
+  <data name="PreviewQuestionLabel" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="PreviewQuestion" xml:space="preserve">
+    <value>What changed across these documents?</value>
+  </data>
+  <data name="PreviewAnswer" xml:space="preserve">
+    <value>Harpyx retrieves the most relevant document sections, keeps the answer tied to the selected project, and lets the configured model respond with the right context.</value>
+  </data>
+  <data name="FeatureDocumentsTitle" xml:space="preserve">
+    <value>Designed for growing document sets</value>
+  </data>
+  <data name="FeatureDocumentsText" xml:space="preserve">
+    <value>Harpyx stores the original upload, extracts text, splits long content into searchable parts, and prepares each project for retrieval. It is built for collections that go beyond a handful of files.</value>
+  </data>
+  <data name="FeatureAccessTitle" xml:space="preserve">
+    <value>Separated by tenant, workspace and project</value>
+  </data>
+  <data name="FeatureAccessText" xml:space="preserve">
+    <value>Teams can keep customers, business units or internal groups isolated through tenants, workspaces, projects, roles and permissions.</value>
+  </data>
+  <data name="FeatureModelsTitle" xml:space="preserve">
+    <value>Bring the model setup that fits your instance</value>
+  </data>
+  <data name="FeatureModelsText" xml:space="preserve">
+    <value>Use configured hosted models, connect provider APIs, or expose local models from your own infrastructure when your deployment requires tighter control.</value>
+  </data>
+  <data name="NotebookEyebrow" xml:space="preserve">
+    <value>Why Harpyx</value>
+  </data>
+  <data name="NotebookTitle" xml:space="preserve">
+    <value>A more controllable document AI workspace</value>
+  </data>
+  <data name="NotebookText1" xml:space="preserve">
+    <value>Notebook-style tools are excellent for personal research, but many teams need something they can host, inspect, extend and govern. Harpyx keeps that workflow familiar while adding multi-tenant organization, project-level access and API-driven automation.</value>
+  </data>
+  <data name="NotebookText2" xml:space="preserve">
+    <value>The goal is practical: let users work with a virtually unlimited number of documents and document types, while operators keep control over storage, authentication, encryption, usage limits and model availability.</value>
+  </data>
+  <data name="OpenSourceEyebrow" xml:space="preserve">
+    <value>Open source</value>
+  </data>
+  <data name="OpenSourceTitle" xml:space="preserve">
+    <value>Built in the open for SaaS and self-hosted deployments</value>
+  </data>
+  <data name="OpenSourceText" xml:space="preserve">
+    <value>Harpyx is released under the MIT license. You can inspect the code, deploy your own instance, adapt the platform to your environment, or contribute improvements upstream.</value>
+  </data>
+  <data name="InstallCardLabel" xml:space="preserve">
+    <value>Deployment</value>
+  </data>
+  <data name="InstallCardTitle" xml:space="preserve">
+    <value>Own your stack</value>
+  </data>
+  <data name="InstallCardText" xml:space="preserve">
+    <value>Run Harpyx with your own database, object storage, search engine, queue and authentication settings.</value>
+  </data>
+  <data name="LicenseCardLabel" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="LicenseCardTitle" xml:space="preserve">
+    <value>MIT licensed</value>
+  </data>
+  <data name="LicenseCardText" xml:space="preserve">
+    <value>Use it, modify it and integrate it with commercial or internal systems according to the MIT license terms.</value>
   </data>
 </root>

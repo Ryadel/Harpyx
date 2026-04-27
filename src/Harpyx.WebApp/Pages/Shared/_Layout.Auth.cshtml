@@ -6,15 +6,15 @@
 
 @if (!User.Identity?.IsAuthenticated ?? true)
 {
-    <div class="flex items-center gap-2 text-sm">
-        @SharedLocalizer["LoginWithLabel"]
-        <form asp-controller="Account" asp-action="LoginGoogle" method="post" class="m-0">
-            <button type="submit" class="link link-hover font-semibold">@SharedLocalizer["GoogleProvider"]</button>
-        </form>
-        <span class="text-base-content/50">|</span>
-        <form asp-controller="Account" asp-action="LoginEntra" method="post" class="m-0">
-            <button type="submit" class="link link-hover font-semibold">@SharedLocalizer["MicrosoftProvider"]</button>
-        </form>
+    <div class="flex items-center gap-2">
+        <a asp-area="" asp-page="/Account/Login" asp-route-mode="signup" class="btn btn-primary btn-sm mw-120">
+            <iconify-icon icon="mdi:account-plus-outline"></iconify-icon>
+            @SharedLocalizer["CreateAccount"]
+        </a>
+        <a asp-area="" asp-page="/Account/Login" class="btn btn-outline btn-sm mw-120 border-base-content">
+            <iconify-icon icon="mdi:login"></iconify-icon>
+            @SharedLocalizer["Login"]
+        </a>
     </div>
 }
 else

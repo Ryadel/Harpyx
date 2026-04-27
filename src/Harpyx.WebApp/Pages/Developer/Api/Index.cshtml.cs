@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Web;
 
-namespace Harpyx.WebApp.Pages.Api;
+namespace Harpyx.WebApp.Pages.Developer.Api;
 
 public class IndexModel : PageModel
 {
@@ -58,12 +58,12 @@ public class IndexModel : PageModel
         if (RevokeApiKeyId == Guid.Empty)
         {
             ErrorMessage = "Invalid API key.";
-            return RedirectToPage("/Api/Index");
+            return RedirectToPage("/Developer/Api/Index");
         }
 
         var revoked = await _apiKeys.RevokeAsync(userId.Value, RevokeApiKeyId, HttpContext.RequestAborted);
         SuccessMessage = revoked ? "API key revoked." : "API key not found.";
-        return RedirectToPage("/Api/Index");
+        return RedirectToPage("/Developer/Api/Index");
     }
 
     public async Task<IActionResult> OnPostDeleteAsync()
@@ -75,14 +75,14 @@ public class IndexModel : PageModel
         if (DeleteApiKeyId == Guid.Empty)
         {
             ErrorMessage = "Invalid API key.";
-            return RedirectToPage("/Api/Index");
+            return RedirectToPage("/Developer/Api/Index");
         }
 
         var deleted = await _apiKeys.DeleteAsync(userId.Value, DeleteApiKeyId, HttpContext.RequestAborted);
         SuccessMessage = deleted
             ? "API key deleted."
             : "API key cannot be deleted. Revoke it first.";
-        return RedirectToPage("/Api/Index");
+        return RedirectToPage("/Developer/Api/Index");
     }
 
     public static IReadOnlyList<string> DescribePermissions(ApiPermission permissions)

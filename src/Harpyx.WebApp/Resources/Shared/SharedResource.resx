@@ -39,6 +39,9 @@
   <data name="NavApi" xml:space="preserve">
     <value>API</value>
   </data>
+  <data name="NavProduct" xml:space="preserve">
+    <value>Product</value>
+  </data>
   <data name="NavWhatIsHarpyx" xml:space="preserve">
     <value>What is Harpyx?</value>
   </data>
@@ -65,6 +68,15 @@
   </data>
   <data name="MicrosoftProvider" xml:space="preserve">
     <value>Microsoft</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Create Account</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
   </data>
   <data name="AllTenants" xml:space="preserve">
     <value>All tenants</value>

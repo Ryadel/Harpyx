@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Harpyx.WebApp.Pages.Api;
+namespace Harpyx.WebApp.Pages.Developer.Api;
 
 public class DocsModel : PageModel
 {

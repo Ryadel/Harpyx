@@ -34,9 +34,9 @@ public static class AuthenticationExtensions
             .AddPolicyScheme(HarpyxAuthenticationDefaults.ChallengeScheme, HarpyxAuthenticationDefaults.ChallengeScheme, options =>
             {
                 options.ForwardDefaultSelector = context =>
-                    context.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase)
+                    IsRestApiRequest(context.Request)
                         ? ApiKeyAuthenticationDefaults.AuthenticationScheme
-                        : OpenIdConnectDefaults.AuthenticationScheme;
+                        : CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(
                 ApiKeyAuthenticationDefaults.AuthenticationScheme,
@@ -75,10 +75,12 @@ public static class AuthenticationExtensions
 
         services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
+            options.LoginPath = "/Account/Login";
+            options.AccessDeniedPath = "/AccessDenied";
             options.Events ??= new CookieAuthenticationEvents();
             options.Events.OnRedirectToLogin = context =>
             {
-                if (context.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase))
+                if (IsRestApiRequest(context.Request))
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
@@ -90,7 +92,7 @@ public static class AuthenticationExtensions
 
             options.Events.OnRedirectToAccessDenied = context =>
             {
-                if (context.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase))
+                if (IsRestApiRequest(context.Request))
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return Task.CompletedTask;
@@ -158,5 +160,12 @@ public static class AuthenticationExtensions
         return authorization.StartsWith(
             ApiKeyAuthenticationDefaults.AuthorizationHeaderScheme + " ",
             StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsRestApiRequest(HttpRequest request)
+    {
+        var path = request.Path.Value;
+        return string.Equals(path, "/api", StringComparison.Ordinal) ||
+               path?.StartsWith("/api/", StringComparison.Ordinal) == true;
     }
 }

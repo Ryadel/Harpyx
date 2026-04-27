@@ -1,0 +1,89 @@
+@page
+@model Harpyx.WebApp.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = Model.IsSignupMode
+        ? Localizer["CreateAccountPageTitle"].Value
+        : Localizer["LoginPageTitle"].Value;
+}
+
+<div class="mx-auto grid min-h-[calc(100vh-12rem)] max-w-6xl items-center gap-10 py-8 lg:grid-cols-[1fr_420px]">
+    <section class="space-y-6">
+        <div class="space-y-4">
+            <p class="text-sm font-semibold uppercase tracking-wide text-primary">
+                @(Model.IsSignupMode ? Localizer["SignupEyebrow"] : Localizer["LoginEyebrow"])
+            </p>
+            <h1 class="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
+                @(Model.IsSignupMode ? Localizer["SignupHeroTitle"] : Localizer["LoginHeroTitle"])
+            </h1>
+            <p class="max-w-2xl text-lg leading-8 text-base-content/75">
+                @(Model.IsSignupMode ? Localizer["SignupHeroText"] : Localizer["LoginHeroText"])
+            </p>
+        </div>
+
+        <div class="grid max-w-2xl gap-3 sm:grid-cols-3">
+            <div class="rounded-lg border border-base-300 bg-base-100 p-4">
+                <iconify-icon icon="mdi:file-document-multiple-outline" class="text-2xl text-primary"></iconify-icon>
+                <p class="mt-2 text-sm font-semibold">@Localizer["BenefitDocumentsTitle"]</p>
+                <p class="mt-1 text-sm text-base-content/70">@Localizer["BenefitDocumentsText"]</p>
+            </div>
+            <div class="rounded-lg border border-base-300 bg-base-100 p-4">
+                <iconify-icon icon="mdi:account-group-outline" class="text-2xl text-primary"></iconify-icon>
+                <p class="mt-2 text-sm font-semibold">@Localizer["BenefitTeamsTitle"]</p>
+                <p class="mt-1 text-sm text-base-content/70">@Localizer["BenefitTeamsText"]</p>
+            </div>
+            <div class="rounded-lg border border-base-300 bg-base-100 p-4">
+                <iconify-icon icon="mdi:server-security" class="text-2xl text-primary"></iconify-icon>
+                <p class="mt-2 text-sm font-semibold">@Localizer["BenefitOpenTitle"]</p>
+                <p class="mt-1 text-sm text-base-content/70">@Localizer["BenefitOpenText"]</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="rounded-lg border border-base-300 bg-base-100 p-7 shadow-xl">
+        <div class="space-y-5">
+            <div>
+                <h2 class="text-2xl font-bold">
+                    @(Model.IsSignupMode ? Localizer["SignupCardTitle"] : Localizer["LoginCardTitle"])
+                </h2>
+                <p class="mt-2 text-sm leading-6 text-base-content/70">
+                    @(Model.IsSignupMode ? Localizer["SignupCardText"] : Localizer["LoginCardText"])
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <form asp-controller="Account" asp-action="LoginGoogle" method="post" class="m-0">
+                    <input type="hidden" name="returnUrl" value="@Model.SafeReturnUrl" />
+                    <button type="submit" class="btn btn-primary w-full justify-start gap-3">
+                        <iconify-icon icon="simple-icons:google" class="text-lg"></iconify-icon>
+                        @Localizer["ContinueWithGoogle"]
+                    </button>
+                </form>
+
+                <form asp-controller="Account" asp-action="LoginEntra" method="post" class="m-0">
+                    <input type="hidden" name="returnUrl" value="@Model.SafeReturnUrl" />
+                    <button type="submit" class="btn btn-outline w-full justify-start gap-3">
+                        <iconify-icon icon="simple-icons:microsoft" class="text-lg"></iconify-icon>
+                        @Localizer["ContinueWithMicrosoft"]
+                    </button>
+                </form>
+            </div>
+
+            <div class="rounded-lg bg-base-200 p-4 text-sm leading-6 text-base-content/75">
+                @(Model.IsSignupMode ? Localizer["SignupPolicyNote"] : Localizer["LoginPolicyNote"])
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-base-300 pt-5 text-sm">
+                @if (Model.IsSignupMode)
+                {
+                    <span class="text-base-content/70">@Localizer["AlreadyHaveAccount"]</span>
+                    <a asp-page="/Account/Login" class="link link-primary font-semibold">@Localizer["GoToLogin"]</a>
+                }
+                else
+                {
+                    <span class="text-base-content/70">@Localizer["NeedAccess"]</span>
+                    <a asp-page="/Account/Login" asp-route-mode="signup" class="link link-primary font-semibold">@Localizer["GoToSignup"]</a>
+                }
+            </div>
+        </div>
+    </section>
+</div>

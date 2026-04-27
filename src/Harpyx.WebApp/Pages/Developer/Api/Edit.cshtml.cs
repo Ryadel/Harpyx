@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Web;
 
-namespace Harpyx.WebApp.Pages.Api;
+namespace Harpyx.WebApp.Pages.Developer.Api;
 
 public class EditModel : PageModel
 {

@@ -1,5 +1,5 @@
 @page
-@model Harpyx.WebApp.Pages.Api.IndexModel
+@model Harpyx.WebApp.Pages.Developer.Api.IndexModel
 @{
     ViewData["Title"] = Localizer["PageTitle"].Value;
     var createApiButtonClass = Model.IsApiEnabledForInstance
@@ -13,11 +13,11 @@
             <div class="flex items-center gap-4">
                 <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto flex items-center gap-2">
-                    <a class="btn btn-ghost btn-sm" asp-page="/Api/Docs">
+                    <a class="btn btn-ghost btn-sm" asp-page="/Developer/Api/Docs">
                         <iconify-icon icon="mdi:file-document-outline"></iconify-icon>
                         @Localizer["ApiDocsButton"]
                     </a>
-                    <a class="@createApiButtonClass" asp-page="/Api/Edit">
+                    <a class="@createApiButtonClass" asp-page="/Developer/Api/Edit">
                         <iconify-icon icon="mdi:key-plus"></iconify-icon>
                         @Localizer["CreateApiKeyButton"]
                     </a>
@@ -64,7 +64,7 @@
             {
                 <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
                     @Localizer["NoKeysPrefix"]
-                    <a asp-page="/Api/Edit" class="link link-hover font-semibold">@Localizer["CreateApiKeyButton"]</a> @Localizer["NoKeysSuffix"]
+                    <a asp-page="/Developer/Api/Edit" class="link link-hover font-semibold">@Localizer["CreateApiKeyButton"]</a> @Localizer["NoKeysSuffix"]
                 </div>
             }
             else
@@ -89,7 +89,7 @@
                                 <td class="font-medium">@key.Name</td>
                                 <td class="font-mono text-xs">@key.KeyPreview...@key.KeyLast4</td>
                                 <td>
-                                    @foreach (var permission in Harpyx.WebApp.Pages.Api.IndexModel.DescribePermissions(key.Permissions))
+                                    @foreach (var permission in Harpyx.WebApp.Pages.Developer.Api.IndexModel.DescribePermissions(key.Permissions))
                                     {
                                         <span class="badge badge-ghost badge-sm mr-1">@permission</span>
                                     }

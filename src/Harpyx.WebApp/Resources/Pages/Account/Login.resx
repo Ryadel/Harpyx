@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LoginPageTitle" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="CreateAccountPageTitle" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+  <data name="LoginEyebrow" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="SignupEyebrow" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="LoginHeroTitle" xml:space="preserve">
+    <value>Sign in to your document knowledge workspace.</value>
+  </data>
+  <data name="SignupHeroTitle" xml:space="preserve">
+    <value>Create your document knowledge workspace.</value>
+  </data>
+  <data name="LoginHeroText" xml:space="preserve">
+    <value>Use your configured identity provider to reach the tenants, workspaces and projects assigned to your account.</value>
+  </data>
+  <data name="SignupHeroText" xml:space="preserve">
+    <value>Harpyx supports self-registration when enabled by the instance operator: otherwise, access is granted through invitations or administrator-managed accounts.</value>
+  </data>
+  <data name="BenefitDocumentsTitle" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="BenefitDocumentsText" xml:space="preserve">
+    <value>Upload files and links into project knowledge bases.</value>
+  </data>
+  <data name="BenefitTeamsTitle" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="BenefitTeamsText" xml:space="preserve">
+    <value>Keep work separated through tenants and permissions.</value>
+  </data>
+  <data name="BenefitOpenTitle" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="BenefitOpenText" xml:space="preserve">
+    <value>Run open-source Harpyx in the environment you trust.</value>
+  </data>
+  <data name="LoginCardTitle" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="SignupCardTitle" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+  <data name="LoginCardText" xml:space="preserve">
+    <value>Choose one of the authentication providers enabled for this Harpyx instance.</value>
+  </data>
+  <data name="SignupCardText" xml:space="preserve">
+    <value>Use the provider associated with the email address you want to use in Harpyx.</value>
+  </data>
+  <data name="ContinueWithGoogle" xml:space="preserve">
+    <value>Continue with Google</value>
+  </data>
+  <data name="ContinueWithMicrosoft" xml:space="preserve">
+    <value>Continue with Microsoft</value>
+  </data>
+  <data name="LoginPolicyNote" xml:space="preserve">
+    <value>If your account has not been activated yet, Harpyx will stop the login flow and show the proper access message.</value>
+  </data>
+  <data name="SignupPolicyNote" xml:space="preserve">
+    <value>Account creation depends on the instance policy. Some installations allow open self-registration; others require an invitation from an administrator.</value>
+  </data>
+  <data name="AlreadyHaveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="GoToLogin" xml:space="preserve">
+    <value>Go to login</value>
+  </data>
+  <data name="NeedAccess" xml:space="preserve">
+    <value>Need access?</value>
+  </data>
+  <data name="GoToSignup" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+</root>

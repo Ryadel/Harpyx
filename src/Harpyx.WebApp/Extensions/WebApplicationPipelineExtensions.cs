@@ -148,7 +148,7 @@ public static class WebApplicationPipelineExtensions
                 var showWelcome = context.Request.Cookies.TryGetValue(OnboardingConstants.WelcomeCookieName, out var cookieValue) &&
                                   string.Equals(cookieValue, "1", StringComparison.Ordinal);
                 var isWelcomeRequest = context.Request.Path.StartsWithSegments("/Welcome");
-                var isApiRequest = context.Request.Path.StartsWithSegments("/api") || context.Request.Path.StartsWithSegments("/swagger");
+                var isApiRequest = IsRestApiRequest(context.Request) || context.Request.Path.StartsWithSegments("/swagger");
                 if (showWelcome && !isWelcomeRequest && !isApiRequest && HttpMethods.IsGet(context.Request.Method))
                 {
                     context.Response.Redirect("/Welcome");
@@ -179,7 +179,7 @@ public static class WebApplicationPipelineExtensions
         app.UseStatusCodePages(async statusCodeContext =>
         {
             var context = statusCodeContext.HttpContext;
-            if (!context.Request.Path.StartsWithSegments("/api"))
+            if (!IsRestApiRequest(context.Request))
             {
                 return;
             }
@@ -243,5 +243,12 @@ public static class WebApplicationPipelineExtensions
         };
 
         return context.Response.WriteAsJsonAsync(payload);
+    }
+
+    private static bool IsRestApiRequest(HttpRequest request)
+    {
+        var path = request.Path.Value;
+        return string.Equals(path, "/api", StringComparison.Ordinal) ||
+               path?.StartsWith("/api/", StringComparison.Ordinal) == true;
     }
 }

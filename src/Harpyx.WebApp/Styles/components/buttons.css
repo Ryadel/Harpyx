@@ -7,4 +7,9 @@
         min-width: 120px;
         justify-content: center;
     }
+
+    .mw-160 {
+        min-width: 160px;
+        justify-content: center;
+    }
 }

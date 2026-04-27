@@ -1,5 +1,5 @@
 @page
-@model Harpyx.WebApp.Pages.Api.EditModel
+@model Harpyx.WebApp.Pages.Developer.Api.EditModel
 @{
     ViewData["Title"] = Localizer["PageTitle"].Value;
 }
@@ -10,7 +10,7 @@
             <div class="flex items-center gap-4">
                 <h1 class="text-2xl font-semibold">@Localizer["PageHeading"]</h1>
                 <div class="ml-auto">
-                    <a class="btn btn-ghost btn-sm" asp-page="/Api/Index">
+                    <a class="btn btn-ghost btn-sm" asp-page="/Developer/Api/Index">
                         <iconify-icon icon="mdi:arrow-left"></iconify-icon>
                         @Localizer["BackToApiKeys"]
                     </a>
@@ -94,7 +94,7 @@
                         <iconify-icon icon="mdi:key-plus"></iconify-icon>
                         @Localizer["GenerateButton"]
                     </button>
-                    <a class="btn btn-ghost" asp-page="/Api/Index">
+                    <a class="btn btn-ghost" asp-page="/Developer/Api/Index">
                         @Localizer["CancelButton"]
                     </a>
                 </div>
