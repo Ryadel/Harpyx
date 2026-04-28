@@ -22,7 +22,7 @@
     <value>Login</value>
   </data>
   <data name="SignupEyebrow" xml:space="preserve">
-    <value>Register</value>
+    <value>Create account</value>
   </data>
   <data name="LoginHeroTitle" xml:space="preserve">
     <value>Sign in to your document knowledge workspace.</value>

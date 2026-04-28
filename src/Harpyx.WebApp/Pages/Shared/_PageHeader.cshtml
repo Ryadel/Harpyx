@@ -1,0 +1,31 @@
+@model PageHeaderViewModel
+
+<div class="card bg-base-100 shadow">
+    <div class="card-body">
+        <div class="flex items-center gap-4">
+            <h1 class="text-2xl font-semibold">@Model.Title</h1>
+            @if (Model.Actions is { Count: > 0 })
+            {
+                <div class="ml-auto">
+                    <div class="flex flex-wrap gap-2">
+                        @foreach (var action in Model.Actions)
+                        {
+                            <a class="@action.CssClass" asp-page="@action.Page" asp-all-route-data="@action.RouteValues">
+                                @if (!string.IsNullOrEmpty(action.Icon))
+                                {
+                                    <iconify-icon icon="@action.Icon"></iconify-icon>
+                                }
+                                @action.Label
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.Intro))
+        {
+            <hr />
+            <p class="text-sm text-base-content/70">@Model.Intro</p>
+        }
+    </div>
+</div>

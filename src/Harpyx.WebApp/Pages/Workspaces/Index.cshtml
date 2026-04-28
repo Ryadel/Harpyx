@@ -19,12 +19,14 @@
                 </div>
             </div>
             <hr />
-            <p class="text-sm text-base-content/70">
-                @Localizer["IntroPrefix"] <span class="font-semibold">@Localizer["WorkspacesLabel"]</span> 
-                @Localizer["IntroMiddle"] <span class="font-semibold">@Localizer["ProjectsLabel"]</span>.
-                <ul class="text-sm  text-base-content/70 list-disc list-inside">
+            <div class="text-sm text-base-content/70 space-y-2">
+                <p>
+                    @Localizer["IntroPrefix"] <span class="font-semibold">@Localizer["WorkspacesLabel"]</span>
+                    @Localizer["IntroMiddle"] <span class="font-semibold">@Localizer["ProjectsLabel"]</span>.
+                </p>
+                <ul class="list-disc list-inside">
                     <li>
-                        <span class="font-semibold">@Localizer["WorkspacesLabel"]</span> 
+                        <span class="font-semibold">@Localizer["WorkspacesLabel"]</span>
                         @Localizer["WorkspacesDescription"]
                     </li>
                     <li>
@@ -32,7 +34,7 @@
                         @Localizer["ProjectsDescription"]
                     </li>
                 </ul>
-            </p>
+            </div>
             @if (totalWorkspaces > 0)
             {
                 <input type="text" id="workspace-search"
@@ -46,15 +48,12 @@
     {
         <div class="card bg-base-100 shadow">
             <div class="card-body">
-                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span>@Localizer["NoWorkspaces"]</span>
-                        <a class="btn btn-primary btn-sm" asp-page="/Workspaces/Edit">
-                            <iconify-icon icon="mdi:plus"></iconify-icon>
-                            @Localizer["AddWorkspaceButton"]
-                        </a>
-                    </div>
-                </div>
+                <partial name="_EmptyState" model="@(new EmptyStateViewModel(
+                    Message: Localizer["NoWorkspaces"].Value,
+                    Action: new PageActionViewModel(
+                        Label: Localizer["AddWorkspaceButton"].Value,
+                        Page: "/Workspaces/Edit",
+                        Icon: "mdi:plus")))" />
             </div>
         </div>
     }

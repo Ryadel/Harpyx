@@ -18,37 +18,29 @@
         </div>
     }
 
-    <div class="card bg-base-100 shadow">
-        <div class="card-body">
-            <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-semibold">Users</h1>
-                <div class="ml-auto">
-                    <a asp-area="Admin" asp-page="/Users/Edit" class="btn btn-primary btn-sm">
-                        <iconify-icon icon="mdi:account-plus"></iconify-icon>
-                        Add User
-                    </a>
-                </div>
-            </div>
-            <hr />
-            <p class="text-sm text-base-content/70">
-                Browse and manage every application user, including roles and activation status.
-            </p>
-        </div>
-    </div>
+    <partial name="/Pages/Shared/_PageHeader.cshtml" model="@(new PageHeaderViewModel(
+        Title: "Users",
+        Intro: "Browse and manage every application user, including roles and activation status.",
+        Actions: new[]
+        {
+            new PageActionViewModel(
+                Label: "Add User",
+                Page: "/Users/Edit",
+                Icon: "mdi:account-plus",
+                RouteValues: new Dictionary<string, string> { ["area"] = "Admin" })
+        }))" />
 
     <div class="card bg-base-100 shadow">
         <div class="card-body">
             @if (Model.Users.Count == 0)
             {
-                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span>No users yet.</span>
-                        <a asp-area="Admin" asp-page="/Users/Edit" class="btn btn-primary btn-sm">
-                            <iconify-icon icon="mdi:account-plus"></iconify-icon>
-                            Add User
-                        </a>
-                    </div>
-                </div>
+                <partial name="/Pages/Shared/_EmptyState.cshtml" model="@(new EmptyStateViewModel(
+                    Message: "No users yet.",
+                    Action: new PageActionViewModel(
+                        Label: "Add User",
+                        Page: "/Users/Edit",
+                        Icon: "mdi:account-plus",
+                        RouteValues: new Dictionary<string, string> { ["area"] = "Admin" })))" />
             }
             else
             {

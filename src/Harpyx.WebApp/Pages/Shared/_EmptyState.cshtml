@@ -1,0 +1,17 @@
+@model EmptyStateViewModel
+
+<div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
+    <div class="flex flex-wrap items-center gap-3">
+        <span>@Model.Message</span>
+        @if (Model.Action is not null)
+        {
+            <a class="@Model.Action.CssClass" asp-page="@Model.Action.Page" asp-all-route-data="@Model.Action.RouteValues">
+                @if (!string.IsNullOrEmpty(Model.Action.Icon))
+                {
+                    <iconify-icon icon="@Model.Action.Icon"></iconify-icon>
+                }
+                @Model.Action.Label
+            </a>
+        }
+    </div>
+</div>

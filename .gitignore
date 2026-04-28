@@ -41,6 +41,7 @@ wiki/
 
 # Logs
 *.log
+*.out
 **/.run.*.log
 
 # Test and coverage outputs

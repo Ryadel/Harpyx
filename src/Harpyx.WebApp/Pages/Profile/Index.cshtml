@@ -88,15 +88,12 @@
         <div class="card-body">
             @if (Model.Providers.Count == 0)
             {
-                <div class="rounded-lg border border-base-200 bg-base-100 p-4 text-sm text-base-content/70">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span>@Localizer["NoProviders"]</span>
-                        <a class="btn btn-primary btn-sm" asp-page="/Profile/Edit">
-                            <iconify-icon icon="mdi:plus"></iconify-icon>
-                            @Localizer["AddProviderButton"]
-                        </a>
-                    </div>
-                </div>
+                <partial name="_EmptyState" model="@(new EmptyStateViewModel(
+                    Message: Localizer["NoProviders"].Value,
+                    Action: new PageActionViewModel(
+                        Label: Localizer["AddProviderButton"].Value,
+                        Page: "/Profile/Edit",
+                        Icon: "mdi:plus")))" />
             }
             else
             {
