@@ -13,7 +13,7 @@ Harpyx is built in .NET 10 and ships as two cooperating services — a web-facin
 - **Document ingestion** — uploads are virus-scanned, stored in object storage, and queued for asynchronous parsing. Containers (ZIP, RAR, 7z, tar.gz, .msg, .eml) are expanded; PDFs, Office documents, RTF, EPUB, HTML, plain-text, images (with OCR), and structured files (CSV, JSON, XML, YAML) are extracted, chunked, and embedded.
 - **Multi-provider RAG** — per-user BYO API keys for OpenAI, Anthropic Claude, and Google Gemini, with AES-256-GCM encryption at rest. Chat, embedding, and OCR models can be overridden independently at workspace or project scope.
 - **Project-scoped chat** — tenants group users into workspaces; workspaces contain projects; projects contain documents, prompts, and chat sessions grounded on the documents they own.
-- **Multi-tenancy with roles** — Admin / Operator / Reviewer / ReadOnly at the platform level; tenant memberships have their own role model. User access is allowlist-controlled and audited.
+- **Multi-tenancy with roles** — platform access is split between Admin and Standard users; tenant memberships provide the operational role model. User access is allowlist-controlled and audited.
 - **Self-hosted usage controls** — instance-wide limits gate tenant, workspace, project, document, storage, API, OCR, and RAG usage without commercial tiers.
 - **Production-grade infrastructure** — health checks for every backing service, OpenTelemetry traces/metrics, Serilog structured logging, forwarded-headers and rate-limiting policies, CSRF protection, ClamAV upload scanning, and auditable security events.
 

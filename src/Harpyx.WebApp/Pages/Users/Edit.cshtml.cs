@@ -37,7 +37,7 @@ public class EditModel : PageModel
     public string? SubjectId { get; set; } = string.Empty;
 
     [BindProperty]
-    public UserRole Role { get; set; } = UserRole.ReadOnly;
+    public UserRole Role { get; set; } = UserRole.Standard;
 
     [BindProperty]
     public bool IsActive { get; set; } = true;

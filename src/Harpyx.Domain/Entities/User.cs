@@ -8,7 +8,7 @@ public class User : BaseEntity
     public string? ObjectId { get; set; }
     public string? SubjectId { get; set; }
     public string Email { get; set; } = string.Empty;
-    public UserRole Role { get; set; } = UserRole.ReadOnly;
+    public UserRole Role { get; set; } = UserRole.Standard;
     public bool IsActive { get; set; } = true;
     public string? LastLoginProvider { get; set; }
     public DateTimeOffset? LastLoginAt { get; set; }

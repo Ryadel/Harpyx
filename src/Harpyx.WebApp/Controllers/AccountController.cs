@@ -10,17 +10,27 @@ namespace Harpyx.WebApp.Controllers;
 public class AccountController : Controller
 {
     private readonly ITenantScopeService _tenantScope;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(ITenantScopeService tenantScope)
+    public AccountController(ITenantScopeService tenantScope, ILogger<AccountController> logger)
     {
         _tenantScope = tenantScope;
+        _logger = logger;
     }
 
     [HttpPost]
     [AllowAnonymous]
     public IActionResult LoginEntra(string? returnUrl = "/")
     {
-        return Challenge(new AuthenticationProperties { RedirectUri = returnUrl ?? "/" }, OpenIdConnectDefaults.AuthenticationScheme);
+        var redirectUri = string.IsNullOrWhiteSpace(returnUrl) ? "/" : returnUrl;
+        _logger.LogInformation(
+            "Starting external sign-in. Provider: entra; Scheme: {Scheme}; RedirectUriAfterExternalLogin: {RedirectUri}; Request: {RequestScheme}://{RequestHost}{RequestPath}",
+            OpenIdConnectDefaults.AuthenticationScheme,
+            redirectUri,
+            Request.Scheme,
+            Request.Host.Value,
+            Request.Path.Value);
+        return Challenge(new AuthenticationProperties { RedirectUri = redirectUri }, OpenIdConnectDefaults.AuthenticationScheme);
     }
 
     [HttpPost]

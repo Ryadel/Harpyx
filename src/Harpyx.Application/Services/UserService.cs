@@ -73,7 +73,7 @@ public class UserService : IUserService
                 ObjectId = string.IsNullOrWhiteSpace(objectId) ? null : objectId,
                 SubjectId = string.IsNullOrWhiteSpace(subjectId) ? null : subjectId,
                 Email = email.Trim(),
-                Role = UserRole.ReadOnly,
+                Role = UserRole.Standard,
                 IsActive = true,
                 LastLoginAt = now,
                 LastLoginProvider = string.IsNullOrWhiteSpace(loginProvider) ? null : loginProvider

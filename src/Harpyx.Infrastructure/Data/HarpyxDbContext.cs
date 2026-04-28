@@ -198,6 +198,7 @@ public class HarpyxDbContext : DbContext
             entity.Property(u => u.ObjectId).HasMaxLength(200);
             entity.Property(u => u.SubjectId).HasMaxLength(200);
             entity.Property(u => u.Email).HasMaxLength(320).IsRequired();
+            entity.Property(u => u.Role).IsRequired().HasDefaultValue(UserRole.Standard);
             entity.Property(u => u.LastLoginProvider).HasMaxLength(100);
             entity.Property(u => u.LastLoginAt);
         });

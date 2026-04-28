@@ -6,7 +6,7 @@ set -euo pipefail
 #   1 = deploy directory on the server
 #   2 = compose file name/path inside that directory
 DEPLOY_PATH="${1:-/var/www/harpyx}"
-COMPOSE_FILE="${2:-docker-compose.prod.yml}"
+COMPOSE_FILE="${2:-docker-compose.yml}"
 
 # Run docker compose from the directory that contains .env and the real prod compose file.
 cd "$DEPLOY_PATH"
