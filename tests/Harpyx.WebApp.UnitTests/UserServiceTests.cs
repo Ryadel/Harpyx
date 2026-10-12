@@ -80,7 +80,7 @@ public class UserServiceTests
 
         createdUser.Should().NotBeNull();
         createdUser!.Email.Should().Be("other@contoso.com");
-        createdUser.Role.Should().Be(UserRole.ReadOnly);
+        createdUser.Role.Should().Be(UserRole.Standard);
         createdUser.IsActive.Should().BeTrue();
         createdTenant.Should().NotBeNull();
         createdTenant!.Name.Should().Be("Personal");
