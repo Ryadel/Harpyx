@@ -16,11 +16,12 @@
 .env.local
 .env.*.local
 docker-compose.prod.yml
-Harpyx.Dev.slnx
-dev/
 
-# GitHub Wiki is a separate repository checked out locally.
-wiki/
+# The private repo lives in a sibling folder, never inside this one. These two
+# entries stay as a safety net: if either path ever reappears here, silence is
+# the safe outcome — private notes must not reach a public remote.
+dev/
+Harpyx.Dev.slnx
 
 # IDE and editor state
 .vs/
